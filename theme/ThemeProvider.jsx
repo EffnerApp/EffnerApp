@@ -10,7 +10,7 @@ const ThemeContext = createContext({
 });
 
 export function ThemeProvider({children}) {
-    const systemTheme = useColorScheme();
+    const systemTheme = "dark" || useColorScheme(); // TODO: fix
     const [theme, setTheme] = useState(systemTheme);
 
     useEffect(() => {

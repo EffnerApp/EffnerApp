@@ -22,7 +22,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
         padding: 12,
         backgroundColor: theme.colors.surface,
         margin: 8,
-        borderRadius: 4,
+        borderRadius: 8
     },
     text: {
         color: theme.colors.font
