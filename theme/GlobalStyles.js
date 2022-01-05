@@ -26,5 +26,33 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     text: {
         color: theme.colors.font
+    },
+    dropShadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 2,
+            height: 2,
+        },
+        shadowOpacity: 0.7,
+        shadowRadius: 2,
+        elevation: 10
+    },
+    textBigCenter: {
+        color: theme.colors.font,
+        fontSize: 17,
+        textAlign: "center"
+    },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    mt30: {
+        marginTop: 30
+    },
+    mt15: {
+        marginTop: 15
+    },
+    mt60: {
+        marginTop: 60
     }
 });

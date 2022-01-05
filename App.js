@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo } from "react";
-import { Linking, Platform, StatusBar, StyleSheet } from "react-native";
+import React, {useMemo} from "react";
+import {Platform, StatusBar, StyleSheet} from "react-native";
 import {ThemeProvider, useTheme} from "./theme/ThemeProvider";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import HomeScreen from "./views/Home";
+import LoginScreen from "./views/Login";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ export default function App() {
     // );
     return (
         <ThemeProvider>
-            <ThemedApp />
+            <ThemedApp/>
         </ThemeProvider>
     )
 }
@@ -42,7 +43,8 @@ function ThemedApp() {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={options}>
-                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Home" component={HomeScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

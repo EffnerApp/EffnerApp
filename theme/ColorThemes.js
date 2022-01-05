@@ -23,9 +23,13 @@ const dark = {
   statusbar: "light-content",
   elevation: 0,
   colors: {
-    primary: "#BB86FC",
+    // primary: "#a4fc86",
+    primary: "#61d763",
     onPrimary: "#FFFFFF",
     onPrimarySelected: "#69e369",
+
+    secondary: '#282828',
+    onSecondary: "#FFFFFF",
 
     background: "#121212",
     onBackground: "#FFFFFF",
