@@ -1,5 +1,5 @@
-import crypto from 'crypto';
+import sha512 from 'crypto-js/sha512';
 
-export function sha512(data) {
-    return crypto.createHash('sha512').update(data, 'utf-8').digest('hex');
+export function hash(data) {
+    return sha512(data);
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import DSBMobile from "./dsbmobile";
-import {sha512} from "./hash";
+import {hash} from "./hash";
 
 const BASE_URL = "https://api.popquiz.sebi.me/v1";
 const STATIC_URL = "https://static.popquiz.sebi.me";
@@ -17,7 +17,7 @@ const loadData = async (credentials, sClass) => {
     try {
         const response = await axios.get('https://api.effner.app/v2/data?class=' + sClass, {
             headers: {
-                'Authorization': 'Basic ' + sha512(credentials + ':' + time),
+                'Authorization': 'Basic ' + hash(credentials + ':' + time),
                 'X-Time': time
             }
         });

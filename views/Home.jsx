@@ -5,7 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
-import {loadData} from "../tools/api";
+import {loadData, loadDSBTimetable, loadNews} from "../tools/api";
 
 
 export default function HomeScreen({navigation, route}) {
@@ -13,6 +13,7 @@ export default function HomeScreen({navigation, route}) {
 
     useEffect(() => {
         loadData();
+        loadNews();
     }, []);
 
     return (
@@ -20,16 +21,16 @@ export default function HomeScreen({navigation, route}) {
             <ScrollView style={globalStyles.content}>
                 <Widget title="ÖPNV" icon="directions-bus" headerRight={{
                     component: <Text style={localStyles.mvvBadgeText}>Live</Text>,
-                    styles: {backgroundColor: "green"}
+                    styles: {backgroundColor: "#7be87b"}
                 }}>
                 </Widget>
                 <Widget title="News" icon="inbox" headerRight={{
                     component: (
                         <>
-                            <Text style={localStyles.mvvBadgeText}>3</Text>
+                            <Text style={{color: theme.colors.onSurface, fontSize: "1rem"}}>3</Text>
                             <Icon name="notifications" color={theme.colors.onSurface}/>
                         </>),
-                    styles: {backgroundColor: "blue"}
+                    styles: {backgroundColor: "#5079e0"}
                 }}>
                 </Widget>
             </ScrollView>
