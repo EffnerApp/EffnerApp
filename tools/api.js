@@ -1,13 +1,38 @@
 import axios from "axios";
 import DSBMobile from "./dsbmobile";
 import {hash} from "./hash";
+import {save} from "./helpers";
 
-const BASE_URL = "https://api.popquiz.sebi.me/v1";
-const STATIC_URL = "https://static.popquiz.sebi.me";
-const SOCKET_URL = "wss://realtime.popquiz.sebi.me";
+const BASE_URL = "https://api.effner.app";
 
 let lastFetchTime = 0;
-//export const SOCKET_URL = "ws://192.168.178.35:80";
+
+const login = async (credentials) => {
+    const time = Date.now();
+
+    try {
+        const response = await axios.post(`${BASE_URL}/v1/auth/login`, {}, {
+            headers: {
+                'Authorization': 'Basic ' + hash(credentials + ':' + time),
+                'X-Time': time
+            }
+        });
+
+        if (response.data.status.login) {
+            await save('APP_CREDENTIALS', credentials);
+
+            // TODO: subscribe to push notifications
+
+            return Promise.resolve();
+        } else {
+            return Promise.reject(response?.data?.status?.error)
+        }
+    } catch (e) {
+        return Promise.reject(e.response?.data?.status?.error || e)
+    }
+
+
+}
 
 const loadData = async (credentials, sClass) => {
     console.log('Loading data ...');
@@ -15,7 +40,7 @@ const loadData = async (credentials, sClass) => {
     const time = Date.now();
 
     try {
-        const response = await axios.get('https://api.effner.app/v2/data?class=' + sClass, {
+        const response = await axios.get(`${BASE_URL}/v2/data?class=${sClass}`, {
             headers: {
                 'Authorization': 'Basic ' + hash(credentials + ':' + time),
                 'X-Time': time
@@ -56,4 +81,4 @@ const loadNews = async () => {
     }
 }
 
-export {loadData, loadNews, loadDSBTimetable}
+export {login, loadData, loadNews, loadDSBTimetable}

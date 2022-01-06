@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
@@ -7,10 +7,16 @@ import {Icon} from "react-native-elements";
 import * as Progress from 'react-native-progress';
 
 
-export default function Button({title, icon, overrideStyles = {}, onPress = () => null}) {
+export default function Button({title, icon, overrideStyles = {}, onPress = () => null, running = true}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const [isProcessing, setProcessing] = useState(false);
+
+    useEffect(() => {
+        if(!running) {
+            setProcessing(false);
+        }
+    }, [running]);
 
     return (
         <TouchableOpacity style={[globalStyles.box, globalStyles.dropShadow, globalStyles.row, overrideStyles]} disabled={isProcessing} onPress={() => {

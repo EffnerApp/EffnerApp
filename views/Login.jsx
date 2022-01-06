@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import {ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
@@ -8,16 +8,37 @@ import {SvgXml} from "react-native-svg";
 
 import logo from "../assets/effnerapp_logo.svg";
 
+import {login} from "../tools/api";
+import {CommonActions} from "@react-navigation/native";
+
 
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    const id = useRef("")
-    const password = useRef("");
+    const [running, setRunning] = useState(true);
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
 
     useEffect(() => {
 
     }, []);
+
+    function performLogin() {
+        setRunning(true);
+
+        login(`${id}:${password}`)
+            .then(() => {
+                setRunning(false);
+                navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [{name: 'Home'}]
+                }));
+            })
+            .catch((e) => {
+                setRunning(false);
+                console.log(e);
+            });
+    }
 
     return (
         <View style={globalStyles.screen}>
@@ -29,19 +50,20 @@ export default function LoginScreen({navigation, route}) {
                 </View>
                 <View style={[globalStyles.box, globalStyles.dropShadow]}>
                     <Text style={globalStyles.text}>Login</Text>
-                    <TextInput ref={id}
+                    <TextInput onChangeText={setId}
                                style={[globalStyles.box, localStyles.boxSecondary, globalStyles.dropShadow, globalStyles.mt15]}
                                placeholder="ID"
                                keyboardType="numeric"
                                placeholderTextColor={theme.colors.onSecondary}
                     />
-                    <TextInput ref={password}
+                    <TextInput onChangeText={setPassword}
                                style={[globalStyles.box, localStyles.boxSecondary, globalStyles.dropShadow]}
                                placeholder="Password"
                                secureTextEntry={true}
                                placeholderTextColor={theme.colors.onSecondary}
                     />
-                    <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]}/>
+                    <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]}
+                            onPress={performLogin} running={running}/>
                 </View>
             </ScrollView>
             <View style={[globalStyles.box, globalStyles.dropShadow]}>

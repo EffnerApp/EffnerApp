@@ -27,7 +27,7 @@ export default function HomeScreen({navigation, route}) {
                 <Widget title="News" icon="inbox" headerRight={{
                     component: (
                         <>
-                            <Text style={{color: theme.colors.onSurface, fontSize: "1rem"}}>3</Text>
+                            <Text style={{color: theme.colors.onSurface, fontSize: 20}}>3</Text>
                             <Icon name="notifications" color={theme.colors.onSurface}/>
                         </>),
                     styles: {backgroundColor: "#5079e0"}
