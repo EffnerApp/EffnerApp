@@ -43,8 +43,8 @@ function ThemedApp() {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={options}>
-                <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
-                <Stack.Screen name="Home" component={HomeScreen}/>
+                <Stack.Screen navigationKey="login" name="Login" component={LoginScreen} options={{headerShown: false}}/>
+                <Stack.Screen navigationKey="home" name="Home" component={HomeScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
