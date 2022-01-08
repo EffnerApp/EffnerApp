@@ -37,7 +37,7 @@ export default function LoginScreen({navigation, route}) {
         login(credentials, sClass)
             .then(() => {
                 setRunning(false);
-                navigateTo(navigation, 'Home', {credentials, sClass});
+                navigateTo(navigation, 'Tabs', {credentials, sClass});
             })
             .catch((e) => {
                 setRunning(false);
