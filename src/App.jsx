@@ -10,6 +10,7 @@ import LoginScreen from "./views/Login";
 import Toast from 'react-native-toast-message';
 import SplashScreen from "./views/Splash";
 import {Icon} from "react-native-elements";
+import TimetableScreen from "./views/Timetable";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -85,15 +86,18 @@ function Tabs({route}) {
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
             }} initialParams={route.params}/>
+            <Tab.Screen navigationKey="timetable" name="Stundenplan" component={TimetableScreen} options={{
+                tabBarIcon: ({color, size}) => (<Icon name="event-note" color={color} size={size}/>)
+            }} initialParams={route.params}/>
             <Tab.Screen navigationKey="substitutions" name="Vertretungen" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="shuffle" color={color} size={size}/>)
             }} initialParams={route.params}/>
             <Tab.Screen navigationKey="exams" name="Schulaufgaben" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="school" color={color} size={size}/>)
             }} initialParams={route.params}/>
-            <Tab.Screen navigationKey="settings" name="Einstellungen" component={HomeScreen} options={{
-                tabBarIcon: ({color, size}) => (<Icon name="settings" color={color} size={size}/>)
-            }} initialParams={route.params}/>
+            {/*<Tab.Screen navigationKey="settings" name="Einstellungen" component={HomeScreen} options={{*/}
+            {/*    tabBarIcon: ({color, size}) => (<Icon name="settings" color={color} size={size}/>)*/}
+            {/*}} initialParams={route.params}/>*/}
         </Tab.Navigator>
     )
 }
