@@ -6,13 +6,16 @@ import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import {loadData, loadDSBTimetable, loadNews} from "../tools/api";
+import {load} from "../tools/helpers";
 
 
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
+    const {credentials, sClass} = route.params || {};
+
     useEffect(() => {
-        loadData();
+        loadData(credentials, sClass);
         loadNews();
     }, []);
 
