@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
@@ -37,7 +37,7 @@ export default function LoginScreen({navigation, route}) {
         login(credentials, sClass)
             .then(() => {
                 setRunning(false);
-                navigateTo(navigation, 'Tabs', {credentials, sClass});
+                navigateTo(navigation, 'Splash');
             })
             .catch((e) => {
                 setRunning(false);

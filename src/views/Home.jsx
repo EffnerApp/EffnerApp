@@ -12,12 +12,7 @@ import {load} from "../tools/helpers";
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    const {credentials, sClass} = route.params || {};
-
-    useEffect(() => {
-        loadData(credentials, sClass);
-        loadNews();
-    }, []);
+    const {credentials, sClass, data, news} = route.params || {};
 
     return (
         <View style={globalStyles.screen}>
