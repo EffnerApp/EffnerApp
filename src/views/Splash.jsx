@@ -17,7 +17,7 @@ export default function SplashScreen({navigation}) {
                 // TODO: check via API call?
                 const sClass = await load('APP_CLASS');
 
-                navigateTo(navigation, 'Home', {credentials, sClass});
+                navigateTo(navigation, 'Tabs', {credentials, sClass});
             } else {
                 navigateTo(navigation, 'Login');
             }
