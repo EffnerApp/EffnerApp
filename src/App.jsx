@@ -6,19 +6,19 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import HomeScreen from "./views/Home";
 import LoginScreen from "./views/Login";
 
+import Toast from 'react-native-toast-message';
+import SplashScreen from "./views/Splash";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-    // return (
-    //     <View style={styles.container}>
-    //         <Text>Open up App.js to start working on your app!</Text>
-    //         <StatusBar style="auto"/>
-    //     </View>
-    // );
     return (
-        <ThemeProvider>
-            <ThemedApp/>
-        </ThemeProvider>
+        <>
+            <ThemeProvider>
+                <ThemedApp/>
+            </ThemeProvider>
+            <Toast position="bottom" />
+        </>
     )
 }
 
@@ -43,6 +43,7 @@ function ThemedApp() {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={options}>
+                <Stack.Screen navigationKey="splash" name="Splash" component={SplashScreen} options={{headerShown: false}}/>
                 <Stack.Screen navigationKey="login" name="Login" component={LoginScreen} options={{headerShown: false}}/>
                 <Stack.Screen navigationKey="home" name="Home" component={HomeScreen}/>
             </Stack.Navigator>

@@ -8,35 +8,40 @@ import {SvgXml} from "react-native-svg";
 
 import logo from "../assets/effnerapp_logo.svg";
 
-import {login} from "../tools/api";
-import {CommonActions} from "@react-navigation/native";
+import {loadClasses, login} from "../tools/api";
+import {navigateTo, runsOn, showToast} from "../tools/helpers";
+import {Picker} from "@react-native-picker/picker";
 
 
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const [running, setRunning] = useState(true);
+
+    const [classes, setClasses] = useState([]);
+
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const [sClass, setClass] = useState();
 
     useEffect(() => {
-
+        // load classes form api
+        loadClasses().then(setClasses).catch((e) => showToast('Error while loading classes', e, 'error'))
     }, []);
 
     function performLogin() {
         setRunning(true);
 
-        login(`${id}:${password}`)
+        const credentials = `${id}:${password}`;
+
+        login(credentials, sClass)
             .then(() => {
                 setRunning(false);
-                navigation.dispatch(CommonActions.reset({
-                    index: 0,
-                    routes: [{name: 'Home'}]
-                }));
+                navigateTo(navigation, 'Home', {credentials, sClass});
             })
             .catch((e) => {
                 setRunning(false);
-                console.log(e);
+                showToast('Error', e, 'error');
             });
     }
 
@@ -62,6 +67,15 @@ export default function LoginScreen({navigation, route}) {
                                secureTextEntry={true}
                                placeholderTextColor={theme.colors.onSecondary}
                     />
+                    <View style={[globalStyles.box, localStyles.boxSecondary, globalStyles.dropShadow]}>
+                        <Picker
+                            style={{color: theme.colors.onPrimary}}
+                            dropdownIconColor={theme.colors.onPrimary}
+                            selectedValue={sClass}
+                            onValueChange={(value) => setClass(value)}>
+                            {classes.map((c, i) => <Picker.Item key={i} label={c} value={c} color={!runsOn('android') ? theme.colors.font : null}/>)}
+                        </Picker>
+                    </View>
                     <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]}
                             onPress={performLogin} running={running}/>
                 </View>

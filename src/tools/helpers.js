@@ -4,22 +4,50 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import axios from "axios";
+import Toast from "react-native-toast-message";
+import {CommonActions} from "@react-navigation/native";
+import platform from "react-native-web/dist/exports/Platform";
 // import { BASE_URL } from "./api";
 // import queryString from "query-string";
 // import { CommonActions } from "@react-navigation/routers";
 // import Toast from "react-native-root-toast";
 
-export async function save(key, value) {
+const save = async (key, value) => {
 	if (!value) await AsyncStorage.removeItem(key);
 	else await AsyncStorage.setItem(key, JSON.stringify(value));
-}
+};
 
-export async function load(key) {
+const load = async (key) => {
 	const data = await AsyncStorage.getItem(key);
 	if (!data) return;
 
 	return JSON.parse(data);
+};
+
+
+const showToast = (title, message, type = 'success') => {
+	Toast.show({
+		type,
+		text1: title,
+		text2: message
+	});
 }
+
+const navigateTo = (navigation, to, params = {}) => {
+	navigation.dispatch(CommonActions.reset({
+		index: 0,
+		routes: [{name: to, params}]
+	}));
+}
+
+const getPlatform = () => {
+	return Platform.OS;
+}
+
+const runsOn = (os) => {
+	return Platform.OS === os;
+}
+
 //
 // export async function registerForPushNotifications() {
 // 	let pushToken;
@@ -86,3 +114,5 @@ export async function load(key) {
 // 		}
 // 	);
 // }
+
+export {save, load, showToast, navigateTo, getPlatform, runsOn}
