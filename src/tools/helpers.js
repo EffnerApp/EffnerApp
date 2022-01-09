@@ -72,6 +72,20 @@ const openUri = async (uri) => {
     }
 }
 
+const groupBy = (list, keyGetter) => {
+    const map = new Map();
+    list.forEach((item) => {
+        const key = keyGetter(item);
+        const collection = map.get(key);
+        if (!collection) {
+            map.set(key, [item]);
+        } else {
+            collection.push(item);
+        }
+    });
+    return map;
+};
+
 //
 // export async function registerForPushNotifications() {
 // 	let pushToken;
@@ -139,4 +153,4 @@ const openUri = async (uri) => {
 // 	);
 // }
 
-export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, openUri}
+export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, openUri, groupBy}

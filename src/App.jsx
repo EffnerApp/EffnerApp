@@ -11,6 +11,7 @@ import Toast from 'react-native-toast-message';
 import SplashScreen from "./views/Splash";
 import {Icon} from "react-native-elements";
 import TimetableScreen from "./views/Timetable";
+import ExamsScreen from "./views/Exams";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,7 +93,7 @@ function Tabs({route}) {
             <Tab.Screen navigationKey="substitutions" name="Vertretungen" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="shuffle" color={color} size={size}/>)
             }} initialParams={route.params}/>
-            <Tab.Screen navigationKey="exams" name="Schulaufgaben" component={HomeScreen} options={{
+            <Tab.Screen navigationKey="exams" name="Schulaufgaben" component={ExamsScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="school" color={color} size={size}/>)
             }} initialParams={route.params}/>
             {/*<Tab.Screen navigationKey="settings" name="Einstellungen" component={HomeScreen} options={{*/}

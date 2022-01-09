@@ -6,7 +6,7 @@ import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 
 
-export default function Widget({title, icon, headerRight, children}) {
+export default function Widget({title, icon, headerRight, children, titleColor}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     return (
@@ -14,7 +14,7 @@ export default function Widget({title, icon, headerRight, children}) {
             <View style={localStyles.boxHeader}>
                 <View style={localStyles.iconContainer}>
                     <Icon name={icon} color={theme.colors.onSurface}/>
-                    <Text style={[localStyles.headerText, {marginStart: 5}]}>{title}</Text>
+                    <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text>
                 </View>
                 {headerRight && <View style={[localStyles.headerRightContainer, headerRight.styles]}>
                     {headerRight.component}
@@ -46,7 +46,6 @@ const createStyles = (theme = Themes.light) =>
             paddingHorizontal: 4
         },
         headerText: {
-            color: theme.colors.font,
             fontWeight: "bold",
             fontSize: 17,
             alignSelf: "center",
