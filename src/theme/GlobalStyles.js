@@ -54,5 +54,8 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     mt60: {
         marginTop: 60
+    },
+    mv15: {
+        marginVertical: 15
     }
 });
