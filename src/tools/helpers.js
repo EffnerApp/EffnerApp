@@ -59,6 +59,29 @@ const getLevel = (sClass) => {
     return sClass.match('^\\d{1,2}')[0];
 };
 
+const validateClass = (fullClass, test) => {
+    if (fullClass === test)
+        return true;
+
+    // if the test string is not equal to the full class name we test it using regex for these cases:
+    // fullClass="12Q3"; test="12Q" -> match
+    // fullClass="10E"; test="12EF" -> match
+
+
+    const checkA = fullClass.match(/\d{1,2}[A-Z]/);
+    const checkB = test.match(/\d{1,2}[A-Z]/);
+
+    let result = false;
+
+    if (checkA) {
+        result = checkA[0] === test;
+    } else if (checkB) {
+        result = checkB[0] === fullClass;
+    }
+
+    return result;
+};
+
 const openUri = async (uri) => {
     // open PDFs with the action view handler on android (fixes issue #163: https://github.com/EffnerApp/EffnerApp/issues/163)
     if (uri.endsWith('.pdf') && runsOn('android')) {
@@ -153,4 +176,4 @@ const groupBy = (list, keyGetter) => {
 // 	);
 // }
 
-export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, openUri, groupBy}
+export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, validateClass, openUri, groupBy}

@@ -1,3 +1,6 @@
+import axios from "axios";
+import {parse} from "node-html-parser";
+
 export default class DSBMobile {
     BASE_URL = 'https://mobileapi.dsbcontrol.de';
     BUNDLE_ID = 'de.heinekingmedia.dsbmobile';
@@ -14,24 +17,15 @@ export default class DSBMobile {
         this.password = password;
     }
 
-    async login(){
-        const url = `${DSBMobile.BASE_URL}/authid?bundleid=${DSBMobile.BUNDLE_ID}&appversion=${DSBMobile.APP_VERSION}&osversion=${DSBMobile.OS_VERSION}&pushid&user=${this.username}&password=${this.password}`;
+    async login() {
+        const url = `${this.BASE_URL}/authid?bundleid=${this.BUNDLE_ID}&appversion=${this.APP_VERSION}&osversion=${this.OS_VERSION}&pushid&user=${this.username}&password=${this.password}`;
 
-        // the native implementations of @capacitor-community/http are kinda broken, so we can only accept the content-type 'text/json' instead of 'application/json'
-        const token = await Http.request({
-            method: 'GET',
-            url,
-            responseType: 'text',
-            headers: {
-                'Accept': 'text/*'
-            }
-        }).then(response => JSON.parse(response.data));
-
-        if (!token) {
+        try {
+            const {data} = await axios.get(url);
+            this.token = data;
+        } catch (e) {
             throw new Error('Error while authenticating with dsbmobile');
         }
-
-        this.token = token;
     }
 
     async getTimetable() {
@@ -46,34 +40,31 @@ export default class DSBMobile {
         return {
             url,
             time,
-            items: await this.parseTimetable(url)
+            data: await this.parseTimetable(url)
         };
     }
 
     async fetchMetaData() {
-        const json = await Http.request({
-            method: 'GET',
-            url: `${DSBMobile.BASE_URL}/dsbtimetables?authid=${this.token}`
-        }).then(response => response.data);
+        try {
+            const {data} = await axios.get(`${this.BASE_URL}/dsbtimetables?authid=${this.token}`);
 
-        if (json['Message']) {
-            throw new Error('dsbError: ' + json['Message']);
+            if (data['Message']) {
+                throw new Error('dsbError: ' + data['Message']);
+            }
+
+            return data;
+        } catch (e) {
+            throw e;
         }
-
-        return json;
     }
 
     async parseTimetable(url) {
         try {
-            const response = await Http.request({
-                method: 'GET',
-                url
-            });
+            const {data} = await axios.get(url);
 
-            const {data} = response;
+            const document = parse(data, {});
 
-            const parser = new DOMParser();
-            const document = parser.parseFromString(data, 'text/html');
+            console.log(!!document)
 
             const documents = this.splitDocuments(document);
 
@@ -112,11 +103,11 @@ export default class DSBMobile {
                                     const td = tr.querySelectorAll('td');
 
                                     return {
-                                        teacher: td.item(0).innerText.trim(),
-                                        period: td.item(1).innerText.trim(),
-                                        subTeacher: td.item(2).innerText.trim(),
-                                        room: td.item(3).innerText.trim(),
-                                        info: td.item(4).innerText.trim(),
+                                        teacher: td[0].innerText.trim(),
+                                        period: td[1].innerText.trim(),
+                                        subTeacher: td[2].innerText.trim(),
+                                        room: td[3].innerText.trim(),
+                                        info: td[4].innerText.trim(),
                                         fullClass: className
                                     };
                                 });
@@ -155,25 +146,24 @@ export default class DSBMobile {
 
     // adopted from https://github.com/EffnerApp/effnerapp-android-legacy/blob/master/app/src/main/java/de/effnerapp/effner/data/dsbmobile/DSBClient.java#L164
     splitDocuments(document) {
-        const parser = new DOMParser();
-
         const elements = [];
 
         document.querySelectorAll('a').forEach(a => {
-            if (a.getAttribute('name')) {
+            if (a.attributes['name']) {
                 elements.push(a.outerHTML);
             }
         });
 
         const documents = [];
-        const outer = document.documentElement.outerHTML;
+        const outer = document.outerHTML;
+        console.log(!!outer)
         for (let i = 0; i < elements.length; i++) {
             if (i === elements.length - 1) {
-                documents.push(parser.parseFromString(outer.substr(outer.indexOf(elements[i])), 'text/html'));
+                documents.push(parse(outer.substr(outer.indexOf(elements[i])), {}));
             } else if (i !== 0) {
                 const indexStart = outer.indexOf(elements[i]);
                 const length = outer.indexOf(elements[i + 1]) - indexStart;
-                documents.push(parser.parseFromString(outer.substr(indexStart, length), 'text/html'));
+                documents.push(parse(outer.substr(indexStart, length), {}));
             }
         }
 
