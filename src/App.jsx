@@ -12,6 +12,7 @@ import SplashScreen from "./views/Splash";
 import {Icon} from "react-native-elements";
 import TimetableScreen from "./views/Timetable";
 import ExamsScreen from "./views/Exams";
+import SubstitutionsScreen from "./views/Substitutions";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +91,7 @@ function Tabs({route}) {
             <Tab.Screen navigationKey="timetable" name="Stundenplan" component={TimetableScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="event-note" color={color} size={size}/>)
             }} initialParams={route.params}/>
-            <Tab.Screen navigationKey="substitutions" name="Vertretungen" component={HomeScreen} options={{
+            <Tab.Screen navigationKey="substitutions" name="Vertretungen" component={SubstitutionsScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="shuffle" color={color} size={size}/>)
             }} initialParams={route.params}/>
             <Tab.Screen navigationKey="exams" name="Schulaufgaben" component={ExamsScreen} options={{
