@@ -57,5 +57,8 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     mv15: {
         marginVertical: 15
+    },
+    ps10: {
+        paddingStart: 10
     }
 });

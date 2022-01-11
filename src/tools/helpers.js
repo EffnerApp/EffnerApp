@@ -109,6 +109,31 @@ const groupBy = (list, keyGetter) => {
     return map;
 };
 
+const decodeEntities = (encodedString) => {
+    const translate_re = /&(nbsp|amp|quot|lt|gt|auml|Auml|ouml|Ouml|uuml|Uuml|szlig);/g;
+    const translate = {
+        "nbsp":" ",
+        "amp" : "&",
+        "quot": "\"",
+        "lt"  : "<",
+        "gt"  : ">",
+        "auml": "ä",
+        "Auml": "Ä",
+        "ouml": "ö",
+        "Ouml": "Ö",
+        "uuml": "ü",
+        "Uuml": "Ü",
+        "szlig": "ß",
+
+    };
+    return encodedString.replace(translate_re, function(match, entity) {
+        return translate[entity];
+    }).replace(/&#(\d+);/gi, function(match, numStr) {
+        const num = parseInt(numStr, 10);
+        return String.fromCharCode(num);
+    });
+};
+
 //
 // export async function registerForPushNotifications() {
 // 	let pushToken;
@@ -176,4 +201,4 @@ const groupBy = (list, keyGetter) => {
 // 	);
 // }
 
-export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, validateClass, openUri, groupBy}
+export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, validateClass, openUri, groupBy, decodeEntities}

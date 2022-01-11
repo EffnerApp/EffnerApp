@@ -24,7 +24,6 @@
     "expo-status-bar": "~1.2.0",
     "expo-web-browser": "~10.1.0",
     "fast-html-parser": "^1.0.1",
-    "jsdom-jscore-rn": "^0.1.8",
     "moment": "^2.29.1",
     "node-html-parser": "^1.4.9",
     "query-string": "^7.0.1",

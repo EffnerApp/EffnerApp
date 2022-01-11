@@ -1,5 +1,6 @@
 import axios from "axios";
 import {parse} from "node-html-parser";
+import {decodeEntities} from "../helpers";
 
 export default class DSBMobile {
     BASE_URL = 'https://mobileapi.dsbcontrol.de';
@@ -62,7 +63,10 @@ export default class DSBMobile {
         try {
             const {data} = await axios.get(url);
 
-            const document = parse(data, {});
+            // const html = data.replace(/&nbsp;/g,' ').trim();
+            const html = decodeEntities(data);
+
+            const document = parse(html, {});
 
             console.log(!!document)
 
