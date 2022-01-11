@@ -6,12 +6,12 @@ import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 
 
-export default function Widget({title, icon, headerRight, children, titleColor}) {
+export default function Widget({title, icon, headerRight, children, titleColor, headerMarginBottom = 15}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     return (
         <View style={globalStyles.box}>
-            <View style={localStyles.boxHeader}>
+            <View style={[localStyles.boxHeader, {marginBottom: headerMarginBottom}]}>
                 <View style={localStyles.iconContainer}>
                     <Icon name={icon} color={theme.colors.onSurface}/>
                     <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text>
@@ -30,7 +30,6 @@ const createStyles = (theme = Themes.light) =>
         boxHeader: {
             flexDirection: "row",
             justifyContent: "space-between",
-            marginBottom: 15
         },
         iconContainer: {
             flexDirection: "row",

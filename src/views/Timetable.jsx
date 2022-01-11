@@ -55,8 +55,8 @@ export default function TimetableScreen({navigation, route}) {
                         ))}
                     </View>
                     {documentUrl && (
-                        <View>
-                            <TouchableOpacity onPress={() => openUri(documentUrl)}><Text style={globalStyles.text}>PDF-Version</Text></TouchableOpacity>
+                        <View style={localStyles.documentBox}>
+                            <TouchableOpacity style={localStyles.documentLink} onPress={() => openUri(documentUrl)}><Text style={[globalStyles.text, localStyles.documentLinkText]}>PDF-Version</Text></TouchableOpacity>
                         </View>
                     )}
                 </Widget>
@@ -79,5 +79,17 @@ const createStyles = (theme = Themes.light) =>
             borderWidth: 1,
             borderColor: theme.colors.onSurface,
             padding: 8
+        },
+        documentBox: {
+            marginTop: 5,
+            marginEnd: 10
+        },
+        documentLink: {
+            padding: 10
+        },
+        documentLinkText: {
+            color: '#1a4cb3',
+            textAlign: 'right',
+            fontSize: 17
         }
     });

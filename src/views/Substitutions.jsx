@@ -9,6 +9,7 @@ import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import moment from "moment";
 import {loadDSBTimetable} from "../tools/api";
+import SubstitutionEntry from "../widgets/SubstitutionEntry";
 
 
 export default function SubstitutionsScreen({navigation, route}) {
@@ -22,7 +23,7 @@ export default function SubstitutionsScreen({navigation, route}) {
 
     useEffect(() => {
         loadDSBTimetable(credentials).then(({url, time, data}) => {
-            const date = data.dates[0];
+            const date = data.dates[1];
             const subs = data.days.get(date).filter((entry) => validateClass(sClass, entry.name)).map((entry) => entry.items);
 
             let tmp = [];
@@ -44,14 +45,9 @@ export default function SubstitutionsScreen({navigation, route}) {
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
                 <View style={localStyles.exams}>
-                    {substitutions.map(({fullClass, info, period, room, teacher, subTeacher}, i) => (
+                    {substitutions.map((data, i) => (
                         <View key={i}>
-                            <Widget title={period + '. Stunde: ' + info} titleColor="#28a745">
-                                <Text style={globalStyles.text}>{'\u2022 Ausfall: ' + teacher}</Text>
-                                <Text style={globalStyles.text}>{'\u2022 Vertreten durch: ' + subTeacher}</Text>
-                                <Text style={globalStyles.text}>{'\u2022 Raum: ' + room}</Text>
-                                <Text style={globalStyles.text}>{'\u2022 Info: ' + info}</Text>
-                            </Widget>
+                            <SubstitutionEntry data={data} />
                         </View>
                     ))}
                 </View>

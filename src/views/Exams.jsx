@@ -59,10 +59,12 @@ export default function ExamsScreen({navigation, route}) {
                 <View style={localStyles.exams}>
                     {sortedExams().map(([date, items], i) => (
                         <View key={i}>
-                            <Widget title={date} titleColor="#28a745">
-                                {items.map(({name}, j) => (
-                                    <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
-                                ))}
+                            <Widget title={date} titleColor="#28a745" headerMarginBottom={0}>
+                                <View style={globalStyles.ps10}>
+                                    {items.map(({name}, j) => (
+                                        <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                    ))}
+                                </View>
                             </Widget>
                         </View>
                     ))}
@@ -71,10 +73,12 @@ export default function ExamsScreen({navigation, route}) {
                 <View style={localStyles.exams}>
                     {examsHistory().map(([date, items], i) => (
                         <View key={i}>
-                            <Widget title={date} titleColor="#dc3545">
-                                {items.map(({name}, j) => (
-                                    <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
-                                ))}
+                            <Widget title={date} titleColor="#dc3545" headerMarginBottom={0}>
+                                <View style={globalStyles.ps10}>
+                                    {items.map(({name}, j) => (
+                                        <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                    ))}
+                                </View>
                             </Widget>
                         </View>
                     ))}
