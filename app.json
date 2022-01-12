@@ -25,7 +25,8 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "de.effnerapp.effner"
+      "package": "de.effnerapp.effner",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
