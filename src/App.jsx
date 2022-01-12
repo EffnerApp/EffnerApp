@@ -71,7 +71,7 @@ function Tabs({route}) {
 
         return {
             headerStyle: {
-                backgroundColor: theme.colors.surface
+                backgroundColor: theme.colors.surface,
             },
             headerShadowVisible: false,
             headerTintColor: theme.colors.onSurface,
