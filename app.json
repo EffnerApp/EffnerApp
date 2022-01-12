@@ -4,7 +4,7 @@
     "slug": "effnerapp-next",
     "version": "1.0.0",
     "orientation": "portrait",
-    "entryPoint": "./src/index.js",
+    "entryPoint": "index.js",
     "icon": "./src/assets/icon.png",
     "splash": {
       "image": "./src/assets/splash.png",
@@ -25,7 +25,7 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-
+      "package": "de.effnerapp.effner"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
