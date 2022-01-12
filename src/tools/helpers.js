@@ -82,9 +82,9 @@ const validateClass = (fullClass, test) => {
     return result;
 };
 
-const openUri = async (uri) => {
+const openUri = async (uri, options = {}) => {
     // open PDFs with the action view handler on android (fixes issue #163: https://github.com/EffnerApp/EffnerApp/issues/163)
-    if (uri.endsWith('.pdf') && runsOn('android')) {
+    if ((uri.endsWith('.pdf') || options.type === 'pdf') && runsOn('android')) {
         await startActivityAsync('android.intent.action.VIEW', {
             data: uri,
             flags: 1,

@@ -101,6 +101,8 @@ const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
         exams: {
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            // TODO: remove margin bottom and fix scrollView container height
+            marginBottom: 10
         }
     });

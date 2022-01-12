@@ -60,5 +60,11 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     ps10: {
         paddingStart: 10
-    }
+    },
+    w100: {
+        width: "100%"
+    },
+    bigIcon: {
+        padding: 8,
+    },
 });

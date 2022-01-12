@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Button from "../components/Button";
@@ -9,8 +9,9 @@ import {SvgXml} from "react-native-svg";
 import logo from "../assets/effnerapp_logo.svg";
 
 import {loadClasses, login} from "../tools/api";
-import {navigateTo, runsOn, showToast} from "../tools/helpers";
+import {navigateTo, openUri, runsOn, showToast} from "../tools/helpers";
 import {Picker} from "@react-native-picker/picker";
+import {BASE_URL_GO} from "../tools/resources";
 
 
 export default function LoginScreen({navigation, route}) {
@@ -82,9 +83,9 @@ export default function LoginScreen({navigation, route}) {
             </ScrollView>
             <View style={[globalStyles.box, globalStyles.dropShadow]}>
                 <View style={globalStyles.row}>
-                    <Text style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text>
-                    <Text style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text>
-                    <Text style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text>
+                    <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
                 </View>
             </View>
         </View>
