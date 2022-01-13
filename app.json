@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "entryPoint": "index.js",
-    "icon": "./src/assets/icon.png",
+    "icon": "./src/assets/effnerapp_logo.png",
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
@@ -22,14 +22,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/effnerapp_logo.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "de.effnerapp.effner",
       "versionCode": 1
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./src/assets/effnerapp_logo.png"
     }
   }
 }
