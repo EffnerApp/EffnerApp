@@ -11,6 +11,8 @@ import moment from "moment";
 import {loadDSBTimetable} from "../tools/api";
 import SubstitutionEntry from "../widgets/SubstitutionEntry";
 import Picker from "../components/Picker";
+import InformationEntry from "../widgets/InformationEntry";
+import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
 
 
 export default function SubstitutionsScreen({navigation, route}) {
@@ -23,6 +25,7 @@ export default function SubstitutionsScreen({navigation, route}) {
     const [dates, setDates] = useState([]);
     const [data, setData] = useState();
     const [substitutions, setSubstitutions] = useState([]);
+    const [absentClasses, setAbsentClasses] = useState([]);
 
     useEffect(() => {
         loadDSBTimetable(credentials).then(({url, time, data}) => {
@@ -52,67 +55,74 @@ export default function SubstitutionsScreen({navigation, route}) {
         }
         setSubstitutions(tmp);
         setInformation(data.information.get(currentDate));
+        setAbsentClasses(data.absentClasses.filter((e) => e.date === currentDate).map((e) => e.class + ': ' + e.period + (e.info ? ' (' + e.info + ')' : '')));
     }, [currentDate, data]);
 
 
 
-    useEffect(() => {
-
-        navigation.setOptions({
-            headerRight: () => (
-                // TODO: move inline styles to localStyles or globalStyles
-                <View style={{flexDirection: "row", justifyContent: "space-between", width: "35%", marginEnd: 20}}>
-                    <Icon name="event" color={theme.colors.onSurface} style={{alignSelf: "center",}}/>
-                    {dates.map((date, i) => (
-                        <TouchableOpacity
-                            key={i}
-                            style={[globalStyles.bigIcon, globalStyles.row, {
-                                alignSelf: "center",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                borderRadius: 8,
-                                backgroundColor: theme.colors.onSurface,
-                                padding: 4
-                            }]}
-                            onPress={() => setCurrentDate(date)}>
-                            <Text style={{color: theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            )
-        })
-    }, [currentDate, dates]);
+    // useEffect(() => {
+    //
+    //     navigation.setOptions({
+    //         headerRight: () => (
+    //             // TODO: move inline styles to localStyles or globalStyles
+    //             <View style={{flexDirection: "row", justifyContent: "space-between", width: "35%", marginEnd: 20}}>
+    //                 <Icon name="event" color={theme.colors.onSurface} style={{alignSelf: "center",}}/>
+    //                 {dates.map((date, i) => (
+    //                     <TouchableOpacity
+    //                         key={i}
+    //                         style={[globalStyles.bigIcon, globalStyles.row, {
+    //                             alignSelf: "center",
+    //                             flexDirection: "row",
+    //                             justifyContent: "space-between",
+    //                             borderRadius: 8,
+    //                             backgroundColor: theme.colors.onSurface,
+    //                             padding: 4
+    //                         }]}
+    //                         onPress={() => setCurrentDate(date)}>
+    //                         <Text style={{color: theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
+    //                     </TouchableOpacity>
+    //                 ))}
+    //             </View>
+    //         )
+    //     })
+    // }, [currentDate, dates]);
 
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
-                <View style={localStyles.exams}>
+                {dates?.length > 1 &&
+                    <View style={localStyles.dateSelector}>
+                        <View style={{alignSelf: 'center'}}>
+                            <Text style={globalStyles.text}>
+                                Tag auswählen:
+                            </Text>
+                        </View>
+                        <View style={{flexDirection: "row"}}>
+                            {dates.map((date, i) => (
+                                <TouchableOpacity
+                                    key={i}
+                                    style={[globalStyles.bigIcon, globalStyles.row, {
+                                        borderRadius: 8,
+                                        backgroundColor: theme.colors.onSurface,
+                                        padding: 4,
+                                        marginHorizontal: 6
+                                    }]}
+                                    onPress={() => setCurrentDate(date)}>
+                                    <Text style={{color: theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </View>
+                }
+                <View style={localStyles.substitutions}>
                     {substitutions.map((data, i) => (
                         <View key={i}>
                             <SubstitutionEntry data={data}/>
                         </View>
                     ))}
+                    {information && <InformationEntry data={information} />}
+                    {absentClasses && <AbsentClassesEntry data={absentClasses} />}
                 </View>
-                {/*<Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>*/}
-                {/*<View style={localStyles.exams}>*/}
-                {/*    {examsHistory().map(([date, items], i) => (*/}
-                {/*        <View key={i}>*/}
-                {/*            <Widget title={date} titleColor="#dc3545">*/}
-                {/*                {items.map(({name}, j) => (*/}
-                {/*                    <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>*/}
-                {/*                ))}*/}
-                {/*            </Widget>*/}
-                {/*        </View>*/}
-                {/*    ))}*/}
-                {/*</View>*/}
-                {/*<Widget title={'Schulaufgaben für die Klasse ' + sClass} icon="event-note">*/}
-                {/*    {documentUrl && (*/}
-                {/*        <View>*/}
-                {/*            <TouchableOpacity onPress={() => openUri(documentUrl)}><Text*/}
-                {/*                style={globalStyles.text}>PDF-Version</Text></TouchableOpacity>*/}
-                {/*        </View>*/}
-                {/*    )}*/}
-                {/*</Widget>*/}
             </ScrollView>
         </View>
 
@@ -121,8 +131,13 @@ export default function SubstitutionsScreen({navigation, route}) {
 
 const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
-        exams: {
+        substitutions: {
             flexDirection: 'column',
             justifyContent: 'center'
-        }
+        },
+        dateSelector: {
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            marginBottom: 32
+        },
     });

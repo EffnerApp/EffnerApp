@@ -80,8 +80,7 @@ export default function TimetableScreen({navigation, route}) {
                         {[...Array(currentDepth).keys()].map((i) => (
                             <View key={i} style={[localStyles.timetableTimeEntry]}>
                                 {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
-                                <Text
-                                    style={[globalStyles.text, {textAlign: 'right', fontWeight: 'bold'}]}>{i + 1}</Text>
+                                <Text style={[globalStyles.text, {textAlign: 'right', fontWeight: 'bold'}]}>{i + 1}</Text>
                             </View>
                         ))}
                     </View>
