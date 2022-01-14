@@ -26,6 +26,10 @@ const load = async (key) => {
     return JSON.parse(data);
 };
 
+const clear = async () => {
+    await AsyncStorage.clear();
+}
+
 
 const showToast = (title, message, type = 'success') => {
     Toast.show({
@@ -134,6 +138,11 @@ const decodeEntities = (encodedString) => {
     });
 };
 
+const weekDays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const getWeekDay = (i) => {
+    return weekDays[i];
+}
+
 //
 // export async function registerForPushNotifications() {
 // 	let pushToken;
@@ -201,4 +210,4 @@ const decodeEntities = (encodedString) => {
 // 	);
 // }
 
-export {save, load, showToast, navigateTo, getPlatform, runsOn, getLevel, validateClass, openUri, groupBy, decodeEntities}
+export {save, load, clear, showToast, navigateTo, getPlatform, runsOn, getLevel, validateClass, openUri, groupBy, decodeEntities, getWeekDay}
