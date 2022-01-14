@@ -3,14 +3,9 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {useFocusEffect} from "@react-navigation/native";
-import {getLevel, groupBy, load, navigateTo, openUri, validateClass} from "../tools/helpers";
-import Widget from "../components/Widget";
-import {Icon} from "react-native-elements";
-import moment from "moment";
+import {openUri, validateClass} from "../tools/helpers";
 import {loadDSBTimetable} from "../tools/api";
 import SubstitutionEntry from "../widgets/SubstitutionEntry";
-import Picker from "../components/Picker";
 import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
 
@@ -26,11 +21,13 @@ export default function SubstitutionsScreen({navigation, route}) {
     const [data, setData] = useState();
     const [substitutions, setSubstitutions] = useState([]);
     const [absentClasses, setAbsentClasses] = useState([]);
+    const [timetableUrl, setTimetableUrl] = useState();
 
     useEffect(() => {
         loadDSBTimetable(credentials).then(({url, time, data}) => {
             setData(data);
             setDates(data.dates);
+            setTimetableUrl(url);
         });
     }, []);
 
@@ -58,35 +55,6 @@ export default function SubstitutionsScreen({navigation, route}) {
         setAbsentClasses(data.absentClasses.filter((e) => e.date === currentDate).map((e) => e.class + ': ' + e.period + (e.info ? ' (' + e.info + ')' : '')));
     }, [currentDate, data]);
 
-
-
-    // useEffect(() => {
-    //
-    //     navigation.setOptions({
-    //         headerRight: () => (
-    //             // TODO: move inline styles to localStyles or globalStyles
-    //             <View style={{flexDirection: "row", justifyContent: "space-between", width: "35%", marginEnd: 20}}>
-    //                 <Icon name="event" color={theme.colors.onSurface} style={{alignSelf: "center",}}/>
-    //                 {dates.map((date, i) => (
-    //                     <TouchableOpacity
-    //                         key={i}
-    //                         style={[globalStyles.bigIcon, globalStyles.row, {
-    //                             alignSelf: "center",
-    //                             flexDirection: "row",
-    //                             justifyContent: "space-between",
-    //                             borderRadius: 8,
-    //                             backgroundColor: theme.colors.onSurface,
-    //                             padding: 4
-    //                         }]}
-    //                         onPress={() => setCurrentDate(date)}>
-    //                         <Text style={{color: theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
-    //                     </TouchableOpacity>
-    //                 ))}
-    //             </View>
-    //         )
-    //     })
-    // }, [currentDate, dates]);
-
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
@@ -101,6 +69,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                             {dates.map((date, i) => (
                                 <TouchableOpacity
                                     key={i}
+                                    // TODO: move inline styles to localStyles or globalStyles
                                     style={[globalStyles.bigIcon, globalStyles.row, {
                                         borderRadius: 8,
                                         backgroundColor: theme.colors.onSurface,
@@ -115,14 +84,21 @@ export default function SubstitutionsScreen({navigation, route}) {
                     </View>
                 }
                 <View style={localStyles.substitutions}>
-                    {substitutions.map((data, i) => (
+                    {substitutions?.length > 0 && substitutions.map((data, i) => (
                         <View key={i}>
                             <SubstitutionEntry data={data}/>
                         </View>
                     ))}
                     {information && <InformationEntry data={information} />}
-                    {absentClasses && <AbsentClassesEntry data={absentClasses} />}
+                    {absentClasses?.length > 0 && <AbsentClassesEntry data={absentClasses} />}
                 </View>
+                {timetableUrl && (
+                    <View style={localStyles.documentBox}>
+                        <TouchableOpacity style={localStyles.documentLink}
+                                          onPress={() => openUri(timetableUrl)}><Text
+                            style={[globalStyles.text, localStyles.documentLinkText]}>Vollständigen Stundenplan anzeigen</Text></TouchableOpacity>
+                    </View>
+                )}
             </ScrollView>
         </View>
 
@@ -139,5 +115,17 @@ const createStyles = (theme = Themes.light) =>
             flexDirection: "row",
             justifyContent: "flex-end",
             marginBottom: 32
+        },
+        documentBox: {
+            marginTop: 5,
+            marginEnd: 10
+        },
+        documentLink: {
+            padding: 10
+        },
+        documentLinkText: {
+            color: '#1a4cb3',
+            textAlign: 'right',
+            fontSize: 17
         },
     });
