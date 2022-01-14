@@ -1,6 +1,7 @@
 const light = {
   name: "light",
   statusbar: "dark-content",
+  keyboardAppearance: "light",
   elevation: 6,
   colors: {
     primary: "#677afc",
@@ -21,6 +22,7 @@ const light = {
 const dark = {
   name: "dark",
   statusbar: "light-content",
+  keyboardAppearance: "dark",
   elevation: 0,
   colors: {
     // primary: "#a4fc86",

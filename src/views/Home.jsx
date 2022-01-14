@@ -6,7 +6,8 @@ import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import {loadData, loadDSBTimetable, loadNews} from "../tools/api";
-import {load} from "../tools/helpers";
+import {clear, load} from "../tools/helpers";
+import Button from "../components/Button";
 
 
 export default function HomeScreen({navigation, route}) {
@@ -31,6 +32,7 @@ export default function HomeScreen({navigation, route}) {
                     styles: {backgroundColor: "#5079e0"}
                 }}>
                 </Widget>
+                <Button title="Clear data" onPress={clear} />
             </ScrollView>
         </View>
 

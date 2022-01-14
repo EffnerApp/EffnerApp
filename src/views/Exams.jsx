@@ -18,7 +18,7 @@ export default function ExamsScreen({navigation, route}) {
     const [exams, setExams] = useState([]);
 
     useEffect(() => {
-        setExams(data.exams.exams);
+        setExams(data.exams?.exams);
     }, []);
 
     function sortedExams() {

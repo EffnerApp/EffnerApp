@@ -18,6 +18,11 @@ export default function SplashScreen({navigation}) {
                 // TODO: check via API call?
                 const sClass = await load('APP_CLASS');
 
+                if(!sClass) {
+                    navigateTo(navigation, 'Login', {error: 'No class provided.'});
+                    return;
+                }
+
                 try {
                     const data = await loadData(credentials, sClass)
                     const news = await loadNews();
