@@ -28,7 +28,7 @@ export default function SubstitutionEntry({data}) {
 
     return (
         <>
-            <Widget title={getTitle()} headerMarginBottom={0}>
+            <Widget title={getTitle()} headerMarginBottom={6}>
                 <View style={globalStyles.ps10}>
                     {!!teacher && <Text style={globalStyles.text}>{'\u2022 Ausfall: ' + teacher}</Text>}
                     {!!subTeacher && <Text style={globalStyles.text}>{'\u2022 Vertreten durch: ' + subTeacher}</Text>}
