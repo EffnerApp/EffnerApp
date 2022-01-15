@@ -1,9 +1,9 @@
 import React, {useMemo} from "react";
-import {Platform, StatusBar, StyleSheet} from "react-native";
+import {Platform, StatusBar, StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemeProvider, useTheme} from "./theme/ThemeProvider";
-import {NavigationContainer} from "@react-navigation/native";
+import {NavigationContainer, useNavigation} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {BottomTabBar, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from "./views/Home";
 import LoginScreen from "./views/Login";
 
@@ -13,6 +13,9 @@ import {Icon} from "react-native-elements";
 import TimetableScreen from "./views/Timetable";
 import ExamsScreen from "./views/Exams";
 import SubstitutionsScreen from "./views/Substitutions";
+import GlobalHeader from "./widgets/GlobalHeader";
+import SettingsScreen from "./views/Settings";
+import {excludeScreens} from "./tools/helpers";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,7 +45,7 @@ function ThemedApp() {
             headerStyle: {
                 backgroundColor: theme.colors.surface,
             },
-            headerTintColor: theme.colors.onSurface,
+            headerTintColor: theme.colors.onSurface
         };
     }, [theme]);
 
@@ -59,7 +62,7 @@ function ThemedApp() {
     )
 }
 
-function Tabs({route}) {
+function Tabs({route: stackRoute}) {
     const theme = useTheme();
     const options = useMemo(() => {
         if (Platform.OS === "android") {
@@ -79,27 +82,32 @@ function Tabs({route}) {
             tabBarStyle: {
                 backgroundColor: theme.colors.surface,
                 borderTopColor: 'transparent'
-            }
+            },
+            headerRight: () => <GlobalHeader/>
         };
     }, [theme]);
 
     return (
-        <Tab.Navigator screenOptions={options}>
+        <Tab.Navigator screenOptions={({route}) => ({
+            ...options,
+            tabBarButton: excludeScreens(route, ['Settings'])
+        })}>
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
-            }} initialParams={route.params}/>
+            }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="timetable" name="Stundenplan" component={TimetableScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="event-note" color={color} size={size}/>)
-            }} initialParams={route.params}/>
+            }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="substitutions" name="Vertretungen" component={SubstitutionsScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="shuffle" color={color} size={size}/>)
-            }} initialParams={route.params}/>
+            }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="exams" name="Schulaufgaben" component={ExamsScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="school" color={color} size={size}/>)
-            }} initialParams={route.params}/>
+            }} initialParams={stackRoute.params}/>
             {/*<Tab.Screen navigationKey="settings" name="Einstellungen" component={HomeScreen} options={{*/}
             {/*    tabBarIcon: ({color, size}) => (<Icon name="settings" color={color} size={size}/>)*/}
             {/*}} initialParams={route.params}/>*/}
+            <Tab.Screen navigationKey="settings" name="Settings" component={SettingsScreen}/>
         </Tab.Navigator>
     )
 }
@@ -110,5 +118,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    },
+    }
 });
