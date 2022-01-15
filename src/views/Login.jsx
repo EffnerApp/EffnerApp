@@ -32,7 +32,6 @@ export default function LoginScreen({navigation, route}) {
             showToast('Error', error, 'error');
         }
 
-
         // load classes form api
         loadClasses().then((classes) => {
             setClasses(classes);
