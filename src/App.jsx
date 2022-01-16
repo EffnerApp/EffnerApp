@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import {Platform, StatusBar, StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemeProvider, useTheme} from "./theme/ThemeProvider";
 import {NavigationContainer, useNavigation} from "@react-navigation/native";
@@ -16,11 +16,23 @@ import SubstitutionsScreen from "./views/Substitutions";
 import GlobalHeader from "./widgets/GlobalHeader";
 import SettingsScreen from "./views/Settings";
 import {excludeScreens} from "./tools/helpers";
+import {registerForPushNotifications} from "./tools/push";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+    useEffect(() => {
+        try {
+            registerForPushNotifications().then(console.log);
+        } catch (e) {
+            console.log("error while initializing push notifications");
+            console.log(e.message);
+        }
+    }, []);
+
+
     return (
         <>
             <ThemeProvider>
