@@ -1,9 +1,11 @@
 import axios from "axios";
 import DSBMobile from "./dsbmobile";
 import {hash} from "./hash";
-import {save} from "./helpers";
+import {load, save} from "./helpers";
+import {subscribeToChannel} from "./push";
 
-const BASE_URL = "https://api.effner.app";
+// const BASE_URL = "https://api.effner.app";
+const BASE_URL = "http://192.168.178.35:8080";
 
 let lastFetchTime = 0;
 
@@ -13,7 +15,7 @@ const login = async (credentials, sClass) => {
     const time = Date.now();
 
     try {
-        const response = await axios.post(`${BASE_URL}/v1/auth/login`, {}, {
+        const response = await axios.post(`${BASE_URL}/v3/auth/login`, {}, {
             headers: {
                 'Authorization': 'Basic ' + hash(credentials + ':' + time),
                 'X-Time': time
@@ -24,7 +26,13 @@ const login = async (credentials, sClass) => {
             await save('APP_CREDENTIALS', credentials);
             await save('APP_CLASS', sClass);
 
-            // TODO: subscribe to push notifications
+            const pushToken = await load('pushToken');
+
+            // subscribe to push notifications
+            if(pushToken) {
+                await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken);
+                await subscribeToChannel(credentials, `PUSH_CLASS_${sClass}`, pushToken);
+            }
 
             return Promise.resolve();
         } else {
@@ -39,7 +47,7 @@ const login = async (credentials, sClass) => {
 
 const loadClasses = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/v2.1/data/classes`);
+        const response = await axios.get(`${BASE_URL}/v3/classes`);
 
         return response.data;
     } catch (e) {
@@ -58,7 +66,7 @@ const loadData = async (credentials, sClass) => {
     const time = Date.now();
 
     try {
-        const response = await axios.get(`${BASE_URL}/v2/data?class=${sClass}`, {
+        const response = await axios.get(`${BASE_URL}/v3/data/${sClass}`, {
             headers: {
                 'Authorization': 'Basic ' + hash(credentials + ':' + time),
                 'X-Time': time
@@ -99,4 +107,4 @@ const loadNews = async () => {
     }
 }
 
-export {login, loadClasses, loadData, loadNews, loadDSBTimetable}
+export {login, loadClasses, loadData, loadNews, loadDSBTimetable, BASE_URL};
