@@ -3,10 +3,7 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {useFocusEffect} from "@react-navigation/native";
 import {getLevel, getWeekDay, load, navigateTo, openUri} from "../tools/helpers";
-import Widget from "../components/Widget";
-import {Icon} from "react-native-elements";
 import axios from "axios";
 import {BASE_URL, withAuthentication} from "../tools/api";
 

@@ -4,8 +4,6 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
-import Widget from "../components/Widget";
-import {navigateTo} from "../tools/helpers";
 import {useNavigation, useRoute} from "@react-navigation/native";
 
 

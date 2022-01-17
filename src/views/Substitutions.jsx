@@ -9,7 +9,6 @@ import SubstitutionEntry from "../widgets/SubstitutionEntry";
 import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
 
-
 export default function SubstitutionsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 

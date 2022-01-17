@@ -6,7 +6,6 @@ import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 import * as Progress from 'react-native-progress';
 
-
 export default function Button({title, icon, overrideStyles = {}, onPress = () => null, running = true}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 

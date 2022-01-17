@@ -1,12 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import alert from "react-native-web/dist/exports/Alert";
-import Constants from "expo-constants";
-import * as Notifications from "expo-notifications";
 import {Platform} from "react-native";
-import axios from "axios";
 import Toast from "react-native-toast-message";
 import {CommonActions} from "@react-navigation/native";
-import platform from "react-native-web/dist/exports/Platform";
 import {startActivityAsync} from "expo-intent-launcher";
 import * as WebBrowser from 'expo-web-browser';
 import moment from "moment";

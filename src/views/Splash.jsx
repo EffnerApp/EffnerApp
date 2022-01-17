@@ -5,7 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useFocusEffect} from "@react-navigation/native";
 import {load, navigateTo} from "../tools/helpers";
-import {loadData, loadNews, login} from "../tools/api";
+import {login} from "../tools/api";
 
 
 export default function SplashScreen({navigation}) {

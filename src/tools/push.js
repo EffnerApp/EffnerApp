@@ -1,8 +1,6 @@
-import axios from "axios";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import {Platform} from "react-native";
-import {BASE_URL, withAuthentication} from "./api";
 import {save} from "./helpers";
 
 async function registerForPushNotifications() {
