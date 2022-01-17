@@ -5,9 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
-import {BASE_URL, loadData, loadDSBTimetable, loadNews, withAuthentication} from "../tools/api";
-import {clear, load} from "../tools/helpers";
-import Button from "../components/Button";
+import {BASE_URL, withAuthentication} from "../tools/api";
 import axios from "axios";
 
 

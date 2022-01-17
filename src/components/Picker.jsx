@@ -4,8 +4,6 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
-import * as Progress from 'react-native-progress';
-
 
 export default function Picker({items = [], value = 0, itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);

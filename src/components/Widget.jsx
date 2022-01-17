@@ -5,7 +5,6 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 
-
 export default function Widget({title, icon, headerRight, children, titleColor, headerMarginBottom = 15}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 

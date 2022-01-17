@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {useFocusEffect} from "@react-navigation/native";
-import {getExamsHistory, getLevel, getUpcomingExams, groupBy, load, navigateTo, openUri} from "../tools/helpers";
+import {getExamsHistory, getUpcomingExams} from "../tools/helpers";
 import Widget from "../components/Widget";
-import {Icon} from "react-native-elements";
-import moment from "moment";
 import axios from "axios";
 import {BASE_URL, withAuthentication} from "../tools/api";
 

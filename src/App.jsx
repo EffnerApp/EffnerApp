@@ -1,9 +1,9 @@
 import React, {useEffect, useMemo} from "react";
-import {Platform, StatusBar, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Platform, StatusBar, StyleSheet} from "react-native";
 import {ThemeProvider, useTheme} from "./theme/ThemeProvider";
-import {NavigationContainer, useNavigation} from "@react-navigation/native";
+import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {BottomTabBar, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from "./views/Home";
 import LoginScreen from "./views/Login";
 

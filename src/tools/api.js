@@ -46,8 +46,6 @@ const login = async (credentials, sClass) => {
     } catch (e) {
         return Promise.reject(e.response?.data?.status?.error || e)
     }
-
-
 }
 
 const loadClasses = async () => {
@@ -62,30 +60,6 @@ const loadClasses = async () => {
     }
 }
 
-
-
-const loadData = async (credentials, sClass) => {
-    console.log('Loading data ...');
-    console.log('data with ' + credentials + ' and ' + sClass)
-    lastFetchTime = new Date().getTime();
-    const time = Date.now();
-
-    try {
-        const response = await axios.get(`${BASE_URL}/v3/data/${sClass}`, {
-            headers: {
-                'Authorization': 'Basic ' + hash(credentials + ':' + time),
-                'X-Time': time
-            }
-        });
-
-        return response.data.data;
-    } catch (e) {
-        // TODO: crashlytics
-        // await FirebaseCrashlytics.recordException({message: e.message, stacktrace: e.stack});
-        return Promise.reject(e.response?.data?.status?.error || e);
-    }
-}
-
 const loadDSBTimetable = async (credentials) => {
     const creds = credentials.split(':');
     const dsbmobile = new DSBMobile(creds[0], creds[1]);
@@ -93,7 +67,6 @@ const loadDSBTimetable = async (credentials) => {
     try {
         await dsbmobile.login();
         return await dsbmobile.getTimetable();
-        // store.commit('setSubstitutions', timetable);
     } catch (e) {
         // await FirebaseCrashlytics.recordException({message: e.message, stacktrace: e.stack});
         console.error(e);
@@ -143,4 +116,4 @@ const revokePushToken = async (credentials, pushToken) => {
     );
 };
 
-export {login, loadClasses, loadData, loadNews, loadDSBTimetable, withAuthentication, subscribeToChannel, revokePushToken, BASE_URL};
+export {login, loadClasses, loadNews, loadDSBTimetable, withAuthentication, subscribeToChannel, revokePushToken, BASE_URL};
