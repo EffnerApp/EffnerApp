@@ -1,7 +1,7 @@
 import axios from "axios";
 import DSBMobile from "./dsbmobile";
 import {hash} from "./hash";
-import {load, save} from "./helpers";
+import {load, save, showToast} from "./helpers";
 
 // const BASE_URL = "https://api.effner.app";
 const BASE_URL = "http://192.168.178.35:8080";
@@ -29,8 +29,14 @@ const login = async (credentials, sClass) => {
 
             // subscribe to push notifications
             if(pushToken) {
-                await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken);
-                await subscribeToChannel(credentials, `PUSH_CLASS_${sClass}`, pushToken);
+                await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken)
+                    .catch(({message, response}) => showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error'));
+                await subscribeToChannel(credentials, `PUSH_CLASS_${sClass}`, pushToken)
+                    .then(() => save('APP_NOTIFICATIONS', true))
+                    .catch(({message, response}) => {
+                        save('APP_NOTIFICATIONS', false);
+                        showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error');
+                    });
             }
 
             return Promise.resolve();
