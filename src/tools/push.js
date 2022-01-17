@@ -2,7 +2,7 @@ import axios from "axios";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import {Platform} from "react-native";
-import {BASE_URL} from "./api";
+import {BASE_URL, withAuthentication} from "./api";
 import {save} from "./helpers";
 
 async function registerForPushNotifications() {
@@ -37,32 +37,4 @@ async function registerForPushNotifications() {
 	return pushToken;
 }
 
-async function subscribeToChannel(credentials, channelId, pushToken) {
-	await axios.post(
-		`${BASE_URL}/push/subscribe/${channelId}`,
-		{
-			pushToken,
-		},
-		{
-			headers: {
-				Authorization: `Bearer ${credentials}`,
-			},
-		}
-	);
-}
-
-async function revokePushToken(credentials, pushToken) {
-	await axios.post(
-		`${BASE_URL}/push/revokeToken`,
-		{
-			pushToken,
-		},
-		{
-			headers: {
-				Authorization: `Bearer ${credentials}`,
-			},
-		}
-	);
-}
-
-export {registerForPushNotifications, subscribeToChannel, revokePushToken};
+export {registerForPushNotifications};

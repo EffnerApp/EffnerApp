@@ -5,7 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useFocusEffect} from "@react-navigation/native";
 import {load, navigateTo} from "../tools/helpers";
-import {loadData, loadNews} from "../tools/api";
+import {loadData, loadNews, login} from "../tools/api";
 
 
 export default function SplashScreen({navigation}) {
@@ -15,7 +15,6 @@ export default function SplashScreen({navigation}) {
         (async () => {
             const credentials = await load('APP_CREDENTIALS');
             if (credentials) {
-                // TODO: check via API call?
                 const sClass = await load('APP_CLASS');
 
                 if(!sClass) {
@@ -24,10 +23,8 @@ export default function SplashScreen({navigation}) {
                 }
 
                 try {
-                    const data = await loadData(credentials, sClass)
-                    const news = await loadNews();
-
-                    navigateTo(navigation, 'Tabs', {credentials, sClass, data, news});
+                    await login(credentials, sClass);
+                    navigateTo(navigation, 'Main', {credentials, sClass});
                 } catch (e) {
                     navigateTo(navigation, 'Login', {error: e});
                 }

@@ -9,6 +9,7 @@ import {CommonActions} from "@react-navigation/native";
 import platform from "react-native-web/dist/exports/Platform";
 import {startActivityAsync} from "expo-intent-launcher";
 import * as WebBrowser from 'expo-web-browser';
+import moment from "moment";
 // import { BASE_URL } from "./api";
 // import queryString from "query-string";
 // import { CommonActions } from "@react-navigation/routers";
@@ -145,6 +146,38 @@ const getWeekDay = (i) => {
 
 const excludeScreens = (route, screensToExclude) => screensToExclude.includes(route.name) ? () => null : undefined
 
+function getUpcomingExams(exams) {
+    const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY') >= moment()).slice().sort((a, b) => {
+        return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
+    }).map((exam) => {
+        if (exams.filter(value => value.name === exam.name).length > 1) {
+            return {
+                ...exam,
+                name: exam.name + (exam.course ? ' (' + exam.course + ')' : '')
+            };
+        }
+        return exam;
+    });
+    const grouped = groupBy(_exams, item => item.date);
+    return Array.from(grouped);
+}
+
+function getExamsHistory(exams) {
+    const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY') < moment()).slice().sort((a, b) => {
+        return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
+    }).map((exam) => {
+        if (exams.filter(value => value.name === exam.name).length > 1) {
+            return {
+                ...exam,
+                name: exam.name + (exam.course ? ' (' + exam.course + ')' : '')
+            };
+        }
+        return exam;
+    });
+    const grouped = groupBy(_exams, item => item.date);
+    return Array.from(grouped);
+}
+
 export {
     save,
     load,
@@ -159,5 +192,7 @@ export {
     groupBy,
     decodeEntities,
     getWeekDay,
-    excludeScreens
+    excludeScreens,
+    getUpcomingExams,
+    getExamsHistory
 }

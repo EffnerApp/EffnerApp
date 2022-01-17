@@ -68,13 +68,13 @@ function ThemedApp() {
                               options={{headerShown: false}}/>
                 <Stack.Screen name="Login" component={LoginScreen}
                               options={{headerShown: false}}/>
-                <Stack.Screen name="Tabs" component={Tabs} options={{headerShown: false}}/>
+                <Stack.Screen name="Main" component={Main} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
 
-function Tabs({route: stackRoute}) {
+function Main({route: stackRoute}) {
     const theme = useTheme();
     const options = useMemo(() => {
         if (Platform.OS === "android") {
