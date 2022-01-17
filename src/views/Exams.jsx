@@ -4,60 +4,37 @@ import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useFocusEffect} from "@react-navigation/native";
-import {getLevel, groupBy, load, navigateTo, openUri} from "../tools/helpers";
+import {getExamsHistory, getLevel, getUpcomingExams, groupBy, load, navigateTo, openUri} from "../tools/helpers";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import moment from "moment";
+import axios from "axios";
+import {BASE_URL, withAuthentication} from "../tools/api";
 
 
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    const {data, sClass} = route.params || {};
+    const {credentials, sClass} = route.params || {};
 
     const [exams, setExams] = useState([]);
+    const [upcomingExams, setUpcomingExams] = useState([]);
+    const [examsHistory, setExamsHistory] = useState([]);
 
     useEffect(() => {
-        setExams(data.exams?.exams);
-    }, []);
+        axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
+    }, [sClass, credentials]);
 
-    function sortedExams() {
-        const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY') >= moment()).slice().sort((a, b) => {
-            return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
-        }).map((exam) => {
-            if (exams.filter(value => value.name === exam.name).length > 1) {
-                return {
-                    ...exam,
-                    name: exam.name + (exam.course ? ' (' + exam.course + ')' : '')
-                };
-            }
-            return exam;
-        });
-        const grouped = groupBy(_exams, item => item.date);
-        return Array.from(grouped);
-    }
-
-    function examsHistory() {
-        const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY') < moment()).slice().sort((a, b) => {
-            return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
-        }).map((exam) => {
-            if (exams.filter(value => value.name === exam.name).length > 1) {
-                return {
-                    ...exam,
-                    name: exam.name + (exam.course ? ' (' + exam.course + ')' : '')
-                };
-            }
-            return exam;
-        });
-        const grouped = groupBy(_exams, item => item.date);
-        return Array.from(grouped);
-    }
+    useEffect(() => {
+        setUpcomingExams(getUpcomingExams(exams));
+        setExamsHistory(getExamsHistory(exams));
+    }, [exams]);
 
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
                 <View style={localStyles.exams}>
-                    {sortedExams().map(([date, items], i) => (
+                    {upcomingExams.map(([date, items], i) => (
                         <View key={i}>
                             <Widget title={date} titleColor="#28a745" headerMarginBottom={0}>
                                 <View style={globalStyles.ps10}>
@@ -69,9 +46,9 @@ export default function ExamsScreen({navigation, route}) {
                         </View>
                     ))}
                 </View>
-                <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>
+                {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>}
                 <View style={localStyles.exams}>
-                    {examsHistory().map(([date, items], i) => (
+                    {examsHistory.map(([date, items], i) => (
                         <View key={i}>
                             <Widget title={date} titleColor="#dc3545" headerMarginBottom={0}>
                                 <View style={globalStyles.ps10}>

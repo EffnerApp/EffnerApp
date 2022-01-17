@@ -7,12 +7,17 @@ import {useFocusEffect} from "@react-navigation/native";
 import {getLevel, getWeekDay, load, navigateTo, openUri} from "../tools/helpers";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
+import axios from "axios";
+import {BASE_URL, withAuthentication} from "../tools/api";
 
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    const {data, sClass} = route.params || {};
+    const {credentials, sClass} = route.params || {};
+
+    const [timetables, setTimetables] = useState({data: [], schedule: []});
+    const [documents, setDocuments] = useState([]);
 
     const [timetable, setTimetable] = useState();
     const [selectedTimetable, setSelectedTimetable] = useState(0);
@@ -20,19 +25,24 @@ export default function TimetableScreen({navigation, route}) {
     const [documentUrl, setDocumentUrl] = useState();
 
     useEffect(() => {
-        setDocumentUrl(data.documents.find(({key}) => key.startsWith('DATA_TIMETABLE_Q' + getLevel(sClass)))?.uri)
-    }, []);
+        axios.get(`${BASE_URL}/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
+        axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+    }, [sClass, credentials]);
 
     useEffect(() => {
-        setTimetable(data.timetables[selectedTimetable]);
-        setCurrentDepth(maxDepth(data.timetables[selectedTimetable]));
-    }, [selectedTimetable]);
+        setDocumentUrl(documents.find(({key}) => key.startsWith('DATA_TIMETABLE_Q' + getLevel(sClass)))?.uri)
+    }, [documents]);
+
+    useEffect(() => {
+        setTimetable(timetables.data[selectedTimetable]);
+        setCurrentDepth(maxDepth(timetables.data[selectedTimetable]));
+    }, [timetables, selectedTimetable]);
 
     function maxDepth(timetable) {
         for (let j = 9; j >= 0; j--) {
             let rowEmpty = true;
             for (let i = 4; i >= 0; i--) {
-                rowEmpty = !timetable.lessons[i][j];
+                rowEmpty = !timetable?.lessons[i][j];
                 if (!rowEmpty) {
                     break;
                 }
@@ -47,7 +57,7 @@ export default function TimetableScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
-                {data.timetables?.length > 1 &&
+                {timetables?.data?.length > 1 &&
                     <View style={localStyles.timetableSelector}>
                         <View style={{alignSelf: 'center'}}>
                             <Text style={globalStyles.text}>
@@ -55,7 +65,7 @@ export default function TimetableScreen({navigation, route}) {
                             </Text>
                         </View>
                         <View style={{flexDirection: "row"}}>
-                            {data.timetables.map(({class: tClass}, i) => (
+                            {timetables.data.map(({class: tClass}, i) => (
                                 <TouchableOpacity
                                     key={i}
                                     style={[globalStyles.bigIcon, globalStyles.row, {

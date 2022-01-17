@@ -13,7 +13,7 @@ import Button from "../components/Button";
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    const {credentials, sClass, data, news} = route.params || {};
+    const {credentials, sClass} = route.params || {};
 
     return (
         <View style={globalStyles.screen}>
