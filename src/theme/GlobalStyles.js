@@ -14,7 +14,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
         height: "100%",
         maxWidth: "90%",
         maxHeight: "90%",
-        padding: 12,
+        padding: 6,
         backgroundColor: theme.colors.background,
         borderRadius: 4,
     },

@@ -7,11 +7,15 @@ import {Icon} from "react-native-elements";
 import * as Progress from 'react-native-progress';
 
 
-export default function Picker({items = [], itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
+export default function Picker({items = [], value = 0, itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const [showItems, setShowItems] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(0);
+    const [selectedItem, setSelectedItem] = useState(value);
+
+    useEffect(() => {
+        setSelectedItem(value);
+    }, [value]);
 
     useEffect(() => {
         onSelect(items[selectedItem], selectedItem);

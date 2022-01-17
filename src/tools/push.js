@@ -20,7 +20,7 @@ async function registerForPushNotifications() {
 			return;
 		}
 		pushToken = (await Notifications.getExpoPushTokenAsync()).data;
-		console.log(pushToken);
+		console.log('recv pushToken ... ' + pushToken);
 
 		await save("pushToken", pushToken);
 	}
