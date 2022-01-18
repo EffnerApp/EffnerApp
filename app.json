@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "effnerapp-next",
-    "slug": "effnerapp-next",
-    "version": "1.0.0",
+    "name": "EffnerApp",
+    "slug": "EffnerApp",
+    "version": "3.0",
     "orientation": "portrait",
     "entryPoint": "index.js",
     "icon": "./src/assets/effnerapp_logo.png",
@@ -26,10 +26,20 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "de.effnerapp.effner",
-      "versionCode": 1
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./src/assets/effnerapp_logo.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/effnerapp_push_icon.png",
+          "color": "#ffffff"
+        }
+      ]
+    ]
   }
 }

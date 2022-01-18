@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "539131155201",
+    "firebase_url": "https://effnerapp.firebaseio.com",
+    "project_id": "effnerapp",
+    "storage_bucket": "effnerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539131155201:android:70271ae28ca3f087dc8100",
+        "android_client_info": {
+          "package_name": "de.effnerapp.effner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539131155201-0m15kof2tm9nffmbjda8c26ar7ejptqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.effnerapp.effner",
+            "certificate_hash": "f83de20c05b505a30452a237f647ebb73a0cb6ff"
+          }
+        },
+        {
+          "client_id": "539131155201-gjiolhga66hine2cacb0n2mm58nsn4n8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.effnerapp.effner",
+            "certificate_hash": "1cc644296cd14ca981eb7c59229b51ca66b14925"
+          }
+        },
+        {
+          "client_id": "539131155201-g2srvtcpd65qd6492i00kphf1rpmptt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw4uVaKxjrFf9f-5MlCdufnI35CAuTwH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539131155201-g2srvtcpd65qd6492i00kphf1rpmptt8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539131155201-97bvapsrbt0b726okgtficaqhei4itrk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.effnerapp.effner"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
