@@ -4,12 +4,14 @@ import {StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
+import {fromAngle} from "../tools/helpers";
+import {LinearGradient} from "expo-linear-gradient";
 
-export default function Widget({title, icon, headerRight, children, titleColor, headerMarginBottom = 15}) {
+export default function Widget({title, icon, headerRight, children, titleColor, headerMarginBottom = 15, gradient}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    return (
-        <View style={globalStyles.box}>
+    function WidgetHeader() {
+        return (
             <View style={[localStyles.boxHeader, {marginBottom: headerMarginBottom}]}>
                 <View style={localStyles.iconContainer}>
                     <Icon name={icon} color={theme.colors.onSurface}/>
@@ -19,9 +21,37 @@ export default function Widget({title, icon, headerRight, children, titleColor, 
                     {headerRight.component}
                 </View>}
             </View>
-            {children}
-        </View>
-    )
+        )
+    }
+
+    function GradientWidget() {
+        return (
+            <LinearGradient
+                style={globalStyles.box}
+                start={[0, 0]}
+                end={fromAngle(gradient.angle, 1.6)}
+                colors={gradient.colors}
+            >
+                <WidgetHeader />
+                {children}
+            </LinearGradient>
+        )
+    }
+
+    function DefaultWidget() {
+        return (
+            <View style={globalStyles.box}>
+                <WidgetHeader />
+                {children}
+            </View>
+        )
+    }
+
+    if(!!gradient) {
+        return <GradientWidget />
+    } else {
+        return <DefaultWidget />
+    }
 }
 
 const createStyles = (theme = Themes.light) =>

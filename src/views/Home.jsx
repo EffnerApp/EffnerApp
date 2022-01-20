@@ -8,7 +8,6 @@ import {Icon} from "react-native-elements";
 import {BASE_URL, withAuthentication} from "../tools/api";
 import axios from "axios";
 
-
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
@@ -31,12 +30,23 @@ export default function HomeScreen({navigation, route}) {
         <View style={globalStyles.screen}>
             <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
             <ScrollView style={globalStyles.content}>
-                <Widget title="ÖPNV" icon="directions-bus" headerRight={{
+                <Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} headerRight={{
                     component: <Text style={localStyles.mvvBadgeText}>Live</Text>,
                     styles: {backgroundColor: "#7be87b"}
                 }}>
+                    <View style={[globalStyles.box, globalStyles.row]}>
+                        <View style={[globalStyles.box, {backgroundColor: '#547fcd', padding: 8}]}>
+                            <Text style={globalStyles.text}>721</Text>
+                        </View>
+                        <View style={{alignSelf: 'center'}}>
+                            <Text style={globalStyles.textBigCenter}>Bergkirchen, Schule und so</Text>
+                        </View>
+                        <View style={{alignSelf: 'center'}}>
+                            <Text style={[globalStyles.text, {color: '#4dc44d'}]}>13:37</Text>
+                        </View>
+                    </View>
                 </Widget>
-                <Widget title="News" icon="inbox" headerRight={{
+                <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}} headerRight={{
                     component: (
                         <>
                             <Text style={{color: theme.colors.onSurface, fontSize: 20}}>3</Text>
@@ -44,7 +54,13 @@ export default function HomeScreen({navigation, route}) {
                         </>),
                     styles: {backgroundColor: "#5079e0"}
                 }}>
+                    <View style={[globalStyles.box, {paddingVertical: 75}]}>
+                    </View>
                 </Widget>
+                <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} headerMarginBottom={0} />
+                <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} headerMarginBottom={0} />
+                <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} headerMarginBottom={0} />
+                <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} headerMarginBottom={0} />
             </ScrollView>
         </View>
 
