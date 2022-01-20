@@ -173,6 +173,15 @@ function getExamsHistory(exams) {
     return Array.from(grouped);
 }
 
+// get pX and pY from angle (inverse atan2)
+function fromAngle(angle, len = 1) {
+    const theta = angle / 2 * Math.PI / 180;
+    const pX = len * Math.cos(theta);
+    const pY = len * Math.sin(theta);
+
+    return [pX, pY];
+}
+
 export {
     save,
     load,
@@ -189,5 +198,6 @@ export {
     getWeekDay,
     excludeScreens,
     getUpcomingExams,
-    getExamsHistory
+    getExamsHistory,
+    fromAngle
 }

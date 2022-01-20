@@ -65,8 +65,8 @@ export default function LoginScreen({navigation, route}) {
     }
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={globalStyles.screen}>
+        <>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={globalStyles.screen}>
                 <ScrollView style={globalStyles.content}>
                     <View style={localStyles.logoOuterContainer}>
                         <View style={localStyles.logoContainer}>
@@ -104,18 +104,18 @@ export default function LoginScreen({navigation, route}) {
                                 onPress={performLogin} running={running}/>
                     </View>
                 </ScrollView>
-                <View style={[globalStyles.box, globalStyles.dropShadow]}>
-                    <View style={globalStyles.row}>
-                        <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
-                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
-                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
-                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
-                    </View>
+            </KeyboardAvoidingView>
+            <View style={[globalStyles.box, globalStyles.dropShadow]}>
+                <View style={globalStyles.row}>
+                    <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
+                        style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
+                        style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
+                        style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
                 </View>
             </View>
-        </KeyboardAvoidingView>
+        </>
     )
 }
 
