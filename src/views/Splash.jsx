@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import {StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {useFocusEffect} from "@react-navigation/native";
+import {useFocusEffect, useIsFocused} from "@react-navigation/native";
 import {load, navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
 
@@ -11,7 +11,9 @@ import {login} from "../tools/api";
 export default function SplashScreen({navigation}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    useFocusEffect(() => {
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
         (async () => {
             const credentials = await load('APP_CREDENTIALS');
             if (credentials) {
@@ -32,7 +34,7 @@ export default function SplashScreen({navigation}) {
                 navigateTo(navigation, 'Login');
             }
         })();
-    });
+    }, [isFocused]);
 
     return (
         <View style={globalStyles.screen}>

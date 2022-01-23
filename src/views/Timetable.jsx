@@ -6,6 +6,7 @@ import {Themes} from "../theme/ColorThemes";
 import {getLevel, getWeekDay, load, navigateTo, openUri} from "../tools/helpers";
 import axios from "axios";
 import {BASE_URL, withAuthentication} from "../tools/api";
+import moment from "moment";
 
 
 export default function TimetableScreen({navigation, route}) {
@@ -108,13 +109,20 @@ export default function TimetableScreen({navigation, route}) {
                         </View>
                     ))}
                 </View>
-                {documentUrl && (
-                    <View style={localStyles.documentBox}>
-                        <TouchableOpacity style={localStyles.documentLink}
-                                          onPress={() => openUri(documentUrl)}><Text
-                            style={[globalStyles.text, localStyles.documentLinkText]}>PDF-Version</Text></TouchableOpacity>
+                <View style={[globalStyles.row, localStyles.timetableFooter]}>
+                    <View style={{alignSelf: 'center'}}>
+                        <View style={localStyles.timetableFooterTextBox}>
+                            <Text style={globalStyles.text}>Zuletzt aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                        </View>
                     </View>
-                )}
+                    {documentUrl && (
+                        <View style={{alignSelf: 'center'}}>
+                            <TouchableOpacity style={localStyles.timetableFooterTextBox} onPress={() => openUri(documentUrl)}>
+                                <Text style={[globalStyles.text, localStyles.timetableFooterLinkText]}>PDF-Version</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                </View>
             </ScrollView>
         </View>
 
@@ -136,16 +144,20 @@ const createStyles = (theme = Themes.light) =>
             borderColor: theme.colors.onSurface,
             padding: 8
         },
-        documentBox: {
+        timetableFooter: {
             marginTop: 5,
             marginEnd: 10
         },
-        documentLink: {
-            padding: 10
+        timetableFooterTextBox: {
+            padding: 10,
+            alignSelf:  'center'
         },
-        documentLinkText: {
+        timetableFooterLinkText: {
             color: '#1a4cb3',
             textAlign: 'right',
+            fontSize: 17
+        },
+        timetableFooterText: {
             fontSize: 17
         },
         timetableSelector: {

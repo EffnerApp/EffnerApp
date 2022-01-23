@@ -128,16 +128,10 @@ export default function SettingsScreen({navigation, route}) {
                         />
                     </View>
                     <View style={localStyles.line}/>
-                    <View style={{marginBottom: 16}}>
-                        <Text style={globalStyles.text}>
-                            Stundenplan-Theme
-                        </Text>
-                    </View>
                     <View>
-                        <Picker items={["Kunterbunt", "Schwarz/Weiß", "Gelb", "Blau", "Grün"]} value={timetableTheme}
+                        <Picker title="Stundenplan-Theme" items={["Kunterbunt", "Schwarz/Weiß", "Gelb", "Blau", "Grün"]} value={timetableTheme}
                                 onSelect={(e, i) => setTimetableTheme(i)}/>
                     </View>
-                    <View style={localStyles.line}/>
                 </Widget>
                 <Widget title="Über EffnerApp" icon="info">
                     <TouchableOpacity onPress={() => openUri('mailto:info@effner.app')}>
