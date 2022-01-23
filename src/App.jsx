@@ -45,29 +45,27 @@ export default function App() {
 
 function ThemedApp() {
     const theme = useTheme();
-    const options = useMemo(() => {
-        if (Platform.OS === "android") {
-            StatusBar.setTranslucent(false);
-            StatusBar.setBackgroundColor(theme.colors.surface);
-        }
-
-        StatusBar.setBarStyle(theme.statusbar);
-
-        return {
-            headerStyle: {
-                backgroundColor: theme.colors.surface,
-            },
-            headerTintColor: theme.colors.onSurface
-        };
-    }, [theme]);
+    {/*const options = useMemo(() => {*/}
+    {/*    if (Platform.OS === "android") {*/}
+    //         StatusBar.setTranslucent(false);
+    //         StatusBar.setBackgroundColor(theme.colors.surface);
+    //     }
+    //
+    //     StatusBar.setBarStyle(theme.statusbar);
+    //
+    //     return {
+    //         headerStyle: {
+    //             backgroundColor: theme.colors.surface,
+    //         },
+    //         headerTintColor: theme.colors.onSurface
+    //     };
+    // }, [theme]);
 
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Splash" component={SplashScreen}
-                              options={{headerShown: false}}/>
-                <Stack.Screen name="Login" component={LoginScreen}
-                              options={{headerShown: false}}/>
+                <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="Main" component={Main} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>

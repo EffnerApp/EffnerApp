@@ -7,14 +7,14 @@ import {Icon} from "react-native-elements";
 import {fromAngle} from "../tools/helpers";
 import {LinearGradient} from "expo-linear-gradient";
 
-export default function Widget({title, icon, headerRight, children, titleColor, headerMarginBottom = 15, gradient}) {
+export default function Widget({title, icon, headerRight, children, titleColor, iconColor, headerMarginBottom = 15, gradient}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     function WidgetHeader() {
         return (
             <View style={[localStyles.boxHeader, {marginBottom: headerMarginBottom}]}>
                 <View style={localStyles.iconContainer}>
-                    <Icon name={icon} color={theme.colors.onSurface}/>
+                    <Icon name={icon} color={iconColor || theme.colors.onSurface}/>
                     <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text>
                 </View>
                 {headerRight && <View style={[localStyles.headerRightContainer, headerRight.styles]}>

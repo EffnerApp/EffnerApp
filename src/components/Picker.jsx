@@ -5,7 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 
-export default function Picker({items = [], value = 0, itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
+export default function Picker({title, items = [], value = 0, itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const [showItems, setShowItems] = useState(false);
@@ -27,6 +27,7 @@ export default function Picker({items = [], value = 0, itemNameGetter = (e) => e
                 }}
                 style={globalStyles.row}>
                 <View style={localStyles.itemContainer}>
+                    {title && <Text style={globalStyles.text}>{title}: </Text>}
                     <Text
                         style={[
                             globalStyles.text,
@@ -90,7 +91,8 @@ export default function Picker({items = [], value = 0, itemNameGetter = (e) => e
 const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
         itemContainer: {
-            alignSelf: "center",
+            flexDirection: 'row',
+            alignSelf: "center"
         },
         itemListContainer: {
             paddingVertical: 2
