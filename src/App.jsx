@@ -45,21 +45,14 @@ export default function App() {
 
 function ThemedApp() {
     const theme = useTheme();
-    {/*const options = useMemo(() => {*/}
-    {/*    if (Platform.OS === "android") {*/}
-    //         StatusBar.setTranslucent(false);
-    //         StatusBar.setBackgroundColor(theme.colors.surface);
-    //     }
-    //
-    //     StatusBar.setBarStyle(theme.statusbar);
-    //
-    //     return {
-    //         headerStyle: {
-    //             backgroundColor: theme.colors.surface,
-    //         },
-    //         headerTintColor: theme.colors.onSurface
-    //     };
-    // }, [theme]);
+    useEffect(() => {
+       if (Platform.OS === "android") {
+           StatusBar.setTranslucent(false);
+           StatusBar.setBackgroundColor(theme.colors.surface);
+       }
+
+        StatusBar.setBarStyle(theme.statusbar);
+    }, [theme]);
 
     return (
         <NavigationContainer>
@@ -75,13 +68,6 @@ function ThemedApp() {
 function Main({route: stackRoute}) {
     const theme = useTheme();
     const options = useMemo(() => {
-        if (Platform.OS === "android") {
-            StatusBar.setTranslucent(false);
-            StatusBar.setBackgroundColor(theme.colors.surface);
-        }
-
-        StatusBar.setBarStyle(theme.statusbar);
-
         return {
             headerStyle: {
                 backgroundColor: theme.colors.surface,

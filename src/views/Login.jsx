@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {
     KeyboardAvoidingView,
     Platform,
-    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -67,7 +66,7 @@ export default function LoginScreen({navigation, route}) {
     return (
         <>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={globalStyles.screen}>
-                <ScrollView style={globalStyles.content}>
+                <View style={localStyles.content}>
                     <View style={localStyles.logoOuterContainer}>
                         <View style={localStyles.logoContainer}>
                             <SvgXml style={{alignSelf: "center"}} xml={logo} width={100} height={100}/>
@@ -103,24 +102,33 @@ export default function LoginScreen({navigation, route}) {
                         <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]}
                                 onPress={performLogin} running={running}/>
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-            <View style={[globalStyles.box, globalStyles.dropShadow]}>
-                <View style={globalStyles.row}>
-                    <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
-                        style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
-                        style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
-                        style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
                 </View>
-            </View>
+                <View style={[globalStyles.box, globalStyles.dropShadow]}>
+                    <View style={globalStyles.row}>
+                        <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
+                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
+                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
+                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
+                    </View>
+                </View>
+            </KeyboardAvoidingView>
+
         </>
     )
 }
 
 const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
+        content: {
+            width: "100%",
+            maxWidth: "90%",
+            maxHeight: "90%",
+            padding: 6,
+            backgroundColor: theme.colors.background,
+            borderRadius: 4
+        },
         boxPrimary: {
             backgroundColor: theme.colors.primary,
             color: theme.colors.onPrimary
