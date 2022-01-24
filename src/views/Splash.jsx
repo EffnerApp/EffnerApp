@@ -6,6 +6,7 @@ import {Themes} from "../theme/ColorThemes";
 import {useFocusEffect, useIsFocused} from "@react-navigation/native";
 import {load, navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
+import * as Progress from 'react-native-progress';
 
 
 export default function SplashScreen({navigation}) {
@@ -38,7 +39,7 @@ export default function SplashScreen({navigation}) {
 
     return (
         <View style={globalStyles.screen}>
-            <Text>Splash here ...</Text>
+            <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true} />
         </View>
     )
 }
