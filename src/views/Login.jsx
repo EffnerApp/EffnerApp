@@ -21,7 +21,6 @@ import {navigateTo, openUri, runsOn, showToast} from "../tools/helpers";
 import {Picker} from "@react-native-picker/picker";
 import {BASE_URL_GO} from "../tools/resources";
 
-
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
@@ -36,16 +35,18 @@ export default function LoginScreen({navigation, route}) {
     const [sClass, setClass] = useState();
 
     useEffect(() => {
-        if (error) {
-            showToast('Error', error, 'error');
-        }
-
         // load classes form api
         loadClasses().then((classes) => {
             setClasses(classes);
             setClass(classes?.[0]);
         }).catch((e) => showToast('Error while loading classes', e, 'error'))
     }, []);
+
+    useEffect(() => {
+        if (error) {
+            showToast('Error', error, 'error');
+        }
+    }, [error]);
 
     function performLogin() {
         setRunning(true);

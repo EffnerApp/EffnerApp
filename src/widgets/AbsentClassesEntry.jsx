@@ -11,7 +11,7 @@ export default function AbsentClassesEntry({data}) {
 
     return (
         <>
-            <Widget title="Abwensende Klassen" headerMarginBottom={6} titleColor="#e85b5b">
+            <Widget title="Abwesende Klassen" headerMarginBottom={6} titleColor="#e85b5b">
                 <View style={globalStyles.ps10}>
                     {data.map((c, i) => (
                         <Text key={i} style={globalStyles.text}>{'\u2022 ' + c}</Text>
