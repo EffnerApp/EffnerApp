@@ -5,6 +5,7 @@ import {CommonActions} from "@react-navigation/native";
 import {startActivityAsync} from "expo-intent-launcher";
 import * as WebBrowser from 'expo-web-browser';
 import moment from "moment";
+import {hash} from "./hash";
 // import { BASE_URL } from "./api";
 // import queryString from "query-string";
 // import { CommonActions } from "@react-navigation/routers";
@@ -166,6 +167,17 @@ function fromAngle(angle, len = 1) {
     return [pX, pY];
 }
 
+const withAuthentication = (credentials) => {
+    const time = Date.now();
+
+    return {
+        headers: {
+            'Authorization': 'Basic ' + hash(credentials + ':' + time),
+            'X-Time': time.toString()
+        }
+    };
+}
+
 export {
     showToast,
     navigateTo,
@@ -180,5 +192,6 @@ export {
     excludeScreens,
     getUpcomingExams,
     getExamsHistory,
-    fromAngle
+    fromAngle,
+    withAuthentication
 }

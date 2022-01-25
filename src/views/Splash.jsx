@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {useFocusEffect, useIsFocused} from "@react-navigation/native";
+import {useIsFocused} from "@react-navigation/native";
 import {navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
 import * as Progress from 'react-native-progress';

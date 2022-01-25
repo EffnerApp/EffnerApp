@@ -6,7 +6,7 @@ import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import Picker from "../components/Picker";
 import {navigateTo, openUri, showToast} from "../tools/helpers";
-import {revokePushToken, subscribeToChannel} from "../tools/api";
+import {revokePushToken, subscribeToChannel} from "../tools/push";
 import {BASE_URL_GO} from "../tools/resources";
 import Constants from "expo-constants";
 import {load, save, clear} from "../tools/storage";
