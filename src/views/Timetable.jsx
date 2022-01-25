@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getLevel, getWeekDay, load, navigateTo, openUri} from "../tools/helpers";
+import {getLevel, getWeekDay, openUri} from "../tools/helpers";
 import axios from "axios";
 import {BASE_URL, withAuthentication} from "../tools/api";
 import moment from "moment";

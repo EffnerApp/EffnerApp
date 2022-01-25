@@ -10,22 +10,6 @@ import moment from "moment";
 // import { CommonActions } from "@react-navigation/routers";
 // import Toast from "react-native-root-toast";
 
-const save = async (key, value) => {
-    if (!value) await AsyncStorage.removeItem(key);
-    else await AsyncStorage.setItem(key, JSON.stringify(value));
-};
-
-const load = async (key) => {
-    const data = await AsyncStorage.getItem(key);
-    if (!data) return;
-
-    return JSON.parse(data);
-};
-
-const clear = async () => {
-    await AsyncStorage.clear();
-}
-
 
 const showToast = (title, message, type = 'success') => {
     Toast.show({
@@ -183,9 +167,6 @@ function fromAngle(angle, len = 1) {
 }
 
 export {
-    save,
-    load,
-    clear,
     showToast,
     navigateTo,
     getPlatform,

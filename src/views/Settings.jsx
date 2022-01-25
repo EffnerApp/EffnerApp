@@ -5,10 +5,11 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import Picker from "../components/Picker";
-import {clear, load, navigateTo, openUri, save, showToast} from "../tools/helpers";
+import {navigateTo, openUri, showToast} from "../tools/helpers";
 import {revokePushToken, subscribeToChannel} from "../tools/api";
 import {BASE_URL_GO} from "../tools/resources";
 import Constants from "expo-constants";
+import {load, save, clear} from "../tools/storage";
 
 export default function SettingsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);

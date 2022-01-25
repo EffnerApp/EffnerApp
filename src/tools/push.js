@@ -1,7 +1,7 @@
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import {Platform} from "react-native";
-import {save} from "./helpers";
+import {save} from "./storage";
 
 async function registerForPushNotifications() {
 	let pushToken;

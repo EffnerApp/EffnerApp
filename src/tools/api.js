@@ -1,7 +1,8 @@
 import axios from "axios";
 import DSBMobile from "./dsbmobile";
 import {hash} from "./hash";
-import {load, save, showToast} from "./helpers";
+import {showToast} from "./helpers";
+import {save, load} from "./storage";
 
 const BASE_URL = "https://v3.api.effner.app";
 // const BASE_URL = "http://192.168.178.35:8080";
