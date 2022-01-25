@@ -17,6 +17,7 @@ import GlobalHeader from "./widgets/GlobalHeader";
 import SettingsScreen from "./views/Settings";
 import {excludeScreens} from "./tools/helpers";
 import {registerForPushNotifications} from "./tools/push";
+import {save} from "./tools/storage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +26,7 @@ export default function App() {
 
     useEffect(() => {
         try {
-            registerForPushNotifications().then(console.log);
+            registerForPushNotifications().then((token) => save("pushToken", token));
         } catch (e) {
             console.log("error while initializing push notifications");
             console.log(e.message);
@@ -46,10 +47,10 @@ export default function App() {
 function ThemedApp() {
     const theme = useTheme();
     useEffect(() => {
-       if (Platform.OS === "android") {
-           StatusBar.setTranslucent(false);
-           StatusBar.setBackgroundColor(theme.colors.surface);
-       }
+        if (Platform.OS === "android") {
+            StatusBar.setTranslucent(false);
+            StatusBar.setBackgroundColor(theme.colors.surface);
+        }
 
         StatusBar.setBarStyle(theme.statusbar);
     }, [theme]);

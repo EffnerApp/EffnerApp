@@ -3,10 +3,10 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getExamsHistory, getUpcomingExams} from "../tools/helpers";
+import {getExamsHistory, getUpcomingExams, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
 import axios from "axios";
-import {BASE_URL, withAuthentication} from "../tools/api";
+import {BASE_URL} from "../tools/resources";
 
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);

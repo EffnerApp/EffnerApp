@@ -3,8 +3,9 @@ import DSBMobile from "./dsbmobile";
 import {hash} from "./hash";
 import {showToast} from "./helpers";
 import {save, load} from "./storage";
+import {BASE_URL} from "./resources";
+import {subscribeToChannel} from "./push";
 
-const BASE_URL = "https://v3.api.effner.app";
 // const BASE_URL = "http://192.168.178.35:8080";
 
 const login = async (credentials, sClass) => {
@@ -84,35 +85,4 @@ const loadNews = async () => {
     }
 }
 
-const withAuthentication = (credentials) => {
-    const time = Date.now();
-
-    return {
-        headers: {
-            'Authorization': 'Basic ' + hash(credentials + ':' + time),
-            'X-Time': time.toString()
-        }
-    };
-}
-
-const subscribeToChannel = async (credentials, channelId, pushToken) => {
-    await axios.post(
-        `${BASE_URL}/v3/push/subscribe/${channelId}`,
-        {
-            pushToken,
-        },
-        withAuthentication(credentials)
-    );
-};
-
-const revokePushToken = async (credentials, pushToken) => {
-    await axios.post(
-        `${BASE_URL}/v3/push/revokeToken`,
-        {
-            pushToken,
-        },
-        withAuthentication(credentials)
-    );
-};
-
-export {login, loadClasses, loadNews, loadDSBTimetable, withAuthentication, subscribeToChannel, revokePushToken, BASE_URL};
+export {login, loadClasses, loadNews, loadDSBTimetable};

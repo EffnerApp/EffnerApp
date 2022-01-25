@@ -1,7 +1,9 @@
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import {Platform} from "react-native";
-import {save} from "./storage";
+import axios from "axios";
+import {BASE_URL} from "./resources";
+import {withAuthentication} from "./helpers";
 
 async function registerForPushNotifications() {
 	let pushToken;
@@ -19,8 +21,6 @@ async function registerForPushNotifications() {
 		}
 		pushToken = (await Notifications.getExpoPushTokenAsync()).data;
 		console.log('recv pushToken ... ' + pushToken);
-
-		await save("pushToken", pushToken);
 	}
 
 	if (Platform.OS === "android") {
@@ -35,4 +35,24 @@ async function registerForPushNotifications() {
 	return pushToken;
 }
 
-export {registerForPushNotifications};
+const subscribeToChannel = async (credentials, channelId, pushToken) => {
+	await axios.post(
+		`${BASE_URL}/v3/push/subscribe/${channelId}`,
+		{
+			pushToken,
+		},
+		withAuthentication(credentials)
+	);
+};
+
+const revokePushToken = async (credentials, pushToken) => {
+	await axios.post(
+		`${BASE_URL}/v3/push/revokeToken`,
+		{
+			pushToken,
+		},
+		withAuthentication(credentials)
+	);
+};
+
+export {registerForPushNotifications, subscribeToChannel, revokePushToken};

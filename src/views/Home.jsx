@@ -5,9 +5,9 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
-import {BASE_URL, withAuthentication} from "../tools/api";
 import axios from "axios";
-import {openUri} from "../tools/helpers";
+import {openUri, withAuthentication} from "../tools/helpers";
+import {BASE_URL} from "../tools/resources";
 
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
