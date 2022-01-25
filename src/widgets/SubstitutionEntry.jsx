@@ -4,6 +4,7 @@ import {StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
+import {normalize} from "../tools/helpers";
 
 export default function SubstitutionEntry({data}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -26,7 +27,7 @@ export default function SubstitutionEntry({data}) {
 
     return (
         <>
-            <Widget title={getTitle()} headerMarginBottom={6}>
+            <Widget title={getTitle()} headerMarginBottom={normalize(6)}>
                 <View style={globalStyles.ps10}>
                     {!!teacher && <Text style={globalStyles.text}>{'\u2022 Ausfall: ' + teacher}</Text>}
                     {!!subTeacher && <Text style={globalStyles.text}>{'\u2022 Vertreten durch: ' + subTeacher}</Text>}

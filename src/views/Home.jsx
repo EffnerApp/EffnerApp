@@ -6,8 +6,10 @@ import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import axios from "axios";
-import {openUri, withAuthentication} from "../tools/helpers";
+import {getCurrentSubstitutionDay, getUpcomingExams, normalize, openUri, validateClass, withAuthentication} from "../tools/helpers";
 import {BASE_URL} from "../tools/resources";
+import {loadDSBTimetable} from "../tools/api";
+import moment from "moment";
 
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -17,10 +19,35 @@ export default function HomeScreen({navigation, route}) {
     const [config, setConfig] = useState();
     const [motd, setMotd] = useState('');
     const [documents, setDocuments] = useState([]);
+    const [exams, setExams] = useState([]);
+
+    const [nextExam, setNextExam] = useState('');
+    const [currentSubstitutions, setCurrentSubstitutions] = useState('');
 
     useEffect(() => {
         axios.get(`${BASE_URL}/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data));
         axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
+
+        loadDSBTimetable(credentials).then(({data}) => {
+            const {dates, days} = data;
+
+            const date = getCurrentSubstitutionDay(dates);
+            const today = moment().format('DD.MM.YYYY');
+
+            const substitutions = days?.get(date)?.filter((entry) => validateClass(sClass, entry.name))?.map((e) => e.items);
+
+            let tmp = [];
+            if (substitutions) {
+                for (let i = 0; i < substitutions.length; i++) {
+                    if (substitutions[i]) {
+                        tmp = tmp.concat(substitutions[i]);
+                    }
+                }
+
+                setCurrentSubstitutions((tmp.length > 0 ? tmp.length : 'Keine') + (tmp.length === 1 ? ' Vertretung ' : ' Vertretungen ') + (date === today ? 'heute' : 'am ' + date));
+            }
+        });
     }, [sClass, credentials]);
 
     useEffect(() => {
@@ -28,48 +55,75 @@ export default function HomeScreen({navigation, route}) {
         setMotd(config.motd);
     }, [config]);
 
+    useEffect(() => {
+        const upcomingExams = getUpcomingExams(exams);
+
+        const nextExams = upcomingExams[0];
+
+        if (!nextExams) return null;
+
+        const date = nextExams[0];
+
+        if(nextExams[1].length === 1) {
+            const {name} = nextExams[1][0];
+
+            const subject = name.split(' in ')[1];
+
+            setNextExam((subject + ' am ' + date) || name);
+            return;
+        }
+
+        setNextExam(date + ': ' + nextExams[1].map((item) => item.course.match(/\d+([a-z]+)\d+/)[1].toUpperCase()).join(', '));
+    }, [exams]);
+
     return (
         <View style={globalStyles.screen}>
-            <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
             <ScrollView style={globalStyles.content}>
-                <Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{
-                    component: <Text style={localStyles.mvvBadgeText}>Live</Text>,
-                    styles: {backgroundColor: "#7be87b"}
-                }}>
-                    <View style={[globalStyles.box, globalStyles.row]}>
-                        <View style={[globalStyles.box, {backgroundColor: '#547fcd', padding: 8}]}>
-                            <Text style={globalStyles.text}>721</Text>
-                        </View>
-                        <View style={{alignSelf: 'center'}}>
-                            <Text style={globalStyles.textBigCenter}>Bergkirchen, Schule und so</Text>
-                        </View>
-                        <View style={{alignSelf: 'center'}}>
-                            <Text style={[globalStyles.text, {color: '#4dc44d'}]}>13:37</Text>
-                        </View>
-                    </View>
-                </Widget>
-                <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{
-                    component: (
-                        <>
-                            <Text style={{color: theme.colors.onSurface, fontSize: 20}}>3</Text>
-                            <Icon name="notifications" color={theme.colors.onSurface}/>
-                        </>),
-                    styles: {backgroundColor: "#5079e0"}
-                }}>
-                    <View style={[globalStyles.box, {paddingVertical: 75}]}>
+                <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
+                {/*<Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{*/}
+                {/*    component: <Text style={localStyles.mvvBadgeText}>Live</Text>,*/}
+                {/*    styles: {backgroundColor: "#7be87b"}*/}
+                {/*}}>*/}
+                {/*    <View style={[globalStyles.box, globalStyles.row]}>*/}
+                {/*        <View style={[globalStyles.box, {backgroundColor: '#547fcd', padding: 8}]}>*/}
+                {/*            <Text style={globalStyles.text}>721</Text>*/}
+                {/*        </View>*/}
+                {/*        <View style={{alignSelf: 'center'}}>*/}
+                {/*            <Text style={globalStyles.textBigCenter}>Bergkirchen, Schule und so</Text>*/}
+                {/*        </View>*/}
+                {/*        <View style={{alignSelf: 'center'}}>*/}
+                {/*            <Text style={[globalStyles.text, {color: '#4dc44d'}]}>13:37</Text>*/}
+                {/*        </View>*/}
+                {/*    </View>*/}
+                {/*</Widget>*/}
+                <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}} titleColor="#FFFFFF" iconColor="#FFFFFF">
+                    <View style={[globalStyles.box]}>
+                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Schulaufgaben')}>
+                            <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
+                            <Text style={localStyles.newsItemText}>{nextExam}</Text>
+                        </TouchableOpacity>
+                        <View style={localStyles.line} />
+                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Vertretungen')}>
+                            <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
+                            <Text style={localStyles.newsItemText}>{currentSubstitutions}</Text>
+                        </TouchableOpacity>
                     </View>
                 </Widget>
                 <TouchableOpacity onPress={() => navigation.navigate('Stundenplan')}>
-                    <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerMarginBottom={0}/>
+                    <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                            headerMarginBottom={0}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => openUri(documents?.find(({key}) => key === 'DATA_FOOD_PLAN')?.uri)}>
-                    <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerMarginBottom={0}/>
+                    <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                            headerMarginBottom={0}/>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerMarginBottom={0}/>
+                    <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                            headerMarginBottom={0}/>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerMarginBottom={0}/>
+                    <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                            headerMarginBottom={0}/>
                 </TouchableOpacity>
             </ScrollView>
         </View>
@@ -83,12 +137,30 @@ const createStyles = (theme = Themes.light) =>
             color: theme.colors.onSurface
         },
         motdBox: {
-            padding: 24
+            paddingBottom: 24
         },
         motdText: {
             color: theme.colors.font,
             fontSize: 24,
             textAlign: 'center',
             fontWeight: 'bold'
-        }
+        },
+        newsItemContainer: {
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            marginBottom: 0,
+            paddingVertical: 2
+        },
+        newsItemText: {
+            fontSize: normalize(14),
+            alignSelf: "center",
+            marginStart: 12,
+            color: theme.colors.font
+        },
+        line: {
+            borderBottomColor: theme.colors.background,
+            marginVertical: 9,
+            borderBottomWidth: 1,
+            width: "100%",
+        },
     });

@@ -39,7 +39,7 @@ export default function SplashScreen({navigation}) {
     }, [isFocused]);
 
     return (
-        <View style={globalStyles.screen}>
+        <View style={globalStyles.fullScreen}>
             <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true} />
         </View>
     )

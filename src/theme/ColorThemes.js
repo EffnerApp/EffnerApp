@@ -33,10 +33,10 @@ const dark = {
     secondary: '#282828',
     onSecondary: "#FFFFFF",
 
-    background: "#121212",
+    background: "#000000",
     onBackground: "#FFFFFF",
 
-    surface: "#1E1E1E",
+    surface: "#1a1a1a",
     onSurface: "#FFFFFF",
 
     font: "#FFFFFF",

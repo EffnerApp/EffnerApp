@@ -1,10 +1,17 @@
 import {StyleSheet} from "react-native";
 import {Themes} from "./ColorThemes";
+import {normalize} from "../tools/helpers";
 
 export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
+    fullScreen: {
+        display: "flex",
+        alignItems: "center",
+        height: "100%",
+        justifyContent: "center",
+        backgroundColor: theme.colors.background
+    },
     screen: {
         display: "flex",
-        height: "100%",
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: theme.colors.background
@@ -25,7 +32,8 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
         borderRadius: 8
     },
     text: {
-        color: theme.colors.font
+        color: theme.colors.font,
+        fontSize: normalize(10)
     },
     dropShadow: {
         shadowColor: "#000",
@@ -39,7 +47,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     textBigCenter: {
         color: theme.colors.font,
-        fontSize: 17,
+        fontSize: normalize(10),
         textAlign: "center"
     },
     row: {
