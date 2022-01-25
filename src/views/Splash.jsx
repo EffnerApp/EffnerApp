@@ -4,9 +4,10 @@ import {StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useFocusEffect, useIsFocused} from "@react-navigation/native";
-import {load, navigateTo} from "../tools/helpers";
+import {navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
 import * as Progress from 'react-native-progress';
+import {load} from "../tools/storage";
 
 
 export default function SplashScreen({navigation}) {

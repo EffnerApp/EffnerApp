@@ -8,7 +8,6 @@ import Widget from "../components/Widget";
 import axios from "axios";
 import {BASE_URL, withAuthentication} from "../tools/api";
 
-
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 

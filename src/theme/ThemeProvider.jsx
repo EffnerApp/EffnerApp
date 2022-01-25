@@ -1,7 +1,7 @@
 import React, {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {useColorScheme} from "react-native";
 import {Themes} from "./ColorThemes";
-import {load, save} from "../tools/helpers";
+import {load, save} from "../tools/storage";
 
 const ThemeContext = createContext({
     ...Themes.light,

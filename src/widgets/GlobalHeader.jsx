@@ -6,7 +6,6 @@ import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 import {useNavigation, useRoute} from "@react-navigation/native";
 
-
 export default function GlobalHeader() {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 

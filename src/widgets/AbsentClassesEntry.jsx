@@ -5,7 +5,6 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 
-
 export default function AbsentClassesEntry({data}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
