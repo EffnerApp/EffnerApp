@@ -113,18 +113,18 @@ const createStyles = (theme = Themes.light) =>
         dateSelector: {
             flexDirection: "row",
             justifyContent: "flex-end",
-            marginBottom: 32
+            marginBottom: 16
         },
         documentBox: {
             marginTop: 5,
             marginEnd: 10
         },
         documentLink: {
-            padding: 10
+            padding: 6
         },
         documentLinkText: {
             color: '#1a4cb3',
             textAlign: 'right',
-            fontSize: 17
+            fontSize: 12
         },
     });

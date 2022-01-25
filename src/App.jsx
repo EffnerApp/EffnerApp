@@ -77,7 +77,9 @@ function Main({route: stackRoute}) {
             tabBarActiveTintColor: theme.colors.onSurface,
             tabBarStyle: {
                 backgroundColor: theme.colors.surface,
-                borderTopColor: 'transparent'
+                borderTopColor: 'transparent',
+                position: 'absolute',
+                paddingBottom: 5,
             },
             headerRight: () => <GlobalHeader/>
         };
@@ -86,7 +88,7 @@ function Main({route: stackRoute}) {
     return (
         <Tab.Navigator screenOptions={({route}) => ({
             ...options,
-            tabBarButton: excludeScreens(route, ['Settings'])
+            tabBarButton: excludeScreens(route, ['Settings']),
         })}>
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)

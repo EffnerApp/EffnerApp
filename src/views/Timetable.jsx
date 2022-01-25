@@ -81,38 +81,42 @@ export default function TimetableScreen({navigation, route}) {
                 }
 
 
-                <View style={localStyles.timetable}>
-
-                    <View style={localStyles.timetableTimeColumnEntry}>
-                        <View><Text style={[globalStyles.text, {fontWeight: "bold", textAlign: "center"}]}>{" "}</Text></View>
-                        {[...Array(currentDepth).keys()].map((i) => (
-                            <View key={i} style={[localStyles.timetableTimeEntry]}>
-                                {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
-                                <Text style={[globalStyles.text, {textAlign: 'right', fontWeight: 'bold'}]}>{i + 1}</Text>
-                            </View>
-                        ))}
-                    </View>
-
-                    {timetable?.lessons.map((day, i) => (
-                        <View key={i} style={localStyles.timetableDayEntry}>
-                            <View><Text style={[globalStyles.text, {
-                                fontWeight: "bold",
-                                textAlign: "center"
-                            }]}>{getWeekDay(i)}</Text></View>
-                            {day.filter((lesson, j) => j < currentDepth).map((lesson, j) => (
-                                <View key={j}
-                                      style={[localStyles.timetableEntry, {backgroundColor: timetable.meta.find((entry) => entry.subject === lesson)?.color}]}>
-                                    {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
-                                    <Text style={[globalStyles.text]}>{lesson || ' '}</Text>
+                <ScrollView horizontal={true}>
+                    <View style={localStyles.timetable}>
+                        <View style={localStyles.timetableTimeColumnEntry}>
+                            <View><Text style={[globalStyles.text, {fontWeight: "bold", textAlign: "center"}]}>{" "}</Text></View>
+                            {[...Array(currentDepth).keys()].map((i) => (
+                                <View key={i} style={[localStyles.timetableTimeEntry]}>
+                                    <Text style={[globalStyles.text, {textAlign: 'right', fontWeight: 'bold'}]}>{i + 1}</Text>
                                 </View>
                             ))}
                         </View>
-                    ))}
-                </View>
+
+                        {[...Array(5).keys()].map(i => (
+                            <View key={i} style={localStyles.timetableDayEntry}>
+                                <View>
+                                    <Text style={[globalStyles.text, {
+                                        fontWeight: "bold",
+                                        textAlign: "center"
+                                    }]}>
+                                        {getWeekDay(i)}
+                                    </Text>
+                                </View>
+                                {timetable?.lessons[i].filter((lesson, j) => j < currentDepth).map((lesson, j) => (
+                                    <View key={j}
+                                          style={[localStyles.timetableEntry, {backgroundColor: timetable.meta.find((entry) => entry.subject === lesson)?.color}]}>
+                                        {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
+                                        <Text style={[globalStyles.text]}>{lesson || ' '}</Text>
+                                    </View>
+                                ))}
+                            </View>
+                        ))}
+                    </View>
+                </ScrollView>
                 <View style={[globalStyles.row, localStyles.timetableFooter]}>
                     <View style={{alignSelf: 'center'}}>
                         <View style={localStyles.timetableFooterTextBox}>
-                            <Text style={globalStyles.text}>Zuletzt aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                            <Text style={[globalStyles.text, localStyles.timetableFooterText]}>Zuletzt aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
                         </View>
                     </View>
                     {documentUrl && (
@@ -133,16 +137,15 @@ const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
         timetable: {
             flexDirection: 'row',
-            justifyContent: 'center'
+            justifyContent: 'center',
         },
         timetableDayEntry: {
-            flexDirection: 'column',
-            flex: 1
+            flexDirection: 'column'
         },
         timetableEntry: {
             borderWidth: 1,
             borderColor: theme.colors.onSurface,
-            padding: 8
+            padding: 8,
         },
         timetableFooter: {
             marginTop: 5,
@@ -150,15 +153,15 @@ const createStyles = (theme = Themes.light) =>
         },
         timetableFooterTextBox: {
             padding: 10,
-            alignSelf:  'center'
+            alignSelf: 'center'
         },
         timetableFooterLinkText: {
             color: '#1a4cb3',
             textAlign: 'right',
-            fontSize: 17
+            fontSize: 12
         },
         timetableFooterText: {
-            fontSize: 17
+            fontSize: 12
         },
         timetableSelector: {
             flexDirection: "row",
