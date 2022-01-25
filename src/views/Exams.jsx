@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getExamsHistory, getUpcomingExams, withAuthentication} from "../tools/helpers";
+import {getExamsHistory, getUpcomingExams, normalize, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
 import axios from "axios";
 import {BASE_URL} from "../tools/resources";
@@ -29,41 +29,43 @@ export default function ExamsScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
-                <View style={localStyles.exams}>
-                    {upcomingExams.map(([date, items], i) => (
-                        <View key={i}>
-                            <Widget title={date} titleColor="#28a745" headerMarginBottom={0}>
-                                <View style={globalStyles.ps10}>
-                                    {items.map(({name}, j) => (
-                                        <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
-                                    ))}
-                                </View>
-                            </Widget>
-                        </View>
-                    ))}
+                <View style={{marginBottom: 20}}>
+                    <View style={localStyles.exams}>
+                        {upcomingExams.map(([date, items], i) => (
+                            <View key={i}>
+                                <Widget title={date} titleColor="#28a745" headerMarginBottom={normalize(6)}>
+                                    <View style={globalStyles.ps10}>
+                                        {items.map(({name}, j) => (
+                                            <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                        ))}
+                                    </View>
+                                </Widget>
+                            </View>
+                        ))}
+                    </View>
+                    {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>}
+                    <View style={localStyles.exams}>
+                        {examsHistory.map(([date, items], i) => (
+                            <View key={i}>
+                                <Widget title={date} titleColor="#dc3545" headerMarginBottom={normalize(6)}>
+                                    <View style={globalStyles.ps10}>
+                                        {items.map(({name}, j) => (
+                                            <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                        ))}
+                                    </View>
+                                </Widget>
+                            </View>
+                        ))}
+                    </View>
+                    {/*<Widget title={'Schulaufgaben für die Klasse ' + sClass} icon="event-note">*/}
+                    {/*    {documentUrl && (*/}
+                    {/*        <View>*/}
+                    {/*            <TouchableOpacity onPress={() => openUri(documentUrl)}><Text*/}
+                    {/*                style={globalStyles.text}>PDF-Version</Text></TouchableOpacity>*/}
+                    {/*        </View>*/}
+                    {/*    )}*/}
+                    {/*</Widget>*/}
                 </View>
-                {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>}
-                <View style={localStyles.exams}>
-                    {examsHistory.map(([date, items], i) => (
-                        <View key={i}>
-                            <Widget title={date} titleColor="#dc3545" headerMarginBottom={0}>
-                                <View style={globalStyles.ps10}>
-                                    {items.map(({name}, j) => (
-                                        <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
-                                    ))}
-                                </View>
-                            </Widget>
-                        </View>
-                    ))}
-                </View>
-                {/*<Widget title={'Schulaufgaben für die Klasse ' + sClass} icon="event-note">*/}
-                {/*    {documentUrl && (*/}
-                {/*        <View>*/}
-                {/*            <TouchableOpacity onPress={() => openUri(documentUrl)}><Text*/}
-                {/*                style={globalStyles.text}>PDF-Version</Text></TouchableOpacity>*/}
-                {/*        </View>*/}
-                {/*    )}*/}
-                {/*</Widget>*/}
             </ScrollView>
         </View>
 
@@ -75,7 +77,5 @@ const createStyles = (theme = Themes.light) =>
         exams: {
             flexDirection: 'column',
             justifyContent: 'center',
-            // TODO: remove margin bottom and fix scrollView container height
-            marginBottom: 10
         }
     });

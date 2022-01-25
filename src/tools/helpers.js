@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Platform} from "react-native";
+import {Dimensions, PixelRatio, Platform} from "react-native";
 import Toast from "react-native-toast-message";
 import {CommonActions} from "@react-navigation/native";
 import {startActivityAsync} from "expo-intent-launcher";
@@ -158,6 +158,25 @@ function getExamsHistory(exams) {
     return Array.from(grouped);
 }
 
+const getCurrentSubstitutionDay = (dates) => {
+    const now = new Date();
+    const hour = now.getHours();
+
+    let newDate;
+
+    if (hour >= 14 || dates[0] !== moment(now).format('DD.MM.YYYY')) {
+        if (dates.length >= 2) {
+            newDate = dates[1];
+        } else {
+            newDate = dates[0];
+        }
+    } else {
+        newDate = dates[0];
+    }
+
+    return newDate;
+};
+
 // get pX and pY from angle (inverse atan2)
 function fromAngle(angle, len = 1) {
     const theta = angle / 2 * Math.PI / 180;
@@ -178,6 +197,18 @@ const withAuthentication = (credentials) => {
     };
 }
 
+const { width, height } = Dimensions.get('window');
+
+// Use Google Pixel 4a as base size which is 1080 x 2340
+const baseWidth = 393;
+const baseHeight = 785;
+
+const scaleWidth = width / baseWidth;
+const scaleHeight = height / baseHeight;
+const scale = Math.min(scaleWidth, scaleHeight);
+
+const normalize = (size) => Math.ceil((size * scale));
+
 export {
     showToast,
     navigateTo,
@@ -192,6 +223,8 @@ export {
     excludeScreens,
     getUpcomingExams,
     getExamsHistory,
+    getCurrentSubstitutionDay,
     fromAngle,
-    withAuthentication
+    withAuthentication,
+    normalize
 }

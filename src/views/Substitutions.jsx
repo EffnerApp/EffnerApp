@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {openUri, validateClass} from "../tools/helpers";
+import {getCurrentSubstitutionDay, normalize, openUri, validateClass} from "../tools/helpers";
 import {loadDSBTimetable} from "../tools/api";
 import SubstitutionEntry from "../widgets/SubstitutionEntry";
 import InformationEntry from "../widgets/InformationEntry";
@@ -32,7 +32,7 @@ export default function SubstitutionsScreen({navigation, route}) {
 
     useEffect(() => {
         if(!currentDate) {
-            setCurrentDate(dates[0]);
+            setCurrentDate(getCurrentSubstitutionDay(dates));
         }
     }, [dates]);
 
@@ -60,7 +60,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                 {dates?.length > 1 &&
                     <View style={localStyles.dateSelector}>
                         <View style={{alignSelf: 'center'}}>
-                            <Text style={globalStyles.text}>
+                            <Text style={localStyles.text}>
                                 Tag auswählen:
                             </Text>
                         </View>
@@ -68,15 +68,9 @@ export default function SubstitutionsScreen({navigation, route}) {
                             {dates.map((date, i) => (
                                 <TouchableOpacity
                                     key={i}
-                                    // TODO: move inline styles to localStyles or globalStyles
-                                    style={[globalStyles.bigIcon, globalStyles.row, {
-                                        borderRadius: 8,
-                                        backgroundColor: theme.colors.onSurface,
-                                        padding: 4,
-                                        marginHorizontal: 6
-                                    }]}
+                                    style={[globalStyles.row, localStyles.selectorBadge, {backgroundColor: currentDate === date ? theme.colors.primary : theme.colors.onSurface}]}
                                     onPress={() => setCurrentDate(date)}>
-                                    <Text style={{color: theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
+                                    <Text style={{color: currentDate === date ? theme.colors.font : theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -125,6 +119,14 @@ const createStyles = (theme = Themes.light) =>
         documentLinkText: {
             color: '#1a4cb3',
             textAlign: 'right',
-            fontSize: 12
+            fontSize: normalize(12)
         },
+        selectorBadge: {
+            borderRadius: 8,
+            padding: 4,
+            marginHorizontal: 6
+        },
+        text: {
+            color: theme.colors.font
+        }
     });

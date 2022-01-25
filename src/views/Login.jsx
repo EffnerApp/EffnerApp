@@ -66,7 +66,7 @@ export default function LoginScreen({navigation, route}) {
 
     return (
         <>
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={globalStyles.screen}>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={globalStyles.fullScreen}>
                 <View style={localStyles.content}>
                     <View style={localStyles.logoOuterContainer}>
                         <View style={localStyles.logoContainer}>
