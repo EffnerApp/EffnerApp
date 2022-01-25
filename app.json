@@ -18,6 +18,9 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber": "35",
+      "userInterfaceStyle": "automatic",
+      "bundleIdentifier": "de.effnerapp.effner",
       "supportsTablet": true
     },
     "android": {
