@@ -11,11 +11,14 @@ import {BASE_URL_GO} from "../tools/resources";
 import Constants from "expo-constants";
 import {load, save, clear} from "../tools/storage";
 import * as Progress from 'react-native-progress';
+import {getTimetableThemes} from "../theme/TimetableThemes";
 
 export default function SettingsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const {credentials, sClass} = route.params || {};
+
+    const timetableThemes = getTimetableThemes();
 
     const [notificationsEnabled, toggleNotifications] = useState(undefined);
     const [nightThemeEnabled, toggleNightTheme] = useState(theme.name === 'dark');
@@ -135,7 +138,7 @@ export default function SettingsScreen({navigation, route}) {
                     </View>
                     <View style={localStyles.line}/>
                     <View>
-                        <Picker title="Stundenplan-Theme" items={["Kunterbunt", "Schwarz/Weiß", "Gelb", "Blau", "Grün"]} value={timetableTheme}
+                        <Picker title="Stundenplan-Theme" items={timetableThemes} value={timetableTheme}
                                 onSelect={(e, i) => setTimetableTheme(i)}/>
                     </View>
                 </Widget>
