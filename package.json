@@ -23,6 +23,7 @@
     "expo-constants": "~13.0.1",
     "expo-intent-launcher": "~10.1.0",
     "expo-linear-gradient": "~11.0.0",
+    "expo-navigation-bar": "~1.1.1",
     "expo-notifications": "~0.14.0",
     "expo-status-bar": "~1.2.0",
     "expo-web-browser": "~10.1.0",

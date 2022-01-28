@@ -10,6 +10,7 @@ import {revokePushToken, subscribeToChannel} from "../tools/push";
 import {BASE_URL_GO} from "../tools/resources";
 import Constants from "expo-constants";
 import {load, save, clear} from "../tools/storage";
+import * as Progress from 'react-native-progress';
 
 export default function SettingsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -98,16 +99,20 @@ export default function SettingsScreen({navigation, route}) {
                                 Benachrichtigungen
                             </Text>
                         </View>
-                        <Switch
-                            trackColor={{
-                                false: "#767577",
-                                true: theme.colors.primary,
-                            }}
-                            thumbColor="#fff"
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleNotifications}
-                            value={notificationsEnabled}
-                        />
+                        {notificationsEnabled === undefined &&
+                            <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>
+                        }
+                        {notificationsEnabled !== undefined &&
+                            <Switch
+                                trackColor={{
+                                    false: "#767577",
+                                    true: theme.colors.primary,
+                                }}
+                                thumbColor="#fff"
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={toggleNotifications}
+                                value={!!notificationsEnabled}
+                            />}
                     </View>
                 </Widget>
                 <Widget title="Theming" icon="palette" headerMarginBottom={0}>

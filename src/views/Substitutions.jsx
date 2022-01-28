@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {getCurrentSubstitutionDay, normalize, openUri, validateClass} from "../tools/helpers";
@@ -14,6 +14,8 @@ export default function SubstitutionsScreen({navigation, route}) {
 
     const {credentials, sClass} = route.params || {};
 
+    const [refreshing, setRefreshing] = useState(false);
+
     const [information, setInformation] = useState();
     const [currentDate, setCurrentDate] = useState();
     const [dates, setDates] = useState([]);
@@ -22,23 +24,33 @@ export default function SubstitutionsScreen({navigation, route}) {
     const [absentClasses, setAbsentClasses] = useState([]);
     const [timetableUrl, setTimetableUrl] = useState();
 
-    useEffect(() => {
-        loadDSBTimetable(credentials).then(({url, time, data}) => {
-            setData(data);
-            setDates(data.dates);
-            setTimetableUrl(url);
-        });
-    }, []);
+    const loadData = () => {
+        loadDSBTimetable(credentials)
+            .then(({url, time, data}) => {
+                setData(data);
+                setDates(data.dates);
+                setTimetableUrl(url);
+            }).then(() => setRefreshing(false));
+    };
+
+    const refresh = () => {
+        setRefreshing(true);
+        loadData();
+    }
 
     useEffect(() => {
-        if(!currentDate) {
+        loadData();
+    }, [credentials]);
+
+    useEffect(() => {
+        if (!currentDate) {
             setCurrentDate(getCurrentSubstitutionDay(dates));
         }
     }, [dates]);
 
 
     useEffect(() => {
-        if(!data || !currentDate) return;
+        if (!data || !currentDate) return;
         const subs = data.days.get(currentDate).filter((entry) => validateClass(sClass, entry.name)).map((entry) => entry.items);
         let tmp = [];
         if (subs) {
@@ -56,7 +68,7 @@ export default function SubstitutionsScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <ScrollView style={globalStyles.content}>
+            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 {dates?.length > 1 &&
                     <View style={localStyles.dateSelector}>
                         <View style={{alignSelf: 'center'}}>
@@ -82,8 +94,8 @@ export default function SubstitutionsScreen({navigation, route}) {
                             <SubstitutionEntry data={data}/>
                         </View>
                     ))}
-                    {information && <InformationEntry data={information} />}
-                    {absentClasses?.length > 0 && <AbsentClassesEntry data={absentClasses} />}
+                    {information && <InformationEntry data={information}/>}
+                    {absentClasses?.length > 0 && <AbsentClassesEntry data={absentClasses}/>}
                 </View>
                 {timetableUrl && (
                     <View style={localStyles.documentBox}>

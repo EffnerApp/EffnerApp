@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
@@ -16,6 +16,8 @@ export default function HomeScreen({navigation, route}) {
 
     const {credentials, sClass} = route.params || {};
 
+    const [refreshing, setRefreshing] = useState(false);
+
     const [config, setConfig] = useState();
     const [motd, setMotd] = useState('');
     const [documents, setDocuments] = useState([]);
@@ -24,30 +26,40 @@ export default function HomeScreen({navigation, route}) {
     const [nextExam, setNextExam] = useState('');
     const [currentSubstitutions, setCurrentSubstitutions] = useState('');
 
-    useEffect(() => {
-        axios.get(`${BASE_URL}/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data));
-        axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
-        axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
+    const loadData = () => {
+        Promise.all([
+            axios.get(`${BASE_URL}/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data)),
+            axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data)),
+            axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams)),
+            loadDSBTimetable(credentials).then(({data}) => {
+                const {dates, days} = data;
 
-        loadDSBTimetable(credentials).then(({data}) => {
-            const {dates, days} = data;
+                const date = getCurrentSubstitutionDay(dates);
+                const today = moment().format('DD.MM.YYYY');
 
-            const date = getCurrentSubstitutionDay(dates);
-            const today = moment().format('DD.MM.YYYY');
+                const substitutions = days?.get(date)?.filter((entry) => validateClass(sClass, entry.name))?.map((e) => e.items);
 
-            const substitutions = days?.get(date)?.filter((entry) => validateClass(sClass, entry.name))?.map((e) => e.items);
-
-            let tmp = [];
-            if (substitutions) {
-                for (let i = 0; i < substitutions.length; i++) {
-                    if (substitutions[i]) {
-                        tmp = tmp.concat(substitutions[i]);
+                let tmp = [];
+                if (substitutions) {
+                    for (let i = 0; i < substitutions.length; i++) {
+                        if (substitutions[i]) {
+                            tmp = tmp.concat(substitutions[i]);
+                        }
                     }
-                }
 
-                setCurrentSubstitutions((tmp.length > 0 ? tmp.length : 'Keine') + (tmp.length === 1 ? ' Vertretung ' : ' Vertretungen ') + (date === today ? 'heute' : 'am ' + date));
-            }
-        });
+                    setCurrentSubstitutions((tmp.length > 0 ? tmp.length : 'Keine') + (tmp.length === 1 ? ' Vertretung ' : ' Vertretungen ') + (date === today ? 'heute' : 'am ' + date));
+                }
+            })
+        ]).then(() => setRefreshing(false));
+    }
+
+    const refresh = () => {
+        setRefreshing(true);
+        loadData();
+    }
+
+    useEffect(() => {
+        loadData();
     }, [sClass, credentials]);
 
     useEffect(() => {
@@ -64,7 +76,7 @@ export default function HomeScreen({navigation, route}) {
 
         const date = nextExams[0];
 
-        if(nextExams[1].length === 1) {
+        if (nextExams[1].length === 1) {
             const {name} = nextExams[1][0];
 
             const subject = name.split(' in ')[1];
@@ -78,7 +90,7 @@ export default function HomeScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <ScrollView style={globalStyles.content}>
+            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
                 {/*<Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{*/}
                 {/*    component: <Text style={localStyles.mvvBadgeText}>Live</Text>,*/}
@@ -102,7 +114,7 @@ export default function HomeScreen({navigation, route}) {
                             <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
                             <Text style={localStyles.newsItemText}>{nextExam}</Text>
                         </TouchableOpacity>
-                        <View style={localStyles.line} />
+                        <View style={localStyles.line}/>
                         <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Vertretungen')}>
                             <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
                             <Text style={localStyles.newsItemText}>{currentSubstitutions}</Text>
