@@ -4,6 +4,7 @@ import {ThemeProvider, useTheme} from "./theme/ThemeProvider";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as NavigationBar from 'expo-navigation-bar';
 import HomeScreen from "./views/Home";
 import LoginScreen from "./views/Login";
 
@@ -15,7 +16,7 @@ import ExamsScreen from "./views/Exams";
 import SubstitutionsScreen from "./views/Substitutions";
 import GlobalHeader from "./widgets/GlobalHeader";
 import SettingsScreen from "./views/Settings";
-import {excludeScreens} from "./tools/helpers";
+import {excludeScreens, normalize} from "./tools/helpers";
 import {registerForPushNotifications} from "./tools/push";
 import {save} from "./tools/storage";
 
@@ -50,6 +51,8 @@ function ThemedApp() {
         if (Platform.OS === "android") {
             StatusBar.setTranslucent(false);
             StatusBar.setBackgroundColor(theme.colors.surface);
+
+            NavigationBar.setBackgroundColorAsync(theme.colors.surface);
         }
 
         StatusBar.setBarStyle(theme.statusbar);
@@ -79,8 +82,8 @@ function Main({route: stackRoute}) {
             tabBarStyle: {
                 backgroundColor: theme.colors.surface,
                 borderTopColor: 'transparent',
-                position: 'absolute',
-                paddingBottom: 5,
+                // position: 'absolute',
+                // paddingVertical: 5
             },
             headerRight: () => <GlobalHeader/>
         };

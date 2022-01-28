@@ -63,12 +63,9 @@ export default class DSBMobile {
         try {
             const {data} = await axios.get(url);
 
-            // const html = data.replace(/&nbsp;/g,' ').trim();
             const html = decodeEntities(data);
 
             const document = parse(html, {});
-
-            console.log(!!document)
 
             const documents = this.splitDocuments(document);
 
@@ -160,7 +157,7 @@ export default class DSBMobile {
 
         const documents = [];
         const outer = document.outerHTML;
-        console.log(!!outer)
+
         for (let i = 0; i < elements.length; i++) {
             if (i === elements.length - 1) {
                 documents.push(parse(outer.substr(outer.indexOf(elements[i])), {}));

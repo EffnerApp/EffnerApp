@@ -1,17 +1,24 @@
 import React, {useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {getLevel, getWeekDay, normalize, openUri, withAuthentication} from "../tools/helpers";
 import axios from "axios";
 import moment from "moment";
 import {BASE_URL} from "../tools/resources";
+import {getCellColor} from "../theme/TimetableThemes";
+import {load} from "../tools/storage";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const {credentials, sClass} = route.params || {};
+
+    const isFocused = useIsFocused();
+
+    const [refreshing, setRefreshing] = useState(false);
 
     const [timetables, setTimetables] = useState({data: [], schedule: []});
     const [documents, setDocuments] = useState([]);
@@ -21,9 +28,26 @@ export default function TimetableScreen({navigation, route}) {
     const [currentDepth, setCurrentDepth] = useState(0);
     const [documentUrl, setDocumentUrl] = useState();
 
+    const [timetableTheme, setTimetableTheme] = useState(0);
+
+    const loadData = () => {
+        Promise.all([
+            axios.get(`${BASE_URL}/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data)),
+            axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data))
+        ]).then(() => setRefreshing(false));
+    }
+
+    const refresh = () => {
+        setRefreshing(true);
+        loadData();
+    }
+
     useEffect(() => {
-        axios.get(`${BASE_URL}/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
-        axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        load('APP_TIMETABLE_COLOR_THEME').then(setTimetableTheme);
+    }, [isFocused]);
+
+    useEffect(() => {
+        loadData();
     }, [sClass, credentials]);
 
     useEffect(() => {
@@ -53,7 +77,7 @@ export default function TimetableScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <ScrollView style={globalStyles.content}>
+            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 {timetables?.data?.length > 1 &&
                     <View style={localStyles.timetableSelector}>
                         <View style={{alignSelf: 'center'}}>
@@ -103,11 +127,11 @@ export default function TimetableScreen({navigation, route}) {
                                                 {getWeekDay(i)}
                                             </Text>
                                         </View>
-                                        {timetable?.lessons[i].filter((lesson, j) => j < currentDepth).map((lesson, j) => (
+                                        {timetable?.lessons[i].filter((lesson, j) => j < currentDepth).map((subject, j) => (
                                             <View key={j}
-                                                  style={[localStyles.timetableEntry, {backgroundColor: timetable.meta.find((entry) => entry.subject === lesson)?.color}]}>
+                                                  style={[localStyles.timetableEntry, {backgroundColor: getCellColor(timetableTheme, {meta: timetable.meta, subject: subject})}]}>
                                                 {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
-                                                <Text style={[globalStyles.text, localStyles.timetableEntryText]}>{lesson || ' '}</Text>
+                                                <Text style={[globalStyles.text, localStyles.timetableEntryText]}>{subject || ' '}</Text>
                                             </View>
                                         ))}
                                     </View>
@@ -120,7 +144,8 @@ export default function TimetableScreen({navigation, route}) {
                 <View style={[globalStyles.row, localStyles.timetableFooter]}>
                     <View style={{alignSelf: 'center'}}>
                         <View style={localStyles.timetableFooterTextBox}>
-                            <Text style={[globalStyles.text, localStyles.timetableFooterText]}>Zuletzt aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                            <Text style={[globalStyles.text, localStyles.timetableFooterText]}>Zuletzt
+                                aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
                         </View>
                     </View>
                     {documentUrl && (

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {getExamsHistory, getUpcomingExams, normalize, withAuthentication} from "../tools/helpers";
@@ -13,12 +13,23 @@ export default function ExamsScreen({navigation, route}) {
 
     const {credentials, sClass} = route.params || {};
 
+    const [refreshing, setRefreshing] = useState(false);
+
     const [exams, setExams] = useState([]);
     const [upcomingExams, setUpcomingExams] = useState([]);
     const [examsHistory, setExamsHistory] = useState([]);
 
+    const loadData = () => {
+        axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams)).then(() => setRefreshing(false));
+    }
+
+    const refresh = () => {
+        setRefreshing(true);
+        loadData();
+    }
+
     useEffect(() => {
-        axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
+        loadData();
     }, [sClass, credentials]);
 
     useEffect(() => {
@@ -28,7 +39,7 @@ export default function ExamsScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <ScrollView style={globalStyles.content}>
+            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={{marginBottom: 20}}>
                     <View style={localStyles.exams}>
                         {upcomingExams.map(([date, items], i) => (
