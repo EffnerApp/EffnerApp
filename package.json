@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@expo/ngrok": "^4.1.0",
     "babel-plugin-inline-import": "^3.0.0"
   },
   "private": true
