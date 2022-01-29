@@ -16,7 +16,7 @@ import ExamsScreen from "./views/Exams";
 import SubstitutionsScreen from "./views/Substitutions";
 import GlobalHeader from "./widgets/GlobalHeader";
 import SettingsScreen from "./views/Settings";
-import {excludeScreens, normalize} from "./tools/helpers";
+import {excludeScreens} from "./tools/helpers";
 import {registerForPushNotifications} from "./tools/push";
 import {save} from "./tools/storage";
 

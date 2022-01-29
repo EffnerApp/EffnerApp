@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useIsFocused} from "@react-navigation/native";
