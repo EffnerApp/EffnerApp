@@ -19,13 +19,13 @@ export default function ExamsScreen({navigation, route}) {
     const [upcomingExams, setUpcomingExams] = useState([]);
     const [examsHistory, setExamsHistory] = useState([]);
 
-    const loadData = () => {
-        axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams)).then(() => setRefreshing(false));
+    const loadData = async () => {
+        await axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
     }
 
     const refresh = () => {
         setRefreshing(true);
-        loadData();
+        loadData().then(() => setRefreshing(false));
     }
 
     useEffect(() => {

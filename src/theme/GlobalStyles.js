@@ -33,7 +33,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     text: {
         color: theme.colors.font,
-        fontSize: normalize(10)
+        fontSize: normalize(12)
     },
     dropShadow: {
         shadowColor: "#000",
@@ -47,7 +47,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     },
     textBigCenter: {
         color: theme.colors.font,
-        fontSize: normalize(10),
+        fontSize: normalize(12),
         textAlign: "center"
     },
     row: {

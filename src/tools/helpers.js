@@ -207,7 +207,7 @@ const scaleWidth = width / baseWidth;
 const scaleHeight = height / baseHeight;
 const scale = Math.min(scaleWidth, scaleHeight);
 
-const normalize = (size) => Math.ceil((size * scale));
+const normalize = (size) => Math.ceil((size * scale * 0.9));
 
 export {
     showToast,

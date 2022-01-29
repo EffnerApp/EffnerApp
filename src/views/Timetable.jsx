@@ -30,16 +30,14 @@ export default function TimetableScreen({navigation, route}) {
 
     const [timetableTheme, setTimetableTheme] = useState(0);
 
-    const loadData = () => {
-        Promise.all([
-            axios.get(`${BASE_URL}/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data)),
-            axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data))
-        ]).then(() => setRefreshing(false));
+    const loadData = async () => {
+        await axios.get(`${BASE_URL}/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
+        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
     }
 
     const refresh = () => {
         setRefreshing(true);
-        loadData();
+        loadData().then(() => setRefreshing(false));
     }
 
     useEffect(() => {

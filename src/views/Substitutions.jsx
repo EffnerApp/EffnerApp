@@ -24,18 +24,18 @@ export default function SubstitutionsScreen({navigation, route}) {
     const [absentClasses, setAbsentClasses] = useState([]);
     const [timetableUrl, setTimetableUrl] = useState();
 
-    const loadData = () => {
-        loadDSBTimetable(credentials)
+    const loadData = async () => {
+        await loadDSBTimetable(credentials)
             .then(({url, time, data}) => {
                 setData(data);
                 setDates(data.dates);
                 setTimetableUrl(url);
-            }).then(() => setRefreshing(false));
+            });
     };
 
     const refresh = () => {
         setRefreshing(true);
-        loadData();
+        loadData().then(() => setRefreshing(false));
     }
 
     useEffect(() => {

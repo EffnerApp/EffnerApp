@@ -95,7 +95,7 @@ export default function SettingsScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
-                <Widget title="Benachrichtigungen" icon="notifications" headerMarginBottom={0}>
+                <Widget title="Benachrichtigungen" icon="notifications" headerMarginBottom={10}>
                     <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                         <View style={{alignSelf: "center"}}>
                             <Text style={globalStyles.text}>
@@ -118,7 +118,7 @@ export default function SettingsScreen({navigation, route}) {
                             />}
                     </View>
                 </Widget>
-                <Widget title="Theming" icon="palette" headerMarginBottom={0}>
+                <Widget title="Theming" icon="palette" headerMarginBottom={10}>
                     <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                         <View style={{alignSelf: "center"}}>
                             <Text style={globalStyles.text}>
