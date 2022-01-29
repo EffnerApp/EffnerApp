@@ -8,6 +8,7 @@ import {navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
 import * as Progress from 'react-native-progress';
 import {load} from "../tools/storage";
+import {performStorageConversion} from "../tools/compatibility";
 
 
 export default function SplashScreen({navigation}) {
@@ -33,7 +34,23 @@ export default function SplashScreen({navigation}) {
                     navigateTo(navigation, 'Login', {error: e});
                 }
             } else {
-                navigateTo(navigation, 'Login');
+                try {
+                    await performStorageConversion();
+                    const credentials = await load('APP_CREDENTIALS');
+                    const sClass = await load('APP_CLASS');
+
+                    try {
+                        await login(credentials, sClass);
+                        navigateTo(navigation, 'Main', {credentials, sClass});
+                    } catch (e) {
+                        navigateTo(navigation, 'Login', {error: e});
+                    }
+                } catch (e) {
+                    console.log('Storage conversion did not work');
+                    console.log(e);
+
+                    navigateTo(navigation, 'Login');
+                }
             }
         })();
     }, [isFocused]);
