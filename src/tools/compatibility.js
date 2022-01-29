@@ -27,7 +27,7 @@ const performStorageConversion = async () => {
         SharedPreferences.setName('CapacitorStorage');
 
         return new Promise((resolve, reject) => {
-            SharedPreferences.getMultipleItems(['APP_CREDENTIALS', 'APP_USER_CLASS'], async ([credentials, sClass]) => {
+            SharedPreferences.getItems(['APP_CREDENTIALS', 'APP_USER_CLASS'], async ([credentials, sClass]) => {
                 if (credentials && sClass) {
                     // save the values to the new storage
                     await save('APP_CREDENTIALS', credentials);
