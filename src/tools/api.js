@@ -6,8 +6,6 @@ import {save, load} from "./storage";
 import {BASE_URL} from "./resources";
 import {subscribeToChannel} from "./push";
 
-// const BASE_URL = "http://192.168.178.35:8080";
-
 const login = async (credentials, sClass) => {
     console.log('login with ' + credentials)
     console.log('class ' + sClass)
@@ -61,8 +59,8 @@ const loadClasses = async () => {
 }
 
 const loadDSBTimetable = async (credentials) => {
-    const creds = credentials.split(':');
-    const dsbmobile = new DSBMobile(creds[0], creds[1]);
+    const [id, password] = credentials.split(':');
+    const dsbmobile = new DSBMobile(id, password);
 
     try {
         await dsbmobile.login();

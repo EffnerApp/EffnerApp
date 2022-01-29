@@ -26,36 +26,35 @@ export default function HomeScreen({navigation, route}) {
     const [nextExam, setNextExam] = useState('');
     const [currentSubstitutions, setCurrentSubstitutions] = useState('');
 
-    const loadData = () => {
-        Promise.all([
-            axios.get(`${BASE_URL}/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data)),
-            axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data)),
-            axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams)),
-            loadDSBTimetable(credentials).then(({data}) => {
-                const {dates, days} = data;
+    const loadData = async () => {
+        await axios.get(`${BASE_URL}/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data));
+        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        await axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
 
-                const date = getCurrentSubstitutionDay(dates);
-                const today = moment().format('DD.MM.YYYY');
+        await loadDSBTimetable(credentials).then(({data}) => {
+            const {dates, days} = data;
 
-                const substitutions = days?.get(date)?.filter((entry) => validateClass(sClass, entry.name))?.map((e) => e.items);
+            const date = getCurrentSubstitutionDay(dates);
+            const today = moment().format('DD.MM.YYYY');
 
-                let tmp = [];
-                if (substitutions) {
-                    for (let i = 0; i < substitutions.length; i++) {
-                        if (substitutions[i]) {
-                            tmp = tmp.concat(substitutions[i]);
-                        }
+            const substitutions = days?.get(date)?.filter((entry) => validateClass(sClass, entry.name))?.map((e) => e.items);
+
+            let tmp = [];
+            if (substitutions) {
+                for (let i = 0; i < substitutions.length; i++) {
+                    if (substitutions[i]) {
+                        tmp = tmp.concat(substitutions[i]);
                     }
-
-                    setCurrentSubstitutions((tmp.length > 0 ? tmp.length : 'Keine') + (tmp.length === 1 ? ' Vertretung ' : ' Vertretungen ') + (date === today ? 'heute' : 'am ' + date));
                 }
-            })
-        ]).then(() => setRefreshing(false));
+
+                setCurrentSubstitutions((tmp.length > 0 ? tmp.length : 'Keine') + (tmp.length === 1 ? ' Vertretung ' : ' Vertretungen ') + (date === today ? 'heute' : 'am ' + date));
+            }
+        });
     }
 
     const refresh = () => {
         setRefreshing(true);
-        loadData();
+        loadData().then(() => setRefreshing(false));
     }
 
     useEffect(() => {
@@ -110,18 +109,18 @@ export default function HomeScreen({navigation, route}) {
                 {/*</Widget>*/}
                 <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}} titleColor="#FFFFFF" iconColor="#FFFFFF">
                     <View style={[globalStyles.box]}>
-                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Schulaufgaben')}>
+                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Exams')}>
                             <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
                             <Text style={localStyles.newsItemText}>{nextExam}</Text>
                         </TouchableOpacity>
                         <View style={localStyles.line}/>
-                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Vertretungen')}>
+                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Substitutions')}>
                             <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
                             <Text style={localStyles.newsItemText}>{currentSubstitutions}</Text>
                         </TouchableOpacity>
                     </View>
                 </Widget>
-                <TouchableOpacity onPress={() => navigation.navigate('Stundenplan')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Timetable')}>
                     <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
                             headerMarginBottom={0}/>
                 </TouchableOpacity>

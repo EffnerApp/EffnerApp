@@ -14,8 +14,8 @@ export default function Widget({title, icon, headerRight, children, titleColor, 
         return (
             <View style={[localStyles.boxHeader, {marginBottom: headerMarginBottom}]}>
                 <View style={localStyles.iconContainer}>
-                    <Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>
-                    <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text>
+                    <View style={{alignSelf: 'center'}}><Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/></View>
+                    <View style={{alignSelf: 'center'}}><Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text></View>
                 </View>
                 {headerRight && <View style={[localStyles.headerRightContainer, headerRight.styles]}>
                     {headerRight.component}
