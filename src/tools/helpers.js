@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Dimensions, PixelRatio, Platform} from "react-native";
+import {Dimensions, Platform} from "react-native";
 import Toast from "react-native-toast-message";
 import {CommonActions} from "@react-navigation/native";
 import {startActivityAsync} from "expo-intent-launcher";

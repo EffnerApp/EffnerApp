@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
