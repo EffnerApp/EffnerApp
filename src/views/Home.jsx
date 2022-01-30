@@ -10,6 +10,7 @@ import {getCurrentSubstitutionDay, getUpcomingExams, normalize, openUri, validat
 import {BASE_URL} from "../tools/resources";
 import {loadDSBTimetable} from "../tools/api";
 import moment from "moment";
+import SkeletonContent from "../components/skeleton/SkeletonContent";
 
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -111,12 +112,21 @@ export default function HomeScreen({navigation, route}) {
                     <View style={[globalStyles.box]}>
                         <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Exams')}>
                             <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
-                            <Text style={localStyles.newsItemText}>{nextExam}</Text>
+                            <View style={localStyles.newsItemContentInner}>
+                                <SkeletonContent isLoading={!nextExam} layout={[{width: 180, height: 20}]} boneColor="#292929" highlightColor="#333333" animationType="pulse">
+                                    <Text style={localStyles.newsItemContentText}>{nextExam}</Text>
+                                </SkeletonContent>
+                            </View>
                         </TouchableOpacity>
                         <View style={localStyles.line}/>
                         <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Substitutions')}>
                             <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
-                            <Text style={localStyles.newsItemText}>{currentSubstitutions}</Text>
+                            <View style={localStyles.newsItemContentInner}>
+                                <SkeletonContent isLoading={!currentSubstitutions} layout={[{width: 220, height: 20}]} boneColor="#292929" highlightColor="#333333"
+                                                 animationType="pulse">
+                                    <Text style={localStyles.newsItemContentText}>{currentSubstitutions}</Text>
+                                </SkeletonContent>
+                            </View>
                         </TouchableOpacity>
                     </View>
                 </Widget>
@@ -162,10 +172,13 @@ const createStyles = (theme = Themes.light) =>
             marginBottom: 0,
             paddingVertical: 2
         },
-        newsItemText: {
-            fontSize: normalize(14),
+        newsItemContentInner: {
             alignSelf: "center",
             marginStart: 12,
+        },
+        newsItemContentText: {
+            alignSelf: "center",
+            fontSize: normalize(14),
             color: theme.colors.font
         },
         line: {
