@@ -10,6 +10,7 @@ import {getCurrentSubstitutionDay, getUpcomingExams, normalize, openUri, validat
 import {BASE_URL} from "../tools/resources";
 import {loadDSBTimetable} from "../tools/api";
 import moment from "moment";
+import SkeletonContent from 'react-native-skeleton-content';
 
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -111,7 +112,10 @@ export default function HomeScreen({navigation, route}) {
                     <View style={[globalStyles.box]}>
                         <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Exams')}>
                             <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
-                            <Text style={localStyles.newsItemText}>{nextExam}</Text>
+                            <SkeletonContent isLoading={!nextExam}>
+                                <Text style={localStyles.newsItemText}>{nextExam}</Text>
+                            </SkeletonContent>
+
                         </TouchableOpacity>
                         <View style={localStyles.line}/>
                         <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Substitutions')}>
