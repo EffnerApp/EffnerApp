@@ -12,6 +12,7 @@ import Constants from "expo-constants";
 import {load, save, clear} from "../tools/storage";
 import * as Progress from 'react-native-progress';
 import {getTimetableThemes} from "../theme/TimetableThemes";
+import {loadClasses} from "../tools/api";
 
 export default function SettingsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -24,11 +25,15 @@ export default function SettingsScreen({navigation, route}) {
     const [nightThemeEnabled, toggleNightTheme] = useState(theme.name === 'dark');
     const [timetableTheme, setTimetableTheme] = useState(0);
 
+    const [classes, setClasses] = useState([sClass]);
+    const [selectedClass, setClass] = useState(classes.indexOf(sClass));
+
     const appVersion = Constants.manifest.version
 
     useEffect(() => {
-        load('APP_NOTIFICATIONS').then(toggleNotifications);
+        load('APP_NOTIFICATIONS').then((v) => toggleNotifications(!!v));
         load('APP_TIMETABLE_COLOR_THEME').then(setTimetableTheme);
+        loadClasses().then(setClasses);
     }, []);
 
     useEffect(() => {
@@ -67,6 +72,17 @@ export default function SettingsScreen({navigation, route}) {
     useEffect(() => {
         save('APP_TIMETABLE_COLOR_THEME', timetableTheme);
     }, [timetableTheme]);
+
+    useEffect(() => {
+        if(!selectedClass)
+            return;
+
+        save('APP_CLASS', classes[selectedClass]);
+    }, [selectedClass]);
+
+    useEffect(() => {
+        setClass(classes.indexOf(sClass));
+    }, [classes]);
 
     const confirmLogout = () => {
         Alert.alert(
@@ -207,17 +223,21 @@ export default function SettingsScreen({navigation, route}) {
                     </TouchableOpacity>
                 </Widget>
                 <Widget title="Account" icon="account-circle">
-                    <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                        <View style={{alignSelf: "center"}}>
-                            <Text style={globalStyles.text}>
-                                Deine Klasse
-                            </Text>
-                        </View>
-                        <View style={{alignSelf: "center"}}>
-                            <Text style={globalStyles.text}>
-                                {sClass}
-                            </Text>
-                        </View>
+                    {/*<View style={[globalStyles.row, {justifyContent: "space-between"}]}>*/}
+                    {/*    <View style={{alignSelf: "center"}}>*/}
+                    {/*        <Text style={globalStyles.text}>*/}
+                    {/*            Deine Klasse*/}
+                    {/*        </Text>*/}
+                    {/*    </View>*/}
+                    {/*    <View style={{alignSelf: "center"}}>*/}
+                    {/*        <Text style={globalStyles.text}>*/}
+                    {/*            {sClass}*/}
+                    {/*        </Text>*/}
+                    {/*    </View>*/}
+                    {/*</View>*/}
+                    <View>
+                        <Picker title="Deine Klasse" items={classes} value={selectedClass}
+                                onSelect={(e, i) => setClass(i)}/>
                     </View>
                     <View style={localStyles.line}/>
                     <TouchableOpacity onPress={confirmLogout}>

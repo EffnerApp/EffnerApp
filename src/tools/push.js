@@ -36,6 +36,7 @@ async function registerForPushNotifications() {
 }
 
 const subscribeToChannel = async (credentials, channelId, pushToken) => {
+	console.log('subscribing to push channel ' + channelId);
 	await axios.post(
 		`${BASE_URL}/v3/push/subscribe/${channelId}`,
 		{
@@ -46,6 +47,7 @@ const subscribeToChannel = async (credentials, channelId, pushToken) => {
 };
 
 const revokePushToken = async (credentials, pushToken) => {
+	console.log('revoking push token');
 	await axios.post(
 		`${BASE_URL}/v3/push/revokeToken`,
 		{
