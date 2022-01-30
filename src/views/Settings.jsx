@@ -26,7 +26,9 @@ export default function SettingsScreen({navigation, route}) {
     const [timetableTheme, setTimetableTheme] = useState(0);
 
     const [classes, setClasses] = useState([sClass]);
-    const [selectedClass, setClass] = useState(classes.indexOf(sClass));
+    const [selectedClass, setClass] = useState(sClass);
+
+    // const [parentScrollEnabled, setParentScrollEnabled] = useState(true);
 
     const appVersion = Constants.manifest.version
 
@@ -74,15 +76,36 @@ export default function SettingsScreen({navigation, route}) {
     }, [timetableTheme]);
 
     useEffect(() => {
-        if(!selectedClass)
-            return;
-
-        save('APP_CLASS', classes[selectedClass]);
+        confirmClassChange(selectedClass);
     }, [selectedClass]);
 
-    useEffect(() => {
-        setClass(classes.indexOf(sClass));
-    }, [classes]);
+    const confirmClassChange = (to) => {
+        if (to === sClass)
+            return;
+
+        Alert.alert(
+            'Klasse ändern',
+            'Willst du deine Klasse wirklich zu ' + to + ' ändern?',
+            [
+                {
+                    text: 'Abbrechen',
+                    style: 'cancel',
+                    onPress: () => setClass(sClass)
+                },
+                {
+                    text: 'Ja',
+                    onPress: () => {
+                        Promise.all([
+                            load("pushToken").then(pushToken => revokePushToken(credentials, pushToken)),
+                            save('APP_CLASS', to)
+                        ]).then(() => navigateTo(navigation, 'Splash'))
+                            .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+                    },
+                },
+            ],
+            {cancelable: false}
+        );
+    }
 
     const confirmLogout = () => {
         Alert.alert(
@@ -154,8 +177,7 @@ export default function SettingsScreen({navigation, route}) {
                     </View>
                     <View style={localStyles.line}/>
                     <View>
-                        <Picker title="Stundenplan-Theme" items={timetableThemes} value={timetableTheme}
-                                onSelect={(e, i) => setTimetableTheme(i)}/>
+                        <Picker title="Stundenplan-Theme" items={timetableThemes} selectedIndex={timetableTheme} onSelect={(e, i) => setTimetableTheme(i)}/>
                     </View>
                 </Widget>
                 <Widget title="Über EffnerApp" icon="info">
@@ -236,8 +258,7 @@ export default function SettingsScreen({navigation, route}) {
                     {/*    </View>*/}
                     {/*</View>*/}
                     <View>
-                        <Picker title="Deine Klasse" items={classes} value={selectedClass}
-                                onSelect={(e, i) => setClass(i)}/>
+                        <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
                     </View>
                     <View style={localStyles.line}/>
                     <TouchableOpacity onPress={confirmLogout}>

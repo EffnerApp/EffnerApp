@@ -5,30 +5,30 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 
-export default function Picker({title, items = [], value = 0, itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
+export default function Picker({title, items = [], selectedIndex = -1, selectedValue, itemNameGetter = (e) => e, onSelect = (e, i) => null, onTouchStart = (e) => null, onTouchEnd = (e) => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
-    const [itemList, setItemList] = useState(items);
     const [showItems, setShowItems] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(value);
+    const [selectedItem, setSelectedItem] = useState(selectedIndex > -1 ? selectedIndex : (items.indexOf(selectedValue) > -1 ? items.indexOf(selectedValue) : 0));
 
     useEffect(() => {
-        console.log(value)
-        setSelectedItem(value);
-    }, [value]);
-
-    useEffect(()  => {
-        setItemList(items);
-    }, [items]);
+        if (selectedIndex > 0) {
+            setSelectedItem(selectedIndex);
+        }
+    }, [selectedIndex]);
 
     useEffect(() => {
-        if(!selectedItem || !itemList[selectedItem])
+        if (items.indexOf(selectedValue) > 0) {
+            setSelectedItem(items.indexOf(selectedValue));
+        }
+    }, [selectedValue]);
+
+    useEffect(() => {
+        if (selectedItem < 0 || !items[selectedItem])
             return;
 
-        console.log(itemList)
-
-        onSelect(itemList[selectedItem], selectedItem);
-    }, [selectedItem, itemList]);
+        onSelect(items[selectedItem], selectedItem);
+    }, [selectedItem, items]);
 
     return (
         <>
@@ -44,7 +44,7 @@ export default function Picker({title, items = [], value = 0, itemNameGetter = (
                             globalStyles.text,
                             {fontWeight: "bold"},
                         ]}>
-                        {itemNameGetter(itemList[selectedItem])}
+                        {itemNameGetter(items[selectedItem])}
                     </Text>
                 </View>
                 <View style={localStyles.itemContainer}>
@@ -64,8 +64,9 @@ export default function Picker({title, items = [], value = 0, itemNameGetter = (
             </TouchableOpacity>
 
             {showItems &&
-                <ScrollView style={localStyles.selectionContainer}>
-                    {items.map((value, key) => (
+                <View style={localStyles.selectionContainer}>
+                    <ScrollView nestedScrollEnabled={true} onTouchStart={onTouchStart} onScrollEndDrag={onTouchEnd} onMomentumScrollEnd={onTouchEnd}>
+                        {items.map((value, key) => (
                             <View key={key}>
                                 {key !== 0 && (
                                     <View style={localStyles.line}/>
@@ -95,7 +96,8 @@ export default function Picker({title, items = [], value = 0, itemNameGetter = (
                                 </TouchableOpacity>
                             </View>
                         ))}
-                </ScrollView>
+                    </ScrollView>
+                </View>
             }
         </>
     )
