@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
@@ -8,16 +8,27 @@ import {Icon} from "react-native-elements";
 export default function Picker({title, items = [], value = 0, itemNameGetter = (e) => e, onSelect = (e, i) => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
+    const [itemList, setItemList] = useState(items);
     const [showItems, setShowItems] = useState(false);
     const [selectedItem, setSelectedItem] = useState(value);
 
     useEffect(() => {
+        console.log(value)
         setSelectedItem(value);
     }, [value]);
 
+    useEffect(()  => {
+        setItemList(items);
+    }, [items]);
+
     useEffect(() => {
-        onSelect(items[selectedItem], selectedItem);
-    }, [selectedItem]);
+        if(!selectedItem || !itemList[selectedItem])
+            return;
+
+        console.log(itemList)
+
+        onSelect(itemList[selectedItem], selectedItem);
+    }, [selectedItem, itemList]);
 
     return (
         <>
@@ -33,7 +44,7 @@ export default function Picker({title, items = [], value = 0, itemNameGetter = (
                             globalStyles.text,
                             {fontWeight: "bold"},
                         ]}>
-                        {itemNameGetter(items[selectedItem])}
+                        {itemNameGetter(itemList[selectedItem])}
                     </Text>
                 </View>
                 <View style={localStyles.itemContainer}>
@@ -53,36 +64,38 @@ export default function Picker({title, items = [], value = 0, itemNameGetter = (
             </TouchableOpacity>
 
             {showItems &&
-                items.map((value, key) => (
-                    <View key={key}>
-                        {key !== 0 && (
-                            <View style={localStyles.line}/>
-                        )}
-                        {key === 0 && <Text>{"\n"}</Text>}
-                        <TouchableOpacity
-                            onPress={() => {
-                                setSelectedItem(key);
-                            }}
-                            style={globalStyles.row}>
-                            <View style={[localStyles.itemContainer, localStyles.itemListContainer]}>
-                                <Text style={[globalStyles.text]}>
-                                    {itemNameGetter(value)}
-                                </Text>
+                <ScrollView style={localStyles.selectionContainer}>
+                    {items.map((value, key) => (
+                            <View key={key}>
+                                {key !== 0 && (
+                                    <View style={localStyles.line}/>
+                                )}
+                                {key === 0 && <Text>{"\n"}</Text>}
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setSelectedItem(key);
+                                    }}
+                                    style={globalStyles.row}>
+                                    <View style={[localStyles.itemContainer, localStyles.itemListContainer]}>
+                                        <Text style={[globalStyles.text]}>
+                                            {itemNameGetter(value)}
+                                        </Text>
+                                    </View>
+                                    {key === selectedItem && (
+                                        <View style={localStyles.itemContainer}>
+                                            <Icon
+                                                name="check"
+                                                color={
+                                                    theme.colors.onSurface
+                                                }
+                                                size={18}
+                                            />
+                                        </View>
+                                    )}
+                                </TouchableOpacity>
                             </View>
-                            {key === selectedItem && (
-                                <View style={localStyles.itemContainer}>
-                                    <Icon
-                                        name="check"
-                                        color={
-                                            theme.colors.onSurface
-                                        }
-                                        size={18}
-                                    />
-                                </View>
-                            )}
-                        </TouchableOpacity>
-                    </View>
-                ))
+                        ))}
+                </ScrollView>
             }
         </>
     )
@@ -103,4 +116,8 @@ const createStyles = (theme = Themes.light) =>
             borderBottomWidth: 1,
             width: "100%",
         },
+        selectionContainer: {
+            maxHeight: 200,
+            marginVertical: 20
+        }
     });
