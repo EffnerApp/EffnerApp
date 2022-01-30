@@ -6,7 +6,7 @@ import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import axios from "axios";
-import {getCurrentSubstitutionDay, getUpcomingExams, normalize, openUri, validateClass, withAuthentication} from "../tools/helpers";
+import {getCurrentSubstitutionDay, getUpcomingExams, normalize, openUri, showToast, validateClass, withAuthentication} from "../tools/helpers";
 import {BASE_URL} from "../tools/resources";
 import {loadDSBTimetable} from "../tools/api";
 import moment from "moment";
@@ -55,11 +55,14 @@ export default function HomeScreen({navigation, route}) {
 
     const refresh = () => {
         setRefreshing(true);
-        loadData().then(() => setRefreshing(false));
+        loadData().then(() => setRefreshing(false)).catch((e) => {
+            showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error');
+            setRefreshing(false);
+        });
     }
 
     useEffect(() => {
-        loadData();
+        loadData().catch((e) => showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error'));
     }, [sClass, credentials]);
 
     useEffect(() => {

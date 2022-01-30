@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {RefreshControl, ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getExamsHistory, getUpcomingExams, normalize, withAuthentication} from "../tools/helpers";
+import {getExamsHistory, getUpcomingExams, normalize, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
 import axios from "axios";
 import {BASE_URL} from "../tools/resources";
@@ -25,12 +25,16 @@ export default function ExamsScreen({navigation, route}) {
 
     const refresh = () => {
         setRefreshing(true);
-        loadData().then(() => setRefreshing(false));
+        loadData().then(() => setRefreshing(false)).catch((e) => {
+            showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error');
+            setRefreshing(false);
+        });
     }
 
     useEffect(() => {
-        loadData();
+        loadData().catch((e) => showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error'));
     }, [sClass, credentials]);
+
 
     useEffect(() => {
         setUpcomingExams(getUpcomingExams(exams));
