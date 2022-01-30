@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getCurrentSubstitutionDay, normalize, openUri, validateClass} from "../tools/helpers";
+import {getCurrentSubstitutionDay, normalize, openUri, showToast, validateClass} from "../tools/helpers";
 import {loadDSBTimetable} from "../tools/api";
 import SubstitutionEntry from "../widgets/SubstitutionEntry";
 import InformationEntry from "../widgets/InformationEntry";
@@ -35,12 +35,15 @@ export default function SubstitutionsScreen({navigation, route}) {
 
     const refresh = () => {
         setRefreshing(true);
-        loadData().then(() => setRefreshing(false));
+        loadData().then(() => setRefreshing(false)).catch((e) => {
+            showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error');
+            setRefreshing(false);
+        });
     }
 
     useEffect(() => {
-        loadData();
-    }, [credentials]);
+        loadData().catch((e) => showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error'));
+    }, [sClass, credentials]);
 
     useEffect(() => {
         if (!currentDate) {

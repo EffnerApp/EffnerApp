@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getLevel, getWeekDay, normalize, openUri, withAuthentication} from "../tools/helpers";
+import {getLevel, getWeekDay, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import axios from "axios";
 import moment from "moment";
 import {BASE_URL} from "../tools/resources";
@@ -37,16 +37,19 @@ export default function TimetableScreen({navigation, route}) {
 
     const refresh = () => {
         setRefreshing(true);
-        loadData().then(() => setRefreshing(false));
+        loadData().then(() => setRefreshing(false)).catch((e) => {
+            showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error');
+            setRefreshing(false);
+        });
     }
+
+    useEffect(() => {
+        loadData().catch((e) => showToast('Error while loading data.', e.response?.data?.status?.error || e.message, 'error'));
+    }, [sClass, credentials]);
 
     useEffect(() => {
         load('APP_TIMETABLE_COLOR_THEME').then(setTimetableTheme);
     }, [isFocused]);
-
-    useEffect(() => {
-        loadData();
-    }, [sClass, credentials]);
 
     useEffect(() => {
         setDocumentUrl(documents.find(({key}) => key.startsWith('DATA_TIMETABLE_Q' + getLevel(sClass)))?.uri)
@@ -115,7 +118,7 @@ export default function TimetableScreen({navigation, route}) {
                                     ))}
                                 </View>
 
-                                {[...Array(5).keys()].map(i => (
+                                {timetable && [...Array(5).keys()].map(i => (
                                     <View key={i} style={localStyles.timetableDayEntry}>
                                         <View>
                                             <Text style={[globalStyles.text, {
@@ -140,12 +143,14 @@ export default function TimetableScreen({navigation, route}) {
                 </View>
 
                 <View style={[globalStyles.row, localStyles.timetableFooter]}>
-                    <View style={{alignSelf: 'center'}}>
-                        <View style={localStyles.timetableFooterTextBox}>
-                            <Text style={[globalStyles.text, localStyles.timetableFooterText]}>Zuletzt
-                                aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                    {timetable?.updatedAt && (
+                        <View style={{alignSelf: 'center'}}>
+                            <View style={localStyles.timetableFooterTextBox}>
+                                <Text style={[globalStyles.text, localStyles.timetableFooterText]}>Zuletzt
+                                    aktualisiert: {moment(timetable?.updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                            </View>
                         </View>
-                    </View>
+                    )}
                     {documentUrl && (
                         <View style={{alignSelf: 'center'}}>
                             <TouchableOpacity style={localStyles.timetableFooterTextBox} onPress={() => openUri(documentUrl)}>
