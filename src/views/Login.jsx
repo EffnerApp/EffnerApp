@@ -107,11 +107,11 @@ export default function LoginScreen({navigation, route}) {
                 <View style={[globalStyles.box, globalStyles.dropShadow]}>
                     <View style={globalStyles.row}>
                         <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
-                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
+                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
                         <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
-                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
+                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
                         <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
-                            style={[globalStyles.text, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
+                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
                     </View>
                 </View>
             </KeyboardAvoidingView>

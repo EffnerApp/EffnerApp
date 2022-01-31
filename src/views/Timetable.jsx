@@ -48,7 +48,7 @@ export default function TimetableScreen({navigation, route}) {
     }, [sClass, credentials]);
 
     useEffect(() => {
-        load('APP_TIMETABLE_COLOR_THEME').then(setTimetableTheme);
+        load('APP_TIMETABLE_COLOR_THEME').then((e) => setTimetableTheme(e || 0));
     }, [isFocused]);
 
     useEffect(() => {
@@ -105,10 +105,10 @@ export default function TimetableScreen({navigation, route}) {
                         <ScrollView horizontal={true}>
                             <View style={localStyles.timetable}>
                                 <View style={localStyles.timetableTimeColumnEntry}>
-                                    <View><Text style={[globalStyles.text, {fontWeight: "bold", textAlign: "center"}]}>{" "}</Text></View>
+                                    <View><Text style={[globalStyles.text, ]}>{" "}</Text></View>
                                     {[...Array(currentDepth).keys()].map((i) => (
                                         <View key={i} style={[localStyles.timetableTimeEntry]}>
-                                            <Text style={[globalStyles.text, {textAlign: 'right', fontWeight: 'bold'}]}>{i + 1}</Text>
+                                            <Text style={[globalStyles.text, localStyles.timetableEntryText, localStyles.textBoldCenter]}>{i + 1}</Text>
                                         </View>
                                     ))}
                                 </View>
@@ -116,10 +116,7 @@ export default function TimetableScreen({navigation, route}) {
                                 {timetable && [...Array(5).keys()].map(i => (
                                     <View key={i} style={localStyles.timetableDayEntry}>
                                         <View>
-                                            <Text style={[globalStyles.text, {
-                                                fontWeight: "bold",
-                                                textAlign: "center"
-                                            }]}>
+                                            <Text style={[globalStyles.text, localStyles.textBoldCenter]}>
                                                 {getWeekDay(i)}
                                             </Text>
                                         </View>
@@ -188,7 +185,7 @@ const createStyles = (theme = Themes.light) =>
         timetableFooterLinkText: {
             color: '#1a4cb3',
             textAlign: 'right',
-            fontSize: normalize(12)
+            fontSize: normalize(15)
         },
         timetableFooterText: {
             fontSize: normalize(12)
@@ -211,8 +208,12 @@ const createStyles = (theme = Themes.light) =>
             flexDirection: 'column'
         },
         timetableTimeEntry: {
-            borderWidth: 1,
+            borderWidth: 1.3,
             borderColor: 'transparent',
             padding: 8
         },
+        textBoldCenter: {
+            fontWeight: "bold",
+            textAlign: "center"
+        }
     });
