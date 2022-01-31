@@ -75,7 +75,7 @@ export default function SettingsScreen({navigation, route}) {
         if(timetableTheme === undefined)
             return;
 
-        save('APP_TIMETABLE_COLOR_THEME', timetableTheme);ea
+        save('APP_TIMETABLE_COLOR_THEME', timetableTheme);
     }, [timetableTheme]);
 
     useEffect(() => {
