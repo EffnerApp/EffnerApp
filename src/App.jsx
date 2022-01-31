@@ -19,6 +19,8 @@ import SettingsScreen from "./views/Settings";
 import {excludeScreens} from "./tools/helpers";
 import {registerForPushNotifications} from "./tools/push";
 import {save} from "./tools/storage";
+import NewsScreen from "./views/News";
+import InformationScreen from "./views/Information";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +92,7 @@ function Main({route: stackRoute}) {
     return (
         <Tab.Navigator screenOptions={({route}) => ({
             ...options,
-            tabBarButton: excludeScreens(route, ['Settings']),
+            tabBarButton: excludeScreens(route, ['News', 'Information', 'Settings']),
         })}>
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
@@ -107,7 +109,9 @@ function Main({route: stackRoute}) {
                 tabBarIcon: ({color, size}) => (<Icon name="school" color={color} size={size}/>),
                 title: 'Schulaufgaben'
             }} initialParams={stackRoute.params}/>
-            <Tab.Screen navigationKey="settings" name="Settings" component={SettingsScreen} options={{title: 'Einstellungen'}}/>
+            <Tab.Screen navigationKey="news" name="News" component={NewsScreen} options={{title: 'Aktuelles'}} initialParams={stackRoute.params}/>
+            <Tab.Screen navigationKey="information" name="Information" component={InformationScreen} options={{title: 'Informationen'}} initialParams={stackRoute.params}/>
+            <Tab.Screen navigationKey="settings" name="Settings" component={SettingsScreen} options={{title: 'Einstellungen'}} initialParams={stackRoute.params}/>
         </Tab.Navigator>
     )
 }
