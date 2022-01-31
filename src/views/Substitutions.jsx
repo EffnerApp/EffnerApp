@@ -64,7 +64,7 @@ export default function SubstitutionsScreen({navigation, route}) {
             }
 
         }
-        setSubstitutions(tmp);
+        setSubstitutions(tmp.sort((a, b) => a.period - b.period));
         setInformation(data.information.get(currentDate));
         setAbsentClasses(data.absentClasses.filter((e) => e.date === currentDate).map((e) => e.class + ': ' + e.period + (e.info ? ' (' + e.info + ')' : '')));
     }, [currentDate, data]);
