@@ -21,6 +21,7 @@ import {registerForPushNotifications} from "./tools/push";
 import {save} from "./tools/storage";
 import NewsScreen from "./views/News";
 import InformationScreen from "./views/Information";
+import PublicTransportScreen from "./views/PublicTransport";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -111,6 +112,7 @@ function Main({route: stackRoute}) {
             }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="news" name="News" component={NewsScreen} options={{title: 'Aktuelles'}} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="information" name="Information" component={InformationScreen} options={{title: 'Informationen'}} initialParams={stackRoute.params}/>
+            <Tab.Screen navigationKey="publicTransport" name="PublicTransport" component={PublicTransportScreen} options={{title: 'ÖPNV'}} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="settings" name="Settings" component={SettingsScreen} options={{title: 'Einstellungen'}} initialParams={stackRoute.params}/>
         </Tab.Navigator>
     )

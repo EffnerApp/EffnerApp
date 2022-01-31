@@ -29,6 +29,7 @@
     "expo-web-browser": "~10.1.0",
     "fast-html-parser": "^1.0.1",
     "moment": "^2.29.1",
+    "mvg-node": "git+https://github.com/sebiIO/mvg-node",
     "node-html-parser": "^1.4.9",
     "query-string": "^7.0.1",
     "react": "17.0.1",
