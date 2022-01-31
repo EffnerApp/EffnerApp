@@ -22,7 +22,7 @@ export default function Button({title, icon, overrideStyles = {}, onPress = () =
             setProcessing(true);
             onPress();
         }}>
-            <Text style={[globalStyles.textBigCenter, localStyles.center]}>
+            <Text style={[globalStyles.textDefault, localStyles.center]}>
                 {title}
             </Text>
             {(icon && !isProcessing) && <Icon

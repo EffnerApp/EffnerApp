@@ -75,7 +75,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                 {dates?.length > 1 &&
                     <View style={localStyles.dateSelector}>
                         <View style={{alignSelf: 'center'}}>
-                            <Text style={localStyles.text}>
+                            <Text style={globalStyles.text}>
                                 Tag auswählen:
                             </Text>
                         </View>
@@ -85,7 +85,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                                     key={i}
                                     style={[globalStyles.row, localStyles.selectorBadge, {backgroundColor: currentDate === date ? theme.colors.primary : theme.colors.onSurface}]}
                                     onPress={() => setCurrentDate(date)}>
-                                    <Text style={{color: currentDate === date ? theme.colors.font : theme.colors.surface}}>{date.substring(0, date.length - 5)}</Text>
+                                    <Text style={[globalStyles.text, {color: currentDate === date ? theme.colors.font : theme.colors.surface}]}>{date.substring(0, date.length - 5)}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -102,9 +102,9 @@ export default function SubstitutionsScreen({navigation, route}) {
                 </View>
                 {timetableUrl && (
                     <View style={localStyles.documentBox}>
-                        <TouchableOpacity style={localStyles.documentLink}
-                                          onPress={() => openUri(timetableUrl)}><Text
-                            style={[globalStyles.text, localStyles.documentLinkText]}>Vollständigen Stundenplan anzeigen</Text></TouchableOpacity>
+                        <TouchableOpacity style={localStyles.documentLink} onPress={() => openUri(timetableUrl)}>
+                            <Text style={[globalStyles.text, localStyles.documentLinkText]}>Vollständigen Stundenplan anzeigen</Text>
+                        </TouchableOpacity>
                     </View>
                 )}
             </ScrollView>
@@ -134,14 +134,11 @@ const createStyles = (theme = Themes.light) =>
         documentLinkText: {
             color: '#1a4cb3',
             textAlign: 'right',
-            fontSize: normalize(12)
+            fontSize: normalize(15)
         },
         selectorBadge: {
             borderRadius: 8,
             padding: 4,
             marginHorizontal: 6
-        },
-        text: {
-            color: theme.colors.font
         }
     });

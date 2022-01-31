@@ -72,7 +72,10 @@ export default function SettingsScreen({navigation, route}) {
     }, [notificationsEnabled]);
 
     useEffect(() => {
-        save('APP_TIMETABLE_COLOR_THEME', timetableTheme);
+        if(timetableTheme === undefined)
+            return;
+
+        save('APP_TIMETABLE_COLOR_THEME', timetableTheme);ea
     }, [timetableTheme]);
 
     useEffect(() => {
