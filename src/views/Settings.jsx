@@ -8,11 +8,12 @@ import Picker from "../components/Picker";
 import {navigateTo, openUri, showToast} from "../tools/helpers";
 import {revokePushToken, subscribeToChannel} from "../tools/push";
 import {BASE_URL_GO} from "../tools/resources";
-import Constants from "expo-constants";
+import {isDevice} from "expo-device";
 import {load, save, clear} from "../tools/storage";
 import * as Progress from 'react-native-progress';
 import {getTimetableThemes} from "../theme/TimetableThemes";
 import {loadClasses} from "../tools/api";
+import Constants from "expo-constants";
 
 export default function SettingsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -22,6 +23,10 @@ export default function SettingsScreen({navigation, route}) {
     const timetableThemes = getTimetableThemes();
 
     const [notificationsEnabled, toggleNotifications] = useState(undefined);
+    const [notificationsAvailable, setNotificationsAvailable] = useState(true);
+
+    const [pushToken, setPushToken] = useState();
+
     const [nightThemeEnabled, toggleNightTheme] = useState(theme.name === 'dark');
     const [timetableTheme, setTimetableTheme] = useState(0);
 
@@ -33,9 +38,24 @@ export default function SettingsScreen({navigation, route}) {
     const appVersion = Constants.manifest.version
 
     useEffect(() => {
-        load('APP_NOTIFICATIONS').then((v) => toggleNotifications(!!v));
         load('APP_TIMETABLE_COLOR_THEME').then(setTimetableTheme);
         loadClasses().then(setClasses);
+
+        if(isDevice) {
+            load('pushToken').then((token) => {
+                if(token) {
+                    setPushToken(token);
+                    setNotificationsAvailable(true);
+                } else {
+                    setNotificationsAvailable(false);
+                }
+            });
+
+            load('APP_NOTIFICATIONS').then((v) => toggleNotifications(!!v));
+        } else {
+            setNotificationsAvailable(false);
+        }
+
     }, []);
 
     useEffect(() => {
@@ -43,11 +63,10 @@ export default function SettingsScreen({navigation, route}) {
     }, [nightThemeEnabled]);
 
     useEffect(() => {
-        if (notificationsEnabled === undefined) return;
+        if (notificationsEnabled === undefined || !pushToken) return;
 
         if (notificationsEnabled) {
             (async () => {
-                const pushToken = await load('pushToken');
                 await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken)
                     .catch(({message, response}) => showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error'));
 
@@ -69,7 +88,7 @@ export default function SettingsScreen({navigation, route}) {
                     });
             })();
         }
-    }, [notificationsEnabled]);
+    }, [notificationsEnabled, pushToken]);
 
     useEffect(() => {
         if(timetableTheme === undefined)
@@ -144,10 +163,10 @@ export default function SettingsScreen({navigation, route}) {
                                 Benachrichtigungen
                             </Text>
                         </View>
-                        {notificationsEnabled === undefined &&
+                        {(notificationsAvailable && notificationsEnabled === undefined) &&
                             <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>
                         }
-                        {notificationsEnabled !== undefined &&
+                        {(notificationsAvailable && notificationsEnabled !== undefined) &&
                             <Switch
                                 trackColor={{
                                     false: "#767577",
@@ -157,7 +176,16 @@ export default function SettingsScreen({navigation, route}) {
                                 ios_backgroundColor="#3e3e3e"
                                 onValueChange={toggleNotifications}
                                 value={!!notificationsEnabled}
-                            />}
+                                disabled={!notificationsAvailable}
+                            />
+                        }
+                        {!notificationsAvailable && (
+                            <View style={{alignSelf: "center"}}>
+                                <Text style={globalStyles.textDefault}>
+                                    Not available
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 </Widget>
                 <Widget title="Theming" icon="palette" headerMarginBottom={10}>

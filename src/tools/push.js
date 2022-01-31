@@ -1,13 +1,13 @@
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
 import {Platform} from "react-native";
 import axios from "axios";
 import {BASE_URL} from "./resources";
 import {withAuthentication} from "./helpers";
+import {isDevice} from "expo-device";
 
 async function registerForPushNotifications() {
 	let pushToken;
-	if (Constants.isDevice) {
+	if (isDevice) {
 		const { status: existingStatus } =
 			await Notifications.getPermissionsAsync();
 		let finalStatus = existingStatus;
