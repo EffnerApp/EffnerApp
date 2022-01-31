@@ -141,11 +141,11 @@ export default function HomeScreen({navigation, route}) {
                     <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
                             headerMarginBottom={0}/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('News')}>
                     <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
                             headerMarginBottom={0}/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Information')}>
                     <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
                             headerMarginBottom={0}/>
                 </TouchableOpacity>

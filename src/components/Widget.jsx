@@ -71,7 +71,8 @@ const createStyles = (theme = Themes.light) =>
             backgroundColor: theme.colors.background,
             borderRadius: 4,
             paddingVertical: 2,
-            paddingHorizontal: 4
+            paddingHorizontal: 4,
+            alignSelf: "center"
         },
         headerText: {
             fontWeight: "bold",

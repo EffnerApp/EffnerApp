@@ -71,16 +71,4 @@ const loadDSBTimetable = async (credentials) => {
     }
 }
 
-const loadNews = async () => {
-    try {
-        // get news from effner.de website
-        const news = await axios.get('https://effner.de/wp-json/wp/v2/posts');
-
-        return news.data;
-    } catch (e) {
-        // await FirebaseCrashlytics.recordException({message: e.message, stacktrace: e.stack});
-        console.error(e);
-    }
-}
-
-export {login, loadClasses, loadNews, loadDSBTimetable};
+export {login, loadClasses, loadDSBTimetable};
