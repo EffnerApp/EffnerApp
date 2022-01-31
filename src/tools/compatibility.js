@@ -17,6 +17,9 @@ const performStorageConversion = async () => {
             // save the values to the new storage
             await save('APP_CREDENTIALS', credentials);
             await save('APP_CLASS', sClass);
+
+            // clear legacy storage
+            await UserDefaults.empty();
             return Promise.resolve();
         } else {
             return Promise.reject('[ios] Legacy storage is empty ...');
@@ -32,6 +35,9 @@ const performStorageConversion = async () => {
                     // save the values to the new storage
                     await save('APP_CREDENTIALS', credentials);
                     await save('APP_CLASS', sClass);
+
+                    // clear legacy storage
+                    SharedPreferences.clear();
                     return resolve();
                 } else {
                     return reject('[android] Legacy storage is empty ...');

@@ -3,7 +3,7 @@
     "name": "EffnerApp",
     "slug": "EffnerApp",
     "version": "3.0.3",
-    "orientation": "portrait",
+    "orientation": "default",
     "entryPoint": "index.js",
     "icon": "./src/assets/effnerapp_logo.png",
     "splash": {
@@ -26,7 +26,11 @@
     "android": {
       "package": "de.effnerapp.effner",
       "versionCode": 89,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/effnerapp_logo.png",
+        "backgroundColor": "#FFFFFF"
+      }
     },
     "web": {
       "favicon": "./src/assets/effnerapp_logo.png"
