@@ -22,7 +22,7 @@ export default function NewsScreen({navigation, route}) {
                 const mediaUri = await getFeaturedMediaUri(e);
 
                 const renderedContent = parse(e.excerpt?.rendered);
-                const content = renderedContent?.childNodes?.[0]?.innerText;
+                const content = decodeEntities(renderedContent?.childNodes?.[0]?.innerText);
 
                 return {
                     title: decodeEntities(e.title?.rendered || 'Beitrag #' + i),
@@ -76,8 +76,10 @@ export default function NewsScreen({navigation, route}) {
                                             <Image source={{uri: mediaUri}} style={localStyles.image} />
                                         </View>
                                     )}
-                                    <View style={{alignSelf: 'center', margin: 5}}>
-                                        <Text style={[globalStyles.textDefault, {width: 500}]}>{content}</Text>
+                                    <View style={localStyles.contentContainer}>
+                                        <View style={{marginStart: 4}}>
+                                            <Text style={[globalStyles.textDefault, {padding: 8}]}>{content}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </Widget>
@@ -96,5 +98,9 @@ const createStyles = (theme = Themes.light) =>
             width: normalize(100),
             height: normalize(100),
             borderRadius: 6
+        },
+        contentContainer: {
+            flexWrap: 'wrap',
+            flexShrink: 1
         }
     });
