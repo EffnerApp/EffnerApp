@@ -90,14 +90,9 @@ export default function TimetableScreen({navigation, route}) {
                             {timetables.data.map(({class: tClass}, i) => (
                                 <TouchableOpacity
                                     key={i}
-                                    style={[globalStyles.bigIcon, globalStyles.row, {
-                                        borderRadius: 8,
-                                        backgroundColor: theme.colors.onSurface,
-                                        padding: 4,
-                                        marginHorizontal: 6
-                                    }]}
+                                    style={[globalStyles.bigIcon, globalStyles.row, localStyles.timetableSelectorBadge]}
                                     onPress={() => setSelectedTimetable(i)}>
-                                    <Text style={{color: theme.colors.surface}}>{tClass}</Text>
+                                    <Text style={localStyles.timetableSelectorBadgeText}>{tClass}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -202,6 +197,15 @@ const createStyles = (theme = Themes.light) =>
             flexDirection: "row",
             justifyContent: "flex-end",
             marginBottom: 32
+        },
+        timetableSelectorBadge: {
+            borderRadius: 8,
+            backgroundColor: theme.colors.onSurface,
+            padding: 4,
+            marginHorizontal: 6
+        },
+        timetableSelectorBadgeText: {
+            color: theme.colors.surface
         },
         timetableTimeColumnEntry: {
             flexDirection: 'column'
