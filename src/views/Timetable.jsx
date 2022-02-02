@@ -3,13 +3,14 @@ import React, {useEffect, useState} from "react";
 import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getLevel, getWeekDay, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
+import {getLevel, getWeekDay, isALevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import axios from "axios";
 import moment from "moment";
 import {BASE_URL} from "../tools/resources";
 import {getCellColor} from "../theme/TimetableThemes";
 import {load} from "../tools/storage";
 import {useIsFocused} from "@react-navigation/native";
+import {Icon} from "react-native-elements";
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -59,6 +60,29 @@ export default function TimetableScreen({navigation, route}) {
         setTimetable(timetables.data[selectedTimetable]);
         setCurrentDepth(maxDepth(timetables.data[selectedTimetable]));
     }, [timetables, selectedTimetable]);
+
+    useEffect(() => {
+        if(!documentUrl)
+            return;
+
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={[globalStyles.row, globalStyles.headerButtonContainer]}>
+                    <TouchableOpacity
+                        style={globalStyles.headerButton}
+                        onPress={() => openUri(documentUrl)}>
+                        <Icon name="picture-as-pdf" color={theme.colors.onSurface}/>
+                    </TouchableOpacity>
+                    <View style={globalStyles.verticalLine}/>
+                    <TouchableOpacity
+                        style={globalStyles.headerButton}
+                        onPress={() => navigation.navigate('Settings', {...route.params})}>
+                        <Icon name="settings" color={theme.colors.onSurface} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }, [isFocused, documentUrl]);
 
     function maxDepth(timetable) {
         for (let j = 9; j >= 0; j--) {

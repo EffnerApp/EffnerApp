@@ -84,7 +84,7 @@ export default function HomeScreen({navigation, route}) {
 
             const subject = name.split(' in ')[1];
 
-            setNextExam((subject + ' am ' + date) || name);
+            setNextExam(((subject || name) + ' am ' + date) || name);
             return;
         }
 

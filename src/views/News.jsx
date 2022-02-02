@@ -57,7 +57,7 @@ export default function NewsScreen({navigation, route}) {
         const {data: meta} = await axios.get(featuredMedia);
 
         if(meta?.media_type === 'image') {
-            return meta?.media_details?.sizes?.full?.source_url;
+            return meta?.media_details?.sizes?.thumbnail?.source_url;
         }
 
         return null;

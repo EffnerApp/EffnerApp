@@ -1,17 +1,22 @@
 import React, {useEffect, useState} from "react";
 
-import {RefreshControl, ScrollView, StyleSheet, Text, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getExamsHistory, getUpcomingExams, normalize, showToast, withAuthentication} from "../tools/helpers";
+import {getExamsHistory, getLevel, getUpcomingExams, isALevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
 import axios from "axios";
 import {BASE_URL} from "../tools/resources";
+import {useIsFocused} from "@react-navigation/native";
+import {Icon} from "react-native-elements";
+import GlobalHeader from "../widgets/GlobalHeader";
 
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const {credentials, sClass} = route.params || {};
+
+    const isFocused = useIsFocused();
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -19,8 +24,11 @@ export default function ExamsScreen({navigation, route}) {
     const [upcomingExams, setUpcomingExams] = useState([]);
     const [examsHistory, setExamsHistory] = useState([]);
 
+    const [documents, setDocuments] = useState([]);
+
     const loadData = async () => {
         await axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
+        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
     }
 
     const refresh = () => {
@@ -40,6 +48,34 @@ export default function ExamsScreen({navigation, route}) {
         setUpcomingExams(getUpcomingExams(exams));
         setExamsHistory(getExamsHistory(exams));
     }, [exams]);
+
+    useEffect(() => {
+        if(!sClass || !isALevel(sClass))
+            return;
+
+        const document = documents.find(({key}) => key.startsWith('DATA_EXAMS_Q' + getLevel(sClass)));
+
+        if(!document)
+            return;
+
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={[globalStyles.row, globalStyles.headerButtonContainer]}>
+                    <TouchableOpacity
+                        style={globalStyles.headerButton}
+                        onPress={() => openUri(document.uri)}>
+                        <Icon name="picture-as-pdf" color={theme.colors.onSurface}/>
+                    </TouchableOpacity>
+                    <View style={globalStyles.verticalLine}/>
+                    <TouchableOpacity
+                        style={globalStyles.headerButton}
+                        onPress={() => navigation.navigate('Settings', {...route.params})}>
+                        <Icon name="settings" color={theme.colors.onSurface} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }, [isFocused, documents, sClass]);
 
     return (
         <View style={globalStyles.screen}>

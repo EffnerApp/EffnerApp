@@ -78,4 +78,15 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     bigIcon: {
         padding: 8,
     },
+    headerButtonContainer: {
+        marginEnd: 8
+    },
+    headerButton: {
+        padding: 8,
+    },
+    verticalLine: {
+        borderLeftColor: theme.colors.font,
+        marginVertical: 10,
+        borderLeftWidth: 2
+    },
 });
