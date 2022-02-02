@@ -13,9 +13,9 @@ export default function GlobalHeader() {
     const route = useRoute();
 
     return (
-        <View style={[globalStyles.row, localStyles.headerButtonContainer]}>
+        <View style={[globalStyles.row, globalStyles.headerButtonContainer]}>
             <TouchableOpacity
-                style={localStyles.headerButton}
+                style={globalStyles.headerButton}
                 onPress={() => navigation.navigate('Settings', {...route.params})}>
                 <Icon name="settings" color={theme.colors.onSurface} />
             </TouchableOpacity>
@@ -24,11 +24,4 @@ export default function GlobalHeader() {
 }
 
 const createStyles = (theme = Themes.light) =>
-    StyleSheet.create({
-        headerButtonContainer: {
-          marginEnd: 8
-        },
-        headerButton: {
-            padding: 8,
-        }
-    });
+    StyleSheet.create({});

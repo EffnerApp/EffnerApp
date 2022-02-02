@@ -40,8 +40,12 @@ const runsOn = (os) => {
 // };
 
 const getLevel = (sClass) => {
-    return sClass.match('^\\d{1,2}')[0];
+    return sClass.match(/^\d{1,2}/)[0];
 };
+
+const isALevel = (sClass) => {
+    return ['11', '12'].includes(getLevel(sClass));
+}
 
 const validateClass = (fullClass, test) => {
     if (fullClass === test)
@@ -214,6 +218,7 @@ export {
     getPlatform,
     runsOn,
     getLevel,
+    isALevel,
     validateClass,
     openUri,
     groupBy,

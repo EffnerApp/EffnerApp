@@ -8,11 +8,15 @@ import {loadDSBTimetable} from "../tools/api";
 import SubstitutionEntry from "../widgets/SubstitutionEntry";
 import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
+import {Icon} from "react-native-elements";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function SubstitutionsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const {credentials, sClass} = route.params || {};
+
+    const isFocused = useIsFocused();
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -68,6 +72,29 @@ export default function SubstitutionsScreen({navigation, route}) {
         setInformation(data.information.get(currentDate));
         setAbsentClasses(data.absentClasses.filter((e) => e.date === currentDate).map((e) => e.class + ': ' + e.period + (e.info ? ' (' + e.info + ')' : '')));
     }, [currentDate, data]);
+
+    useEffect(() => {
+        if(!timetableUrl)
+            return;
+
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={[globalStyles.row, globalStyles.headerButtonContainer]}>
+                    <TouchableOpacity
+                        style={globalStyles.headerButton}
+                        onPress={() => openUri(timetableUrl)}>
+                        <Icon name="launch" color={theme.colors.onSurface}/>
+                    </TouchableOpacity>
+                    <View style={globalStyles.verticalLine}/>
+                    <TouchableOpacity
+                        style={globalStyles.headerButton}
+                        onPress={() => navigation.navigate('Settings', {...route.params})}>
+                        <Icon name="settings" color={theme.colors.onSurface} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }, [isFocused, timetableUrl]);
 
     return (
         <View style={globalStyles.screen}>
