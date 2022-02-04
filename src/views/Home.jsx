@@ -135,19 +135,19 @@ export default function HomeScreen({navigation, route}) {
                 </Widget>
                 <TouchableOpacity onPress={() => navigation.navigate('Timetable')}>
                     <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0}/>
+                            headerMarginBottom={0} headerPadding={6}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => openUri(documents?.find(({key}) => key === 'DATA_FOOD_PLAN')?.uri)}>
                     <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0}/>
+                            headerMarginBottom={0} headerPadding={6}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('News')}>
                     <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0}/>
+                            headerMarginBottom={0} headerPadding={6}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Information')}>
                     <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0}/>
+                            headerMarginBottom={0} headerPadding={6}/>
                 </TouchableOpacity>
             </ScrollView>
         </View>
@@ -161,7 +161,8 @@ const createStyles = (theme = Themes.light) =>
             color: theme.colors.onSurface
         },
         motdBox: {
-            paddingBottom: 24
+            paddingBottom: 24,
+            paddingHorizontal: 12
         },
         motdText: {
             color: theme.colors.font,

@@ -4,14 +4,16 @@ const light = {
   keyboardAppearance: "light",
   elevation: 6,
   colors: {
-    primary: "#677afc",
+    primary: "#3658D8",
     onPrimary: "#FFFFFF",
-    onPrimarySelected: "#69e369",
 
-    background: "#e4e4e4",
+    secondary: "#ee0979",
+    onSecondary: "#FFFFFF",
+
+    background: "#FFFFFF",
     onBackground: "#000000",
 
-    surface: "#FFFFFF",
+    surface: "#f5f5f5",
     onSurface: "#000000",
 
     font: "#000000",
@@ -28,10 +30,9 @@ const dark = {
     // primary: "#a4fc86",
     primary: "#61d763",
     onPrimary: "#FFFFFF",
-    onPrimarySelected: "#69e369",
 
-    secondary: '#282828',
-    onSecondary: "#FFFFFF",
+    secondary: "#FFFFFF",
+    onSecondary: "#000000",
 
     background: "#000000",
     onBackground: "#FFFFFF",

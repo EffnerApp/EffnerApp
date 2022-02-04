@@ -10,6 +10,7 @@ import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
 import {Icon} from "react-native-elements";
 import {useIsFocused} from "@react-navigation/native";
+import moment from "moment";
 
 export default function SubstitutionsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -28,12 +29,15 @@ export default function SubstitutionsScreen({navigation, route}) {
     const [absentClasses, setAbsentClasses] = useState([]);
     const [timetableUrl, setTimetableUrl] = useState();
 
+    const [updatedAt, setUpdatedAt] = useState();
+
     const loadData = async () => {
         await loadDSBTimetable(credentials)
             .then(({url, time, data}) => {
                 setData(data);
                 setDates(data.dates);
                 setTimetableUrl(url);
+                setUpdatedAt(time);
             });
     };
 
@@ -110,9 +114,9 @@ export default function SubstitutionsScreen({navigation, route}) {
                             {dates.map((date, i) => (
                                 <TouchableOpacity
                                     key={i}
-                                    style={[globalStyles.row, localStyles.selectorBadge, {backgroundColor: currentDate === date ? theme.colors.primary : theme.colors.onSurface}]}
+                                    style={[globalStyles.row, localStyles.selectorBadge, {backgroundColor: currentDate === date ? theme.colors.secondary : theme.colors.primary}]}
                                     onPress={() => setCurrentDate(date)}>
-                                    <Text style={[globalStyles.text, {color: currentDate === date ? theme.colors.font : theme.colors.surface}]}>{date.substring(0, date.length - 5)}</Text>
+                                    <Text style={[globalStyles.text, {color: currentDate === date ? theme.colors.onSecondary : theme.colors.onPrimary}]}>{date.substring(0, date.length - 5)}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -127,13 +131,16 @@ export default function SubstitutionsScreen({navigation, route}) {
                     {information && <InformationEntry data={information}/>}
                     {absentClasses?.length > 0 && <AbsentClassesEntry data={absentClasses}/>}
                 </View>
-                {timetableUrl && (
-                    <View style={localStyles.documentBox}>
-                        <TouchableOpacity style={localStyles.documentLink} onPress={() => openUri(timetableUrl)}>
-                            <Text style={[globalStyles.text, localStyles.documentLinkText]}>Vollständigen Stundenplan anzeigen</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
+                <View style={[globalStyles.row, localStyles.footer]}>
+                    {updatedAt && (
+                        <View style={{alignSelf: 'center'}}>
+                            <View style={localStyles.footerTextBox}>
+                                <Text style={[globalStyles.text, localStyles.footerText]}>Zuletzt
+                                    aktualisiert: {updatedAt}</Text>
+                            </View>
+                        </View>
+                    )}
+                </View>
             </ScrollView>
         </View>
 
@@ -151,17 +158,16 @@ const createStyles = (theme = Themes.light) =>
             justifyContent: "flex-end",
             marginBottom: 16
         },
-        documentBox: {
+        footer: {
             marginTop: 5,
             marginEnd: 10
         },
-        documentLink: {
-            padding: 6
+        footerTextBox: {
+            padding: 10,
+            alignSelf: 'center'
         },
-        documentLinkText: {
-            color: '#1a4cb3',
-            textAlign: 'right',
-            fontSize: normalize(15)
+        footerText: {
+            fontSize: normalize(12)
         },
         selectorBadge: {
             borderRadius: 8,

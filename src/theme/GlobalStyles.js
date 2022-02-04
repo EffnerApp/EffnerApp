@@ -19,16 +19,16 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
     content: {
         width: "100%",
         height: "100%",
-        maxWidth: "90%",
+        maxWidth: "95%",
         maxHeight: "90%",
-        padding: 6,
+        padding: 2,
         backgroundColor: theme.colors.background,
         borderRadius: 4,
     },
     box: {
         padding: 12,
         backgroundColor: theme.colors.surface,
-        margin: 8,
+        margin: 12,
         borderRadius: 8
     },
     text: {
