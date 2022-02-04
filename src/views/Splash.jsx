@@ -4,7 +4,7 @@ import {StyleSheet, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useIsFocused} from "@react-navigation/native";
-import {navigateTo} from "../tools/helpers";
+import {initDevice, navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
 import * as Progress from 'react-native-progress';
 import {load} from "../tools/storage";
@@ -18,11 +18,13 @@ export default function SplashScreen({navigation}) {
 
     useEffect(() => {
         (async () => {
+            await initDevice();
+
             const credentials = await load('APP_CREDENTIALS');
             if (credentials) {
                 const sClass = await load('APP_CLASS');
 
-                if(!sClass) {
+                if (!sClass) {
                     navigateTo(navigation, 'Login', {error: 'No class provided.'});
                     return;
                 }
@@ -57,7 +59,7 @@ export default function SplashScreen({navigation}) {
 
     return (
         <View style={globalStyles.fullScreen}>
-            <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true} />
+            <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>
         </View>
     )
 }

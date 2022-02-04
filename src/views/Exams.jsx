@@ -86,42 +86,44 @@ export default function ExamsScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
-                <View style={localStyles.exams}>
-                    {upcomingExams.map(([date, items], i) => (
-                        <View key={i}>
-                            <Widget title={date} titleColor="#28a745" headerMarginBottom={normalize(6)}>
-                                <View style={globalStyles.ps10}>
-                                    {items.map(({name}, j) => (
-                                        <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
-                                    ))}
-                                </View>
-                            </Widget>
-                        </View>
-                    ))}
-                </View>
-                {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>}
-                <View style={localStyles.exams}>
-                    {examsHistory.map(([date, items], i) => (
-                        <View key={i}>
-                            <Widget title={date} titleColor="#dc3545" headerMarginBottom={normalize(6)}>
-                                <View style={globalStyles.ps10}>
-                                    {items.map(({name}, j) => (
-                                        <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
-                                    ))}
-                                </View>
-                            </Widget>
-                        </View>
-                    ))}
-                </View>
-                <View style={[globalStyles.row, localStyles.footer]}>
-                    {updatedAt && (
-                        <View style={{alignSelf: 'center'}}>
-                            <View style={localStyles.footerTextBox}>
-                                <Text style={[globalStyles.text, localStyles.footerText]}>Zuletzt
-                                    aktualisiert: {moment(updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                <View style={globalStyles.contentWrapper}>
+                    <View style={localStyles.exams}>
+                        {upcomingExams.map(([date, items], i) => (
+                            <View key={i}>
+                                <Widget title={date} titleColor="#28a745" headerMarginBottom={normalize(6)}>
+                                    <View style={globalStyles.ps10}>
+                                        {items.map(({name}, j) => (
+                                            <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                        ))}
+                                    </View>
+                                </Widget>
                             </View>
-                        </View>
-                    )}
+                        ))}
+                    </View>
+                    {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>}
+                    <View style={localStyles.exams}>
+                        {examsHistory.map(([date, items], i) => (
+                            <View key={i}>
+                                <Widget title={date} titleColor="#dc3545" headerMarginBottom={normalize(6)}>
+                                    <View style={globalStyles.ps10}>
+                                        {items.map(({name}, j) => (
+                                            <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                        ))}
+                                    </View>
+                                </Widget>
+                            </View>
+                        ))}
+                    </View>
+                    <View style={[globalStyles.row, localStyles.footer]}>
+                        {updatedAt && (
+                            <View style={{alignSelf: 'center'}}>
+                                <View style={localStyles.footerTextBox}>
+                                    <Text style={[globalStyles.text, localStyles.footerText]}>Zuletzt
+                                        aktualisiert: {moment(updatedAt, 'YYYY-MM-DD\'T\'HH:mm:ss').format('DD.MM.YYYY HH:mm:ss')}</Text>
+                                </View>
+                            </View>
+                        )}
+                    </View>
                 </View>
             </ScrollView>
         </View>

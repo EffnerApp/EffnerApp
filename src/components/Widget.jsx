@@ -7,7 +7,7 @@ import {Icon} from "react-native-elements";
 import {fromAngle, normalize} from "../tools/helpers";
 import {LinearGradient} from "expo-linear-gradient";
 
-export default function Widget({title, icon, headerRight, children, titleColor, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, headerMargin = 12}) {
+export default function Widget({title, icon, headerRight, children, titleColor, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, marginVertical = 12}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     function WidgetHeader() {
@@ -27,7 +27,7 @@ export default function Widget({title, icon, headerRight, children, titleColor, 
     function GradientWidget() {
         return (
             <LinearGradient
-                style={[globalStyles.box, {marginVertical: headerMargin}]}
+                style={[globalStyles.box, {marginVertical: marginVertical}]}
                 start={[0, 0]}
                 end={fromAngle(gradient.angle, 1.6)}
                 colors={gradient.colors}
@@ -40,7 +40,7 @@ export default function Widget({title, icon, headerRight, children, titleColor, 
 
     function DefaultWidget() {
         return (
-            <View style={[globalStyles.box, {backgroundColor: backgroundColor || theme.colors.surface, marginVertical: headerMargin}]}>
+            <View style={[globalStyles.box, {backgroundColor: backgroundColor || theme.colors.surface, marginVertical: marginVertical}]}>
                 <WidgetHeader />
                 {children}
             </View>
@@ -76,7 +76,7 @@ const createStyles = (theme = Themes.light) =>
         },
         headerText: {
             fontWeight: "bold",
-            fontSize: normalize(17),
+            fontSize: normalize(19),
             alignSelf: "center",
         }
     });

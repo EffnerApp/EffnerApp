@@ -94,61 +94,63 @@ export default function HomeScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
-                <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
-                {/*<Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{*/}
-                {/*    component: <Text style={localStyles.mvvBadgeText}>Live</Text>,*/}
-                {/*    styles: {backgroundColor: "#7be87b"}*/}
-                {/*}}>*/}
-                {/*    <View style={[globalStyles.box, globalStyles.row]}>*/}
-                {/*        <View style={[globalStyles.box, {backgroundColor: '#547fcd', padding: 8}]}>*/}
-                {/*            <Text style={globalStyles.text}>721</Text>*/}
-                {/*        </View>*/}
-                {/*        <View style={{alignSelf: 'center'}}>*/}
-                {/*            <Text style={globalStyles.textBigCenter}>Bergkirchen, Schule und so</Text>*/}
-                {/*        </View>*/}
-                {/*        <View style={{alignSelf: 'center'}}>*/}
-                {/*            <Text style={[globalStyles.text, {color: '#4dc44d'}]}>13:37</Text>*/}
-                {/*        </View>*/}
-                {/*    </View>*/}
-                {/*</Widget>*/}
-                <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}} titleColor="#FFFFFF" iconColor="#FFFFFF">
-                    <View style={[globalStyles.box]}>
-                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Exams')}>
-                            <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
-                            <View style={localStyles.newsItemContentInner}>
-                                <SkeletonContent isLoading={!nextExam} layout={[{width: 180, height: 20}]} boneColor="#292929" highlightColor="#333333" animationType="pulse">
-                                    <Text style={localStyles.newsItemContentText}>{nextExam}</Text>
-                                </SkeletonContent>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={localStyles.line}/>
-                        <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Substitutions')}>
-                            <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
-                            <View style={localStyles.newsItemContentInner}>
-                                <SkeletonContent isLoading={!currentSubstitutions} layout={[{width: 220, height: 20}]} boneColor="#292929" highlightColor="#333333"
-                                                 animationType="pulse">
-                                    <Text style={localStyles.newsItemContentText}>{currentSubstitutions}</Text>
-                                </SkeletonContent>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </Widget>
-                <TouchableOpacity onPress={() => navigation.navigate('Timetable')}>
-                    <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0} headerPadding={6}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => openUri(documents?.find(({key}) => key === 'DATA_FOOD_PLAN')?.uri)}>
-                    <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0} headerPadding={6}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('News')}>
-                    <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0} headerPadding={6}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Information')}>
-                    <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
-                            headerMarginBottom={0} headerPadding={6}/>
-                </TouchableOpacity>
+                <View style={globalStyles.contentWrapper}>
+                    <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
+                    {/*<Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{*/}
+                    {/*    component: <Text style={localStyles.mvvBadgeText}>Live</Text>,*/}
+                    {/*    styles: {backgroundColor: "#7be87b"}*/}
+                    {/*}}>*/}
+                    {/*    <View style={[globalStyles.box, globalStyles.row]}>*/}
+                    {/*        <View style={[globalStyles.box, {backgroundColor: '#547fcd', padding: 8}]}>*/}
+                    {/*            <Text style={globalStyles.text}>721</Text>*/}
+                    {/*        </View>*/}
+                    {/*        <View style={{alignSelf: 'center'}}>*/}
+                    {/*            <Text style={globalStyles.textBigCenter}>Bergkirchen, Schule und so</Text>*/}
+                    {/*        </View>*/}
+                    {/*        <View style={{alignSelf: 'center'}}>*/}
+                    {/*            <Text style={[globalStyles.text, {color: '#4dc44d'}]}>13:37</Text>*/}
+                    {/*        </View>*/}
+                    {/*    </View>*/}
+                    {/*</Widget>*/}
+                    <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}} titleColor="#FFFFFF" iconColor="#FFFFFF">
+                        <View style={[globalStyles.box]}>
+                            <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Exams')}>
+                                <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
+                                <View style={localStyles.newsItemContentInner}>
+                                    <SkeletonContent isLoading={!nextExam} layout={[{width: 180, height: 20}]} boneColor="#292929" highlightColor="#333333" animationType="pulse">
+                                        <Text style={localStyles.newsItemContentText}>{nextExam}</Text>
+                                    </SkeletonContent>
+                                </View>
+                            </TouchableOpacity>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity style={localStyles.newsItemContainer} onPress={() => navigation.navigate('Substitutions')}>
+                                <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
+                                <View style={localStyles.newsItemContentInner}>
+                                    <SkeletonContent isLoading={!currentSubstitutions} layout={[{width: 220, height: 20}]} boneColor="#292929" highlightColor="#333333"
+                                                     animationType="pulse">
+                                        <Text style={localStyles.newsItemContentText}>{currentSubstitutions}</Text>
+                                    </SkeletonContent>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </Widget>
+                    <TouchableOpacity onPress={() => navigation.navigate('Timetable')}>
+                        <Widget title="Stundenplan" icon="event-note" gradient={{angle: 135, colors: ['#0062ff', '#61efff']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                                headerMarginBottom={0} headerPadding={6}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(documents?.find(({key}) => key === 'DATA_FOOD_PLAN')?.uri)}>
+                        <Widget title="Speiseplan" icon="restaurant" gradient={{angle: 135, colors: ['#5f0a87', '#f8ceec']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                                headerMarginBottom={0} headerPadding={6}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('News')}>
+                        <Widget title="Aktuelles" icon="local-fire-department" gradient={{angle: 135, colors: ['#D31027', '#e1eec3']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                                headerMarginBottom={0} headerPadding={6}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Information')}>
+                        <Widget title="Informationen" icon="content-paste" gradient={{angle: 135, colors: ['#50d1e0', '#69e369']}} titleColor="#FFFFFF" iconColor="#FFFFFF"
+                                headerMarginBottom={0} headerPadding={6}/>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
 
@@ -161,7 +163,7 @@ const createStyles = (theme = Themes.light) =>
             color: theme.colors.onSurface
         },
         motdBox: {
-            paddingBottom: 24,
+            paddingBottom: 12,
             paddingHorizontal: 12
         },
         motdText: {

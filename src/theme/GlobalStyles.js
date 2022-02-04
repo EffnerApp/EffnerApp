@@ -20,10 +20,14 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
         width: "100%",
         height: "100%",
         maxWidth: "95%",
-        maxHeight: "90%",
-        padding: 2,
+        // maxHeight: "95%",
+        paddingHorizontal: 2,
+        // paddingTop: 2,
         backgroundColor: theme.colors.background,
         borderRadius: 4,
+    },
+    contentWrapper: {
+        paddingTop: 48
     },
     box: {
         padding: 12,
