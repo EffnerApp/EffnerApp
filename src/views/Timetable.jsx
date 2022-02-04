@@ -167,13 +167,6 @@ export default function TimetableScreen({navigation, route}) {
                             </View>
                         </View>
                     )}
-                    {documentUrl && (
-                        <View style={{alignSelf: 'center'}}>
-                            <TouchableOpacity style={localStyles.timetableFooterTextBox} onPress={() => openUri(documentUrl)}>
-                                <Text style={[globalStyles.text, localStyles.timetableFooterLinkText]}>PDF-Version</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
                 </View>
             </ScrollView>
         </View>
@@ -194,6 +187,7 @@ const createStyles = (theme = Themes.light) =>
             borderWidth: 1.3,
             borderColor: theme.colors.onSurface,
             padding: 8,
+            margin: 1
         },
         timetableEntryText: {
             fontSize: normalize(12)
@@ -205,11 +199,6 @@ const createStyles = (theme = Themes.light) =>
         timetableFooterTextBox: {
             padding: 10,
             alignSelf: 'center'
-        },
-        timetableFooterLinkText: {
-            color: '#1a4cb3',
-            textAlign: 'right',
-            fontSize: normalize(15)
         },
         timetableFooterText: {
             fontSize: normalize(12)
@@ -233,8 +222,9 @@ const createStyles = (theme = Themes.light) =>
         },
         timetableTimeEntry: {
             borderWidth: 1.3,
-            borderColor: 'transparent',
-            padding: 8
+            borderColor: theme.colors.background,
+            padding: 8,
+            margin: 1
         },
         textBoldCenter: {
             fontWeight: "bold",
