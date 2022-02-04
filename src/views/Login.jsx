@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import {
     KeyboardAvoidingView,
-    Platform,
+    Platform, SafeAreaView,
     StyleSheet,
     Text,
     TextInput,
@@ -65,7 +65,8 @@ export default function LoginScreen({navigation, route}) {
     }
 
     return (
-        <>
+
+        <SafeAreaView style={{backgroundColor: theme.colors.background}}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={globalStyles.fullScreen}>
                 <View style={localStyles.content}>
                     <View style={localStyles.logoOuterContainer}>
@@ -74,26 +75,26 @@ export default function LoginScreen({navigation, route}) {
                         </View>
                     </View>
 
-                    <View style={[globalStyles.box, globalStyles.dropShadow]}>
+                    <View style={[globalStyles.box]}>
                         <Text style={globalStyles.text}>Login</Text>
                         <TextInput onChangeText={setId}
-                                   style={[globalStyles.box, localStyles.boxSecondary, globalStyles.dropShadow, globalStyles.mt15]}
+                                   style={[globalStyles.box, localStyles.boxSecondary, globalStyles.mt15]}
                                    keyboardAppearance={theme.keyboardAppearance}
                                    placeholder="ID"
                                    keyboardType="numeric"
-                                   placeholderTextColor={theme.colors.onSecondary}
+                                   placeholderTextColor={theme.colors.onSurface}
                         />
                         <TextInput onChangeText={setPassword}
-                                   style={[globalStyles.box, localStyles.boxSecondary, globalStyles.dropShadow]}
+                                   style={[globalStyles.box, localStyles.boxSecondary]}
                                    keyboardAppearance={theme.keyboardAppearance}
                                    placeholder="Password"
                                    secureTextEntry={true}
-                                   placeholderTextColor={theme.colors.onSecondary}
+                                   placeholderTextColor={theme.colors.onSurface}
                         />
-                        <View style={[globalStyles.box, localStyles.boxSecondary, globalStyles.dropShadow]}>
+                        <View style={[globalStyles.box, localStyles.boxSecondary]}>
                             <Picker
-                                style={{color: theme.colors.onPrimary}}
-                                dropdownIconColor={theme.colors.onPrimary}
+                                style={{color: theme.colors.font}}
+                                dropdownIconColor={theme.colors.font}
                                 selectedValue={sClass}
                                 onValueChange={(value) => setClass(value)}>
                                 {classes.map((c, i) => <Picker.Item key={i} label={c} value={c}
@@ -104,7 +105,7 @@ export default function LoginScreen({navigation, route}) {
                                 onPress={performLogin} running={running}/>
                     </View>
                 </View>
-                <View style={[globalStyles.box, globalStyles.dropShadow]}>
+                <View style={[globalStyles.box]}>
                     <View style={globalStyles.row}>
                         <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
                             style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
@@ -115,8 +116,7 @@ export default function LoginScreen({navigation, route}) {
                     </View>
                 </View>
             </KeyboardAvoidingView>
-
-        </>
+        </SafeAreaView>
     )
 }
 
@@ -135,18 +135,18 @@ const createStyles = (theme = Themes.light) =>
             color: theme.colors.onPrimary
         },
         boxSecondary: {
-            backgroundColor: theme.colors.secondary,
-            color: theme.colors.onSecondary
+            backgroundColor: theme.colors.surfaceSecondary,
+            color: theme.colors.onSurface
         },
         logoOuterContainer: {
             alignSelf: "center",
             marginBottom: 30
         },
         logoContainer: {
-            backgroundColor: theme.colors.onBackground,
+            // backgroundColor: theme.colors.onBackground,
             height: 150,
             width: 150,
-            borderRadius: 150 / 2,
+            // borderRadius: 150 / 2,
             justifyContent: "center",
             marginBottom: 10
         }

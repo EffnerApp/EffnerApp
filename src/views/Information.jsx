@@ -36,16 +36,18 @@ export default function InformationScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
-                {documents.filter((e) => e.key.startsWith('DATA_INFORMATION')).map(({key, name, uri}, i) => {
-                    return (
-                        <TouchableOpacity key={i} onPress={() => openUri(uri)}>
-                            <Widget title={name || key} icon="description" headerMarginBottom={0}
-                                    headerRight={{component: <Icon name="launch" color={theme.colors.onSurface}/>, styles: {backgroundColor: theme.colors.surface}}} />
-                        </TouchableOpacity>
-                    )
-                })}
-            </ScrollView>
+            <View style={globalStyles.contentWrapper}>
+                <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
+                    {documents.filter((e) => e.key.startsWith('DATA_INFORMATION')).map(({key, name, uri}, i) => {
+                        return (
+                            <TouchableOpacity key={i} onPress={() => openUri(uri)}>
+                                <Widget title={name || key} icon="description" headerMarginBottom={0}
+                                        headerRight={{component: <Icon name="launch" color={theme.colors.onSurface}/>, styles: {backgroundColor: theme.colors.surface}}}/>
+                            </TouchableOpacity>
+                        )
+                    })}
+                </ScrollView>
+            </View>
         </View>
     )
 }

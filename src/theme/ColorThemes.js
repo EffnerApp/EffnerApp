@@ -16,6 +16,8 @@ const light = {
     surface: "#f5f5f5",
     onSurface: "#000000",
 
+    surfaceSecondary: "#fefefe",
+
     font: "#000000",
     error: "#FF0000",
   },
@@ -39,6 +41,8 @@ const dark = {
 
     surface: "#1a1a1a",
     onSurface: "#FFFFFF",
+
+    surfaceSecondary: "#282828",
 
     font: "#FFFFFF",
     error: "#FF4E2C",

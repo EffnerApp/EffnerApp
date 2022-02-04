@@ -165,18 +165,49 @@ export default function SettingsScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
-                <Widget title="Benachrichtigungen" icon="notifications" headerMarginBottom={10} backgroundColor="transparent" headerMargin={0}>
-                    <View style={localStyles.widgetEntryContainer}>
-                        <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                            <View style={{alignSelf: "center"}}>
-                                <Text style={globalStyles.text}>
-                                    Benachrichtigungen
-                                </Text>
+                <View style={globalStyles.contentWrapper}>
+                    <Widget title="Benachrichtigungen" icon="notifications" headerMarginBottom={10} backgroundColor="transparent" marginVertical={0}>
+                        <View style={localStyles.widgetEntryContainer}>
+                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                <View style={{alignSelf: "center"}}>
+                                    <Text style={globalStyles.text}>
+                                        Benachrichtigungen
+                                    </Text>
+                                </View>
+                                {(notificationsAvailable && notificationsEnabled === undefined) &&
+                                    <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>
+                                }
+                                {(notificationsAvailable && notificationsEnabled !== undefined) &&
+                                    <Switch
+                                        trackColor={{
+                                            false: "#767577",
+                                            true: theme.colors.primary,
+                                        }}
+                                        thumbColor="#fff"
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={toggleNotifications}
+                                        value={!!notificationsEnabled}
+                                        disabled={!notificationsAvailable}
+                                    />
+                                }
+                                {!notificationsAvailable && (
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.textDefault}>
+                                            Not available
+                                        </Text>
+                                    </View>
+                                )}
                             </View>
-                            {(notificationsAvailable && notificationsEnabled === undefined) &&
-                                <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>
-                            }
-                            {(notificationsAvailable && notificationsEnabled !== undefined) &&
+                        </View>
+                    </Widget>
+                    <Widget title="Theming" icon="palette" headerMarginBottom={10} backgroundColor="transparent" marginVertical={0}>
+                        <View style={localStyles.widgetEntryContainer}>
+                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                <View style={{alignSelf: "center"}}>
+                                    <Text style={globalStyles.text}>
+                                        Night-Theme
+                                    </Text>
+                                </View>
                                 <Switch
                                     trackColor={{
                                         false: "#767577",
@@ -184,129 +215,100 @@ export default function SettingsScreen({navigation, route}) {
                                     }}
                                     thumbColor="#fff"
                                     ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleNotifications}
-                                    value={!!notificationsEnabled}
-                                    disabled={!notificationsAvailable}
+                                    onValueChange={toggleNightTheme}
+                                    value={nightThemeEnabled}
                                 />
-                            }
-                            {!notificationsAvailable && (
-                                <View style={{alignSelf: "center"}}>
-                                    <Text style={globalStyles.textDefault}>
-                                        Not available
-                                    </Text>
-                                </View>
-                            )}
-                        </View>
-                    </View>
-                </Widget>
-                <Widget title="Theming" icon="palette" headerMarginBottom={10} backgroundColor="transparent" headerMargin={0}>
-                    <View style={localStyles.widgetEntryContainer}>
-                        <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                            <View style={{alignSelf: "center"}}>
-                                <Text style={globalStyles.text}>
-                                    Night-Theme
-                                </Text>
                             </View>
-                            <Switch
-                                trackColor={{
-                                    false: "#767577",
-                                    true: theme.colors.primary,
-                                }}
-                                thumbColor="#fff"
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleNightTheme}
-                                value={nightThemeEnabled}
-                            />
-                        </View>
-                        <View style={localStyles.line}/>
-                        <View>
-                            <Picker title="Stundenplan-Theme" items={timetableThemes} selectedIndex={timetableTheme} onSelect={(e, i) => setTimetableTheme(i)}/>
-                        </View>
-                    </View>
-                </Widget>
-                <Widget title="Über EffnerApp" icon="info" backgroundColor="transparent" headerMargin={0}>
-                    <View style={localStyles.widgetEntryContainer}>
-                        <TouchableOpacity onPress={() => openUri('mailto:info@effner.app')}>
-                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                                <View style={{alignSelf: "center"}}>
-                                    <Text style={globalStyles.text}>
-                                        Feedback
-                                    </Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={localStyles.line}/>
-                        <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                            <View style={{alignSelf: "center"}}>
-                                <Text style={globalStyles.text}>
-                                    App-Version
-                                </Text>
-                            </View>
-                            <View style={{alignSelf: "center"}}>
-                                <Text style={globalStyles.text}>
-                                    Version: {appVersion}
-                                </Text>
+                            <View style={localStyles.line}/>
+                            <View>
+                                <Picker title="Stundenplan-Theme" items={timetableThemes} selectedIndex={timetableTheme} onSelect={(e, i) => setTimetableTheme(i)}/>
                             </View>
                         </View>
-                        <View style={localStyles.line}/>
-                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}>
+                    </Widget>
+                    <Widget title="Über EffnerApp" icon="info" backgroundColor="transparent" marginVertical={0}>
+                        <View style={localStyles.widgetEntryContainer}>
+                            <TouchableOpacity onPress={() => openUri('mailto:info@effner.app')}>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Feedback
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            <View style={localStyles.line}/>
                             <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                                 <View style={{alignSelf: "center"}}>
                                     <Text style={globalStyles.text}>
-                                        Datenschutzerklärung
+                                        App-Version
                                     </Text>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={localStyles.line}/>
-                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}>
-                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                                 <View style={{alignSelf: "center"}}>
                                     <Text style={globalStyles.text}>
-                                        Impressum
+                                        Version: {appVersion}
                                     </Text>
                                 </View>
                             </View>
-                        </TouchableOpacity>
-                        <View style={localStyles.line}/>
-                        <TouchableOpacity onPress={() => openUri('https://status.effner.app')}>
-                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                                <View style={{alignSelf: "center"}}>
-                                    <Text style={globalStyles.text}>
-                                        Status
-                                    </Text>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Datenschutzerklärung
+                                        </Text>
+                                    </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={localStyles.line}/>
-                        <TouchableOpacity>
-                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                                <View style={{alignSelf: "center"}}>
-                                    <Text style={globalStyles.text}>
-                                        Über die App
-                                    </Text>
+                            </TouchableOpacity>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Impressum
+                                        </Text>
+                                    </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </Widget>
-                <Widget title="Account" icon="account-circle" backgroundColor="transparent" headerMargin={0}>
-                    <View style={localStyles.widgetEntryContainer}>
-                        <View>
-                            <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
+                            </TouchableOpacity>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity onPress={() => openUri('https://status.effner.app')}>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Status
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Über die App
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                        <View style={localStyles.line}/>
-                        <TouchableOpacity onPress={confirmLogout}>
-                            <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                                <View style={{alignSelf: "center"}}>
-                                    <Text style={globalStyles.text}>
-                                        Abmelden
-                                    </Text>
-                                </View>
+                    </Widget>
+                    <Widget title="Account" icon="account-circle" backgroundColor="transparent" marginVertical={0}>
+                        <View style={localStyles.widgetEntryContainer}>
+                            <View>
+                                <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
                             </View>
-                        </TouchableOpacity>
-                    </View>
-                </Widget>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity onPress={confirmLogout}>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Abmelden
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </Widget>
+                </View>
             </ScrollView>
         </View>
     )

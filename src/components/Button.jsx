@@ -22,15 +22,15 @@ export default function Button({title, icon, overrideStyles = {}, onPress = () =
             setProcessing(true);
             onPress();
         }}>
-            <Text style={[globalStyles.textDefault, localStyles.center]}>
+            <Text style={[globalStyles.textDefault, localStyles.center, {color: theme.colors.onPrimary}]}>
                 {title}
             </Text>
             {(icon && !isProcessing) && <Icon
                 name={icon}
-                color={theme.colors.onSurface}
+                color={theme.colors.onPrimary}
             />}
             {isProcessing &&
-                <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true} />
+                <Progress.Circle size={25} color={theme.colors.onPrimary} borderWidth={3} indeterminate={true} />
             }
 
         </TouchableOpacity>

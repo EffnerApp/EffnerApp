@@ -51,12 +51,12 @@ export default function NewsScreen({navigation, route}) {
     const getFeaturedMediaUri = async (e) => {
         const featuredMedia = e?._links?.['wp:featuredmedia']?.[0]?.href;
 
-        if(!featuredMedia)
+        if (!featuredMedia)
             return null;
 
         const {data: meta} = await axios.get(featuredMedia);
 
-        if(meta?.media_type === 'image') {
+        if (meta?.media_type === 'image') {
             return meta?.media_details?.sizes?.thumbnail?.source_url;
         }
 
@@ -66,26 +66,28 @@ export default function NewsScreen({navigation, route}) {
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
-                {news.map(({title, content, mediaUri, postUri}, i) => {
-                    return (
-                        <TouchableOpacity key={i} onPress={() => openUri(postUri)}>
-                            <Widget title={title}>
-                                <View style={globalStyles.row}>
-                                    {!!mediaUri && (
-                                        <View style={{alignSelf: 'center'}}>
-                                            <Image source={{uri: mediaUri}} style={localStyles.image} />
-                                        </View>
-                                    )}
-                                    <View style={localStyles.contentContainer}>
-                                        <View style={{marginStart: 4}}>
-                                            <Text style={[globalStyles.textDefault, {padding: 8}]}>{content}</Text>
+                <View style={globalStyles.contentWrapper}>
+                    {news.map(({title, content, mediaUri, postUri}, i) => {
+                        return (
+                            <TouchableOpacity key={i} onPress={() => openUri(postUri)}>
+                                <Widget title={title}>
+                                    <View style={globalStyles.row}>
+                                        {!!mediaUri && (
+                                            <View style={{alignSelf: 'center'}}>
+                                                <Image source={{uri: mediaUri}} style={localStyles.image}/>
+                                            </View>
+                                        )}
+                                        <View style={localStyles.contentContainer}>
+                                            <View style={{marginStart: 4}}>
+                                                <Text style={[globalStyles.textDefault, {padding: 8}]}>{content}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                            </Widget>
-                        </TouchableOpacity>
-                    )
-                })}
+                                </Widget>
+                            </TouchableOpacity>
+                        )
+                    })}
+                </View>
             </ScrollView>
         </View>
 

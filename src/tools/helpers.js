@@ -5,11 +5,15 @@ import {startActivityAsync} from "expo-intent-launcher";
 import * as WebBrowser from 'expo-web-browser';
 import moment from "moment";
 import {hash} from "./hash";
-// import { BASE_URL } from "./api";
-// import queryString from "query-string";
-// import { CommonActions } from "@react-navigation/routers";
-// import Toast from "react-native-root-toast";
+import * as Device from 'expo-device';
+import {DeviceType} from "expo-device";
 
+let deviceType = DeviceType.UNKNOWN;
+
+const initDevice = async () => {
+    deviceType = await Device.getDeviceTypeAsync();
+    console.log('deviceType -> ' + deviceType);
+}
 
 const showToast = (title, message, type = 'success') => {
     Toast.show({
@@ -200,19 +204,30 @@ const withAuthentication = (credentials) => {
     };
 }
 
-const { width, height } = Dimensions.get('window');
+// very hacky function, it'll work. trust me :)
+const normalize = (size, sizeXL) => {
+    const { width, height } = Dimensions.get('window');
 
-// Use Google Pixel 4a as base size which is 1080 x 2340
-const baseWidth = 393;
-const baseHeight = 785;
+    // Use Google Pixel 4a as base size
+    const baseWidth = 393;
+    const baseHeight = 785;
 
-const scaleWidth = width / baseWidth;
-const scaleHeight = height / baseHeight;
-const scale = Math.min(scaleWidth, scaleHeight);
+    const scaleWidth = width / baseWidth;
+    const scaleHeight = height / baseHeight;
 
-const normalize = (size) => Math.ceil((size * scale * 0.9));
+    let scale;
+
+    if (deviceType === DeviceType.TABLET) {
+        scale = Math.min(scaleWidth, scaleHeight) * 0.75;
+        return Math.ceil(((sizeXL || size) * scale));
+    } else {
+        scale = Math.max(scaleWidth, scaleHeight) * 0.9;
+        return Math.ceil((size * scale));
+    }
+}
 
 export {
+    initDevice,
     showToast,
     navigateTo,
     getPlatform,
