@@ -7,7 +7,7 @@ import {Icon} from "react-native-elements";
 import {fromAngle, normalize} from "../tools/helpers";
 import {LinearGradient} from "expo-linear-gradient";
 
-export default function Widget({title, icon, headerRight, children, titleColor, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, marginVertical = 12}) {
+export default function Widget({title, icon, headerLeft, headerRight, children, titleColor, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, marginVertical = 12}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     function WidgetHeader() {
@@ -15,9 +15,14 @@ export default function Widget({title, icon, headerRight, children, titleColor, 
             <View style={[localStyles.boxHeader, {marginBottom: headerMarginBottom, paddingVertical: headerPadding}]}>
                 <View style={localStyles.iconContainer}>
                     <View style={{alignSelf: 'center'}}><Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/></View>
-                    <View style={{alignSelf: 'center'}}><Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text></View>
+                    <View style={{alignSelf: 'center'}}>
+                        <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text>
+                    </View>
+                    {headerLeft && <View style={[localStyles.headerComponentContainer, headerLeft.styles]}>
+                        {headerLeft.component}
+                    </View>}
                 </View>
-                {headerRight && <View style={[localStyles.headerRightContainer, headerRight.styles]}>
+                {headerRight && <View style={[localStyles.headerComponentContainer, headerRight.styles]}>
                     {headerRight.component}
                 </View>}
             </View>
@@ -66,7 +71,7 @@ const createStyles = (theme = Themes.light) =>
             marginBottom: 0,
             paddingVertical: 2
         },
-        headerRightContainer: {
+        headerComponentContainer: {
             flexDirection: "row",
             backgroundColor: theme.colors.background,
             borderRadius: 4,

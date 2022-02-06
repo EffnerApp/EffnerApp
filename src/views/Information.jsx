@@ -36,8 +36,8 @@ export default function InformationScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <View style={globalStyles.contentWrapper}>
-                <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
+            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
+                <View style={globalStyles.contentWrapper}>
                     {documents.filter((e) => e.key.startsWith('DATA_INFORMATION')).map(({key, name, uri}, i) => {
                         return (
                             <TouchableOpacity key={i} onPress={() => openUri(uri)}>
@@ -46,8 +46,8 @@ export default function InformationScreen({navigation, route}) {
                             </TouchableOpacity>
                         )
                     })}
-                </ScrollView>
-            </View>
+                </View>
+            </ScrollView>
         </View>
     )
 }

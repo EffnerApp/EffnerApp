@@ -110,17 +110,17 @@ export default function LoginScreen({navigation, route}) {
                         <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]} onPress={performLogin} running={running}/>
                     </View>
                 </View>
-                <View style={[globalStyles.box]}>
-                    <View style={globalStyles.row}>
-                        <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
-                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
-                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
-                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
-                    </View>
-                </View>
             </KeyboardAvoidingView>
+            <View style={[globalStyles.box]}>
+                <View style={globalStyles.row}>
+                    <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
+                        style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
+                        style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
+                        style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
+                </View>
+            </View>
         </SafeAreaView>
     )
 }

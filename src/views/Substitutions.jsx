@@ -125,7 +125,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                 <View style={localStyles.substitutions}>
                     {substitutions?.length > 0 && substitutions.map((data, i) => (
                         <View key={i}>
-                            <SubstitutionEntry data={data}/>
+                            <SubstitutionEntry data={data} class={sClass}/>
                         </View>
                     ))}
                     {information && <InformationEntry data={information}/>}
