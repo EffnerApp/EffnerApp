@@ -27,7 +27,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
         borderRadius: 4,
     },
     contentWrapper: {
-        paddingTop: 48
+        paddingTop: 26
     },
     box: {
         padding: 12,
