@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import {
     KeyboardAvoidingView,
@@ -29,6 +29,9 @@ export default function LoginScreen({navigation, route}) {
     const [running, setRunning] = useState(true);
 
     const [classes, setClasses] = useState([]);
+
+    const idInput = useRef();
+    const passwordInput = useRef();
 
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -77,14 +80,19 @@ export default function LoginScreen({navigation, route}) {
 
                     <View style={[globalStyles.box]}>
                         <Text style={globalStyles.text}>Login</Text>
-                        <TextInput onChangeText={setId}
+                        <TextInput ref={idInput}
+                                   onChangeText={setId}
                                    style={[globalStyles.box, localStyles.boxSecondary, globalStyles.mt15]}
                                    keyboardAppearance={theme.keyboardAppearance}
                                    placeholder="ID"
                                    keyboardType="numeric"
                                    placeholderTextColor={theme.colors.onSurface}
+                                   returnKeyType="next"
+                                   blurOnSubmit={false}
+                                   onSubmitEditing={() => passwordInput.current.focus()}
                         />
-                        <TextInput onChangeText={setPassword}
+                        <TextInput ref={passwordInput}
+                                   onChangeText={setPassword}
                                    style={[globalStyles.box, localStyles.boxSecondary]}
                                    keyboardAppearance={theme.keyboardAppearance}
                                    placeholder="Password"
@@ -92,17 +100,14 @@ export default function LoginScreen({navigation, route}) {
                                    placeholderTextColor={theme.colors.onSurface}
                         />
                         <View style={[globalStyles.box, localStyles.boxSecondary]}>
-                            <Picker
-                                style={{color: theme.colors.font}}
-                                dropdownIconColor={theme.colors.font}
-                                selectedValue={sClass}
-                                onValueChange={(value) => setClass(value)}>
-                                {classes.map((c, i) => <Picker.Item key={i} label={c} value={c}
-                                                                    color={!runsOn('android') ? theme.colors.font : null}/>)}
+                            <Picker style={{color: theme.colors.font}}
+                                    dropdownIconColor={theme.colors.font}
+                                    selectedValue={sClass}
+                                    onValueChange={(value) => setClass(value)}>
+                                {classes.map((c, i) => <Picker.Item key={i} label={c} value={c} color={!runsOn('android') ? theme.colors.font : null}/>)}
                             </Picker>
                         </View>
-                        <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]}
-                                onPress={performLogin} running={running}/>
+                        <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]} onPress={performLogin} running={running}/>
                     </View>
                 </View>
                 <View style={[globalStyles.box]}>

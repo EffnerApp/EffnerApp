@@ -12,7 +12,6 @@ let deviceType = DeviceType.UNKNOWN;
 
 const initDevice = async () => {
     deviceType = await Device.getDeviceTypeAsync();
-    console.log('deviceType -> ' + deviceType);
 }
 
 const showToast = (title, message, type = 'success') => {
