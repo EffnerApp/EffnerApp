@@ -91,9 +91,9 @@ export default function ExamsScreen({navigation, route}) {
                         {upcomingExams.map(([date, items], i) => (
                             <View key={i}>
                                 <Widget title={date} titleColor="#28a745" headerMarginBottom={normalize(6)}>
-                                    <View style={globalStyles.ps10}>
+                                    <View style={[{flexDirection: "column"}, globalStyles.ps10]}>
                                         {items.map(({name}, j) => (
-                                            <Text key={j} style={globalStyles.text}>{'\u2022 ' + name}</Text>
+                                            <Text key={j} style={[globalStyles.text, {paddingHorizontal: 1}]}>{'\u2022 ' + name}</Text>
                                         ))}
                                     </View>
                                 </Widget>

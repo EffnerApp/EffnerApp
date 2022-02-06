@@ -220,7 +220,8 @@ const normalize = (size, sizeXL) => {
         scale = Math.min(scaleWidth, scaleHeight) * 0.75;
         return Math.ceil(((sizeXL || size) * scale));
     } else {
-        scale = Math.max(scaleWidth, scaleHeight) * 0.9;
+        //scale = Math.max(scaleWidth, scaleHeight) * 0.9;
+        scale = Math.max(scaleWidth, scaleHeight) * 1;
         return Math.ceil((size * scale));
     }
 }

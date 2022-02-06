@@ -156,7 +156,7 @@ const createStyles = (theme = Themes.light) =>
         dateSelector: {
             flexDirection: "row",
             justifyContent: "flex-end",
-            paddingVertical: 16
+            paddingVertical: 26
         },
         footer: {
             marginTop: 5,
