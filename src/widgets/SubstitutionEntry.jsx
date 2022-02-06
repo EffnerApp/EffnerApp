@@ -40,5 +40,4 @@ export default function SubstitutionEntry({data}) {
 }
 
 const createStyles = (theme = Themes.light) =>
-    StyleSheet.create({
-    });
+    StyleSheet.create({});

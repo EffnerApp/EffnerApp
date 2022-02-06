@@ -10,7 +10,7 @@ export default function AbsentClassesEntry({data}) {
 
     return (
         <>
-            <Widget title="Abwesende Klassen" headerMarginBottom={6} titleColor="#e85b5b">
+            <Widget title="Abwesende Klassen" headerMarginBottom={normalize(6)} titleColor="#e85b5b">
                 <View style={globalStyles.ps10}>
                     {data.map((c, i) => (
                         <Text key={i} style={globalStyles.text}>{'\u2022 ' + c}</Text>
@@ -22,5 +22,4 @@ export default function AbsentClassesEntry({data}) {
 }
 
 const createStyles = (theme = Themes.light) =>
-    StyleSheet.create({
-    });
+    StyleSheet.create({});

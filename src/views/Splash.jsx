@@ -48,9 +48,6 @@ export default function SplashScreen({navigation}) {
                         navigateTo(navigation, 'Login', {error: e});
                     }
                 } catch (e) {
-                    console.log('Storage conversion did not work');
-                    console.log(e);
-
                     navigateTo(navigation, 'Login');
                 }
             }

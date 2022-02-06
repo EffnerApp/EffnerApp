@@ -7,8 +7,6 @@ import {BASE_URL} from "./resources";
 import {subscribeToChannel} from "./push";
 
 const login = async (credentials, sClass) => {
-    console.log('login with ' + credentials)
-    console.log('class ' + sClass)
     const time = Date.now();
 
     try {
