@@ -110,6 +110,10 @@ export default function SettingsScreen({navigation, route}) {
         confirmClassChange(selectedClass);
     }, [selectedClass]);
 
+    const showAbout = () => {
+        Alert.alert('Über die App', 'EffnerApp by Sebastian Müller, Luis Bros & Jonathan Berger\n\n© ' + new Date().getFullYear() + ' EffnerApp - Danke an alle Mitwirkenden ❤');
+    }
+
     const confirmClassChange = (to) => {
         if (to === sClass)
             return;
@@ -280,7 +284,7 @@ export default function SettingsScreen({navigation, route}) {
                                 </View>
                             </TouchableOpacity>
                             <View style={localStyles.line}/>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={showAbout}>
                                 <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                                     <View style={{alignSelf: "center"}}>
                                         <Text style={globalStyles.text}>
@@ -308,6 +312,10 @@ export default function SettingsScreen({navigation, route}) {
                             </TouchableOpacity>
                         </View>
                     </Widget>
+                    <View style={{flexDirection: 'column', justifyContent: "center", paddingVertical: 20}}>
+                        <Text style={[globalStyles.text, {textAlign: 'center'}]}>© {new Date().getFullYear()} EffnerApp by</Text>
+                        <Text style={[globalStyles.text, {textAlign: 'center', paddingTop: 5}]}>Sebastian Müller, Luis Bros & Jonathan Berger</Text>
+                    </View>
                 </View>
             </ScrollView>
         </View>

@@ -1,4 +1,4 @@
-import {Dimensions, Platform} from "react-native";
+import {Dimensions, Linking, Platform} from "react-native";
 import Toast from "react-native-toast-message";
 import {CommonActions} from "@react-navigation/native";
 import {startActivityAsync} from "expo-intent-launcher";
@@ -74,8 +74,10 @@ const validateClass = (fullClass, test) => {
 };
 
 const openUri = async (uri, options = {}) => {
-    // open PDFs with the action view handler on android (fixes issue #163: https://github.com/EffnerApp/EffnerApp/issues/163)
-    if ((uri.endsWith('.pdf') || options.type === 'pdf') && runsOn('android')) {
+    if (uri.startsWith('mailto:')) {
+        await Linking.openURL(uri);
+    } else if ((uri.endsWith('.pdf') || options.type === 'pdf') && runsOn('android')) {
+        // open PDFs with the action view handler on android (fixes issue #163: https://github.com/EffnerApp/EffnerApp/issues/163)
         await startActivityAsync('android.intent.action.VIEW', {
             data: uri,
             flags: 1,
@@ -205,7 +207,7 @@ const withAuthentication = (credentials) => {
 
 // very hacky function, it'll work. trust me :)
 const normalize = (size, sizeXL) => {
-    const { width, height } = Dimensions.get('window');
+    const {width, height} = Dimensions.get('window');
 
     // Use Google Pixel 4a as base size
     const baseWidth = 393;
