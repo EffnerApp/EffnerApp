@@ -114,9 +114,9 @@ export default function SubstitutionsScreen({navigation, route}) {
                             {dates.map((date, i) => (
                                 <TouchableOpacity
                                     key={i}
-                                    style={[globalStyles.row, localStyles.selectorBadge, {backgroundColor: currentDate === date ? theme.colors.secondary : theme.colors.primary}]}
+                                    style={[globalStyles.row, localStyles.selectorBadge, {borderColor: currentDate === date ? theme.colors.primary : 'transparent'}]}
                                     onPress={() => setCurrentDate(date)}>
-                                    <Text style={[globalStyles.text, {color: currentDate === date ? theme.colors.onSecondary : theme.colors.onPrimary}]}>{date.substring(0, date.length - 5)}</Text>
+                                    <Text style={[globalStyles.text, {color: theme.colors.onSecondary}]}>{date.substring(0, date.length - 5)}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -156,7 +156,8 @@ const createStyles = (theme = Themes.light) =>
         dateSelector: {
             flexDirection: "row",
             justifyContent: "flex-end",
-            paddingVertical: 26
+            paddingTop: 26,
+            paddingBottom: 13
         },
         footer: {
             marginTop: 5,
@@ -172,6 +173,8 @@ const createStyles = (theme = Themes.light) =>
         selectorBadge: {
             borderRadius: 8,
             padding: 4,
-            marginHorizontal: 6
+            marginHorizontal: 6,
+            backgroundColor: theme.colors.secondary,
+            borderWidth: 4
         }
     });

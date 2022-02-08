@@ -7,6 +7,8 @@ import {decodeEntities, normalize, openUri, showToast} from "../tools/helpers";
 import Widget from "../components/Widget";
 import axios from "axios";
 import {parse} from "node-html-parser";
+import SkeletonContent from "../components/skeleton/SkeletonContent";
+import NewsPreloadItem from "../widgets/NewsPreloadItem";
 
 export default function NewsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -67,6 +69,7 @@ export default function NewsScreen({navigation, route}) {
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
+                    {news?.length === 0 && [...Array(5).keys()].map((i) => <NewsPreloadItem key={i} />)}
                     {news.map(({title, content, mediaUri, postUri}, i) => {
                         return (
                             <TouchableOpacity key={i} onPress={() => openUri(postUri)}>

@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 import {
     KeyboardAvoidingView,
-    Platform, SafeAreaView,
+    Platform, SafeAreaView, ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -70,55 +70,60 @@ export default function LoginScreen({navigation, route}) {
     return (
 
         <SafeAreaView style={{backgroundColor: theme.colors.background}}>
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={globalStyles.fullScreen}>
-                <View style={localStyles.content}>
-                    <View style={localStyles.logoOuterContainer}>
-                        <View style={localStyles.logoContainer}>
-                            <SvgXml style={{alignSelf: "center"}} xml={logo} width={100} height={100}/>
-                        </View>
-                    </View>
+            <View style={globalStyles.fullScreen}>
 
-                    <View style={[globalStyles.box]}>
-                        <Text style={globalStyles.text}>Login</Text>
-                        <TextInput ref={idInput}
-                                   onChangeText={setId}
-                                   style={[globalStyles.box, localStyles.boxSecondary, globalStyles.mt15]}
-                                   keyboardAppearance={theme.keyboardAppearance}
-                                   placeholder="ID"
-                                   keyboardType="numeric"
-                                   placeholderTextColor={theme.colors.onSurface}
-                                   returnKeyType="next"
-                                   blurOnSubmit={false}
-                                   onSubmitEditing={() => passwordInput.current.focus()}
-                        />
-                        <TextInput ref={passwordInput}
-                                   onChangeText={setPassword}
-                                   style={[globalStyles.box, localStyles.boxSecondary]}
-                                   keyboardAppearance={theme.keyboardAppearance}
-                                   placeholder="Password"
-                                   secureTextEntry={true}
-                                   placeholderTextColor={theme.colors.onSurface}
-                        />
-                        <View style={[globalStyles.box, localStyles.boxSecondary]}>
-                            <Picker style={{color: theme.colors.font}}
-                                    dropdownIconColor={theme.colors.font}
-                                    selectedValue={sClass}
-                                    onValueChange={(value) => setClass(value)}>
-                                {classes.map((c, i) => <Picker.Item key={i} label={c} value={c} color={!runsOn('android') ? theme.colors.font : null}/>)}
-                            </Picker>
+                <ScrollView style={localStyles.content}>
+
+                    <KeyboardAvoidingView style={localStyles.keyboardAvoiding} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                        <View style={localStyles.logoOuterContainer}>
+                            <View style={localStyles.logoContainer}>
+                                <SvgXml style={{alignSelf: "center"}} xml={logo} width={100} height={100}/>
+                            </View>
                         </View>
-                        <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]} onPress={performLogin} running={running}/>
+
+                        <View style={[globalStyles.box]}>
+                            <Text style={globalStyles.text}>Login</Text>
+                            <TextInput ref={idInput}
+                                       onChangeText={setId}
+                                       style={[globalStyles.box, localStyles.boxSecondary, globalStyles.mt15]}
+                                       keyboardAppearance={theme.keyboardAppearance}
+                                       placeholder="ID"
+                                       keyboardType="numeric"
+                                       placeholderTextColor={theme.colors.onSurface}
+                                       returnKeyType="next"
+                                       blurOnSubmit={false}
+                                       onSubmitEditing={() => passwordInput.current.focus()}
+                            />
+                            <TextInput ref={passwordInput}
+                                       onChangeText={setPassword}
+                                       style={[globalStyles.box, localStyles.boxSecondary]}
+                                       keyboardAppearance={theme.keyboardAppearance}
+                                       placeholder="Password"
+                                       secureTextEntry={true}
+                                       placeholderTextColor={theme.colors.onSurface}
+                            />
+                            <View style={[globalStyles.box, localStyles.boxSecondary]}>
+                                <Picker style={{color: theme.colors.font}}
+                                        dropdownIconColor={theme.colors.font}
+                                        selectedValue={sClass}
+                                        onValueChange={(value) => setClass(value)}>
+                                    {classes.map((c, i) => <Picker.Item key={i} label={c} value={c} color={!runsOn('android') ? theme.colors.font : null}/>)}
+                                </Picker>
+                            </View>
+                            <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]} onPress={performLogin} running={running}/>
+                        </View>
+                    </KeyboardAvoidingView>
+                </ScrollView>
+
+                <View style={[globalStyles.box]}>
+                    <View style={globalStyles.row}>
+                        <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
+                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
+                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
+                            style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
                     </View>
-                </View>
-            </KeyboardAvoidingView>
-            <View style={[globalStyles.box]}>
-                <View style={globalStyles.row}>
-                    <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
-                        style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/imprint`, {type: 'pdf'})}><Text
-                        style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Impressum</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => openUri(`${BASE_URL_GO}/privacy`, {type: 'pdf'})}><Text
-                        style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Datenschutzerklärung</Text></TouchableOpacity>
                 </View>
             </View>
         </SafeAreaView>
@@ -135,6 +140,7 @@ const createStyles = (theme = Themes.light) =>
             backgroundColor: theme.colors.background,
             borderRadius: 4
         },
+        keyboardAvoiding: {},
         boxPrimary: {
             backgroundColor: theme.colors.primary,
             color: theme.colors.onPrimary

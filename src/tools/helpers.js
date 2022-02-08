@@ -150,7 +150,7 @@ function getUpcomingExams(exams) {
 
 function getExamsHistory(exams) {
     const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY') < moment()).slice().sort((a, b) => {
-        return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
+        return moment(b.date, 'DD.MM.YYYY').unix() - moment(a.date, 'DD.MM.YYYY').unix();
     }).map((exam) => {
         if (exams.filter(value => value.name === exam.name).length > 1) {
             return {
