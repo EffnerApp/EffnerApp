@@ -11,6 +11,7 @@ import {useIsFocused} from "@react-navigation/native";
 import {Icon} from "react-native-elements";
 import GlobalHeader from "../widgets/GlobalHeader";
 import moment from "moment";
+import Disclaimer from "../widgets/Disclaimer";
 
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -100,7 +101,8 @@ export default function ExamsScreen({navigation, route}) {
                             </View>
                         ))}
                     </View>
-                    {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, globalStyles.mv15]}>Vergangene Schulaufgaben</Text>}
+                    {upcomingExams.length > 0 && <Disclaimer />}
+                    {examsHistory.length > 0 && <Text style={[globalStyles.textBigCenter, localStyles.examsHistoryTitle]}>Vergangene Schulaufgaben</Text>}
                     <View style={localStyles.exams}>
                         {examsHistory.map(([date, items], i) => (
                             <View key={i}>
@@ -114,6 +116,7 @@ export default function ExamsScreen({navigation, route}) {
                             </View>
                         ))}
                     </View>
+                    {examsHistory.length > 0 && <Disclaimer />}
                     <View style={[globalStyles.row, localStyles.footer]}>
                         {updatedAt && (
                             <View style={{alignSelf: 'center'}}>
@@ -148,4 +151,8 @@ const createStyles = (theme = Themes.light) =>
         footerText: {
             fontSize: normalize(12)
         },
+        examsHistoryTitle: {
+            marginTop: 30,
+            marginBottom: 15
+        }
     });

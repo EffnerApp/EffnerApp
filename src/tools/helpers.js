@@ -37,11 +37,6 @@ const runsOn = (os) => {
     return Platform.OS === os;
 }
 
-
-// const getLevel = async () => {
-// 	return (await load('APP_CLASS')).match('^\\d{1,2}')[0];
-// };
-
 const getLevel = (sClass) => {
     return sClass.match(/^\d{1,2}/)[0];
 };
@@ -223,7 +218,7 @@ const normalize = (size, sizeXL) => {
         return Math.ceil(((sizeXL || size) * scale));
     } else {
         //scale = Math.max(scaleWidth, scaleHeight) * 0.9;
-        scale = Math.max(scaleWidth, scaleHeight) * 1;
+        scale = Math.max(scaleWidth, scaleHeight);
         return Math.ceil((size * scale));
     }
 }
