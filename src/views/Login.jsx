@@ -20,29 +20,18 @@ import {loadClasses, login} from "../tools/api";
 import {navigateTo, openUri, runsOn, showToast} from "../tools/helpers";
 import {Picker} from "@react-native-picker/picker";
 import {BASE_URL_GO} from "../tools/resources";
+import Widget from "../components/Widget";
+import {Icon} from "react-native-elements";
 
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const {error} = route.params || {};
 
-    const [running, setRunning] = useState(true);
-
     const [classes, setClasses] = useState([]);
 
-    const idInput = useRef();
-    const passwordInput = useRef();
-
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const [sClass, setClass] = useState();
-
     useEffect(() => {
-        // load classes form api
-        loadClasses().then((classes) => {
-            setClasses(classes);
-            setClass(classes?.[0]);
-        }).catch((e) => showToast('Error while loading classes', e, 'error'))
+        loadClasses().then((classes) => setClasses(classes)).catch((e) => showToast('Error while loading classes', e, 'error'))
     }, []);
 
     useEffect(() => {
@@ -51,20 +40,84 @@ export default function LoginScreen({navigation, route}) {
         }
     }, [error]);
 
-    function performLogin() {
-        setRunning(true);
+    const LoginInfo = {
+        component: (
+            <TouchableOpacity onPress={() => showToast('Die Anmeldedaten sind dieselben wie in der DSBmobile-App.', 'Du kannst sie auch im Sekretariat erfragen.', 'info')}>
+                <Icon name="info" color={theme.colors.onSurface}/>
+            </TouchableOpacity>
+        ),
+        styles: {
+            backgroundColor: 'transparent'
+        }
+    };
 
-        const credentials = `${id}:${password}`;
+    function LoginForm() {
 
-        login(credentials, sClass)
-            .then(() => {
-                setRunning(false);
-                navigateTo(navigation, 'Splash');
-            })
-            .catch((e) => {
-                setRunning(false);
-                showToast('Error', e, 'error');
-            });
+        const [running, setRunning] = useState(true);
+
+        const idInput = useRef();
+        const passwordInput = useRef();
+
+        const [id, setId] = useState('');
+        const [password, setPassword] = useState('');
+        const [sClass, setClass] = useState();
+
+        useEffect(() => {
+            setClass(classes?.[0]);
+        }, [classes]);
+
+        function performLogin() {
+            setRunning(true);
+
+            const credentials = `${id}:${password}`;
+
+            login(credentials, sClass)
+                .then(() => {
+                    setRunning(false);
+                    navigateTo(navigation, 'Splash');
+                })
+                .catch((e) => {
+                    setRunning(false);
+                    showToast('Error', e, 'error');
+                });
+        }
+
+        return (
+            <>
+                <TextInput name="id_input"
+                           ref={idInput}
+                           onChangeText={setId}
+                           value={id}
+                           style={[globalStyles.box, globalStyles.dropShadow, localStyles.boxSecondary, globalStyles.mt15]}
+                           keyboardAppearance={theme.keyboardAppearance}
+                           placeholder="ID"
+                           keyboardType="numeric"
+                           placeholderTextColor={theme.colors.onSurface}
+                           returnKeyType="next"
+                           blurOnSubmit={false}
+                           onSubmitEditing={() => passwordInput.current.focus()}
+                />
+                <TextInput key="password_input"
+                           ref={passwordInput}
+                           onChangeText={setPassword}
+                           value={password}
+                           style={[globalStyles.box, globalStyles.dropShadow, localStyles.boxSecondary]}
+                           keyboardAppearance={theme.keyboardAppearance}
+                           placeholder="Password"
+                           secureTextEntry={true}
+                           placeholderTextColor={theme.colors.onSurface}
+                />
+                <View style={[globalStyles.box, globalStyles.dropShadow, localStyles.boxSecondary]}>
+                    <Picker style={{color: theme.colors.font}}
+                            dropdownIconColor={theme.colors.font}
+                            selectedValue={sClass}
+                            onValueChange={(value) => setClass(value)}>
+                        {classes.map((c, i) => <Picker.Item key={i} label={c} value={c} color={!runsOn('android') ? theme.colors.font : null}/>)}
+                    </Picker>
+                </View>
+                <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]} onPress={performLogin} running={running}/>
+            </>
+        );
     }
 
     return (
@@ -81,41 +134,13 @@ export default function LoginScreen({navigation, route}) {
                             </View>
                         </View>
 
-                        <View style={[globalStyles.box]}>
-                            <Text style={globalStyles.text}>Login</Text>
-                            <TextInput ref={idInput}
-                                       onChangeText={setId}
-                                       style={[globalStyles.box, localStyles.boxSecondary, globalStyles.mt15]}
-                                       keyboardAppearance={theme.keyboardAppearance}
-                                       placeholder="ID"
-                                       keyboardType="numeric"
-                                       placeholderTextColor={theme.colors.onSurface}
-                                       returnKeyType="next"
-                                       blurOnSubmit={false}
-                                       onSubmitEditing={() => passwordInput.current.focus()}
-                            />
-                            <TextInput ref={passwordInput}
-                                       onChangeText={setPassword}
-                                       style={[globalStyles.box, localStyles.boxSecondary]}
-                                       keyboardAppearance={theme.keyboardAppearance}
-                                       placeholder="Password"
-                                       secureTextEntry={true}
-                                       placeholderTextColor={theme.colors.onSurface}
-                            />
-                            <View style={[globalStyles.box, localStyles.boxSecondary]}>
-                                <Picker style={{color: theme.colors.font}}
-                                        dropdownIconColor={theme.colors.font}
-                                        selectedValue={sClass}
-                                        onValueChange={(value) => setClass(value)}>
-                                    {classes.map((c, i) => <Picker.Item key={i} label={c} value={c} color={!runsOn('android') ? theme.colors.font : null}/>)}
-                                </Picker>
-                            </View>
-                            <Button icon="east" title="Login" overrideStyles={[localStyles.boxPrimary, globalStyles.mt30]} onPress={performLogin} running={running}/>
-                        </View>
+                        <Widget title="Anmelden" icon="login" style={globalStyles.dropShadow} headerRight={LoginInfo}>
+                            <LoginForm/>
+                        </Widget>
                     </KeyboardAvoidingView>
                 </ScrollView>
 
-                <View style={[globalStyles.box]}>
+                <View style={[globalStyles.box, globalStyles.dropShadow]}>
                     <View style={globalStyles.row}>
                         <TouchableOpacity onPress={() => openUri('https://status.effner.app')}><Text
                             style={[globalStyles.textDefault, {paddingHorizontal: 10}]}>Status</Text></TouchableOpacity>

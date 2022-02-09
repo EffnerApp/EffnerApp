@@ -1,7 +1,4 @@
 import {StyleSheet, Text, View} from "react-native";
-import SkeletonContent from "../components/skeleton/SkeletonContent";
-import {normalize} from "../tools/helpers";
-import Widget from "../components/Widget";
 import React from "react";
 import {Themes} from "../theme/ColorThemes";
 import {ThemePreset} from "../theme/ThemePreset";

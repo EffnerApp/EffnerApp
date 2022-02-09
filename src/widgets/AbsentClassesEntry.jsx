@@ -4,6 +4,7 @@ import {StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
+import {normalize} from "../tools/helpers";
 
 export default function AbsentClassesEntry({data}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);

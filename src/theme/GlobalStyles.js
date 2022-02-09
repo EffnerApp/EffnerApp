@@ -50,7 +50,7 @@ export const GlobalStyles = (theme = Themes.light) => StyleSheet.create({
         },
         shadowOpacity: 0.7,
         shadowRadius: 2,
-        elevation: 10
+        elevation: 2
     },
     textBigCenter: {
         color: theme.colors.font,

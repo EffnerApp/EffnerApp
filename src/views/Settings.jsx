@@ -131,7 +131,8 @@ export default function SettingsScreen({navigation, route}) {
                     text: 'Ja',
                     onPress: () => {
                         Promise.all([
-                            load("pushToken").then(pushToken => revokePushToken(credentials, pushToken)),
+                            // TODO: remove? should be unnecessary
+                            // load("pushToken").then(pushToken => revokePushToken(credentials, pushToken)),
                             save('APP_CLASS', to)
                         ]).then(() => navigateTo(navigation, 'Splash'))
                             .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
@@ -155,7 +156,7 @@ export default function SettingsScreen({navigation, route}) {
                     text: 'Ja',
                     onPress: () => {
                         Promise.all([
-                            load("pushToken").then(pushToken => revokePushToken(credentials, pushToken)),
+                            load("pushToken").then(pushToken => pushToken && revokePushToken(credentials, pushToken)),
                             clear()
                         ]).then(() => navigateTo(navigation, 'Splash'))
                             .catch(({message, response}) => showToast('Error while performing logout.', response?.data?.status?.error || message, 'error'));
