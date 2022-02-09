@@ -9,6 +9,7 @@ import {login} from "../tools/api";
 import * as Progress from 'react-native-progress';
 import {load} from "../tools/storage";
 import {performStorageConversion} from "../tools/compatibility";
+import AnimatedIcon from "../widgets/AnimatedIcon";
 
 
 export default function SplashScreen({navigation}) {
@@ -56,7 +57,8 @@ export default function SplashScreen({navigation}) {
 
     return (
         <View style={globalStyles.fullScreen}>
-            <Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>
+            {/*<Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>*/}
+            <AnimatedIcon />
         </View>
     )
 }
