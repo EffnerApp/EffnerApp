@@ -4,10 +4,10 @@ const light = {
   keyboardAppearance: "light",
   elevation: 6,
   colors: {
-    primary: "#3658D8",
+    primary: "#f3bc56",
     onPrimary: "#FFFFFF",
 
-    secondary: "#ee0979",
+    secondary: "#3b3b3b",
     onSecondary: "#FFFFFF",
 
     background: "#FFFFFF",

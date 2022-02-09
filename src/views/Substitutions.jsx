@@ -10,7 +10,6 @@ import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
 import {Icon} from "react-native-elements";
 import {useIsFocused} from "@react-navigation/native";
-import moment from "moment";
 
 export default function SubstitutionsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
