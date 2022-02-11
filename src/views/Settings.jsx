@@ -5,8 +5,8 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import Picker from "../components/Picker";
-import {getLevel, isALevel, navigateTo, openUri, showToast} from "../tools/helpers";
-import {revokePushToken, subscribeToChannel} from "../tools/push";
+import {navigateTo, openUri, showToast} from "../tools/helpers";
+import {getPushToken, revokePushToken, subscribeToChannel} from "../tools/push";
 import {BASE_URL_GO} from "../tools/resources";
 import {isDevice} from "expo-device";
 import {load, save, clear} from "../tools/storage";
@@ -28,7 +28,7 @@ export default function SettingsScreen({navigation, route}) {
     const [notificationsEnabled, toggleNotifications] = useState(undefined);
     const [notificationsAvailable, setNotificationsAvailable] = useState(true);
 
-    const [pushToken, setPushToken] = useState();
+    const [pushToken, setPushToken] = useState(undefined);
 
     const [nightThemeEnabled, toggleNightTheme] = useState(theme.name === 'dark');
     const [timetableTheme, setTimetableTheme] = useState(0);
@@ -51,7 +51,7 @@ export default function SettingsScreen({navigation, route}) {
         loadClasses().then(setClasses);
 
         if (isDevice) {
-            load('pushToken').then((token) => {
+            getPushToken().then((token) => {
                 if (token) {
                     setPushToken(token);
                     setNotificationsAvailable(true);
@@ -88,7 +88,6 @@ export default function SettingsScreen({navigation, route}) {
             })();
         } else {
             (async () => {
-                const pushToken = await load('pushToken');
                 await revokePushToken(credentials, pushToken)
                     .then(() => save('APP_NOTIFICATIONS', false))
                     .catch(({message, response}) => {
@@ -130,11 +129,8 @@ export default function SettingsScreen({navigation, route}) {
                 {
                     text: 'Ja',
                     onPress: () => {
-                        Promise.all([
-                            // TODO: remove? should be unnecessary
-                            // load("pushToken").then(pushToken => revokePushToken(credentials, pushToken)),
-                            save('APP_CLASS', to)
-                        ]).then(() => navigateTo(navigation, 'Splash'))
+                        save('APP_CLASS', to)
+                            .then(() => navigateTo(navigation, 'Splash'))
                             .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
                     },
                 },
@@ -156,7 +152,7 @@ export default function SettingsScreen({navigation, route}) {
                     text: 'Ja',
                     onPress: () => {
                         Promise.all([
-                            load("pushToken").then(pushToken => pushToken && revokePushToken(credentials, pushToken)),
+                            revokePushToken(credentials, pushToken).catch(({message}) => showToast('Error while unsubscribing from push services.', message, 'error')),
                             clear()
                         ]).then(() => navigateTo(navigation, 'Splash'))
                             .catch(({message, response}) => showToast('Error while performing logout.', response?.data?.status?.error || message, 'error'));

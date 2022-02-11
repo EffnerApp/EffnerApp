@@ -8,9 +8,9 @@ export default function Disclaimer() {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     return (
-        <View style={[globalStyles.row, {justifyContent: "center", paddingVertical: 20}]}>
-            <View style={{alignSelf: 'center'}}><Icon style={{paddingRight: 8}} name="info" color={theme.colors.font} /></View>
-            <View style={{alignSelf: 'center'}}><Text style={globalStyles.text}>Alle Angaben sind ohne Gewähr. Es gilt das Wort des Lehrers.</Text></View>
+        <View style={[globalStyles.row, {justifyContent: 'center', marginVertical: 20}]}>
+            <View style={{alignSelf: 'center'}}><Icon name="info" color={theme.colors.font} /></View>
+            <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Alle Angaben sind ohne Gewähr.{'\n'}Es gilt das Wort des Lehrers.</Text></View>
         </View>
     )
 }

@@ -7,10 +7,9 @@ import {decodeEntities, normalize, openUri, showToast} from "../tools/helpers";
 import Widget from "../components/Widget";
 import axios from "axios";
 import {parse} from "node-html-parser";
-import SkeletonContent from "../components/skeleton/SkeletonContent";
 import NewsPreloadItem from "../widgets/NewsPreloadItem";
 
-export default function NewsScreen({navigation, route}) {
+export default function NewsScreen() {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const [refreshing, setRefreshing] = useState(false);

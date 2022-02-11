@@ -1,11 +1,10 @@
 import * as Notifications from "expo-notifications";
 import {Platform} from "react-native";
-import axios from "axios";
-import {BASE_URL} from "./resources";
 import {withAuthentication} from "./helpers";
 import {isDevice} from "expo-device";
+import {api} from "./api";
 
-async function registerForPushNotifications() {
+const registerForPushNotifications = async () => {
 	let pushToken;
 	if (isDevice) {
 		const { status: existingStatus } =
@@ -19,7 +18,7 @@ async function registerForPushNotifications() {
 			alert("Failed to get push token for push notification!");
 			return;
 		}
-		pushToken = (await Notifications.getExpoPushTokenAsync()).data;
+		pushToken = await getPushToken();
 		console.log('recv pushToken ... ' + pushToken);
 	}
 
@@ -31,12 +30,18 @@ async function registerForPushNotifications() {
 	}
 
 	return pushToken;
-}
+};
+
+const getPushToken = async () => {
+	return (await Notifications.getExpoPushTokenAsync({
+		experienceId: '@effnerapp/EffnerApp'
+	})).data;
+};
 
 const subscribeToChannel = async (credentials, channelId, pushToken) => {
 	console.log('subscribing to push channel ' + channelId);
-	await axios.post(
-		`${BASE_URL}/v3/push/subscribe/${channelId}`,
+	await api.post(
+		`/v3/push/subscribe/${channelId}`,
 		{
 			pushToken,
 		},
@@ -45,9 +50,8 @@ const subscribeToChannel = async (credentials, channelId, pushToken) => {
 };
 
 const revokePushToken = async (credentials, pushToken) => {
-	console.log('revoking push token');
-	await axios.post(
-		`${BASE_URL}/v3/push/revokeToken`,
+	await api.post(
+		'/v3/push/revoke',
 		{
 			pushToken,
 		},
@@ -55,4 +59,4 @@ const revokePushToken = async (credentials, pushToken) => {
 	);
 };
 
-export {registerForPushNotifications, subscribeToChannel, revokePushToken};
+export {registerForPushNotifications, getPushToken, subscribeToChannel, revokePushToken};

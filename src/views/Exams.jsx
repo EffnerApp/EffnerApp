@@ -5,13 +5,11 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {getExamsHistory, getLevel, getUpcomingExams, isALevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
-import axios from "axios";
-import {BASE_URL} from "../tools/resources";
 import {useIsFocused} from "@react-navigation/native";
 import {Icon} from "react-native-elements";
-import GlobalHeader from "../widgets/GlobalHeader";
 import moment from "moment";
 import Disclaimer from "../widgets/Disclaimer";
+import {api} from "../tools/api";
 
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -31,11 +29,11 @@ export default function ExamsScreen({navigation, route}) {
     const [updatedAt, setUpdatedAt] = useState();
 
     const loadData = async () => {
-        await axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => {
+        await api.get(`/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => {
             setExams(data.exams);
             setUpdatedAt(data.updatedAt);
         });
-        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        await api.get('/v3/documents', withAuthentication(credentials)).then(({data}) => setDocuments(data));
     }
 
     const refresh = () => {
