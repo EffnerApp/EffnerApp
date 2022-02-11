@@ -2,15 +2,25 @@ import axios from "axios";
 import DSBMobile from "./dsbmobile";
 import {hash} from "./hash";
 import {showToast} from "./helpers";
-import {save, load} from "./storage";
+import {save} from "./storage";
 import {BASE_URL} from "./resources";
-import {subscribeToChannel} from "./push";
+import {getPushToken, subscribeToChannel} from "./push";
+import Constants from "expo-constants";
+
+const appVersion = Constants.manifest.version
+
+const api = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        'User-Agent': `EffnerApp/${appVersion}`
+    }
+});
 
 const login = async (credentials, sClass) => {
     const time = Date.now();
 
     try {
-        const response = await axios.post(`${BASE_URL}/v3/auth/login`, {}, {
+        const response = await api.post('/v3/auth/login', {}, {
             headers: {
                 'Authorization': 'Basic ' + hash(credentials + ':' + time),
                 'X-Time': time
@@ -21,7 +31,7 @@ const login = async (credentials, sClass) => {
             await save('APP_CREDENTIALS', credentials);
             await save('APP_CLASS', sClass);
 
-            const pushToken = await load('pushToken');
+            const pushToken = await getPushToken();
 
             // subscribe to push notifications
             if(pushToken) {
@@ -46,7 +56,7 @@ const login = async (credentials, sClass) => {
 
 const loadClasses = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/v3/classes`);
+        const response = await api.get('/v3/classes');
 
         return response.data;
     } catch (e) {
@@ -69,4 +79,4 @@ const loadDSBTimetable = async (credentials) => {
     }
 }
 
-export {login, loadClasses, loadDSBTimetable};
+export {login, loadClasses, loadDSBTimetable, api};

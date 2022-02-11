@@ -6,7 +6,6 @@ import {Themes} from "../theme/ColorThemes";
 import {useIsFocused} from "@react-navigation/native";
 import {initDevice, navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
-import * as Progress from 'react-native-progress';
 import {load} from "../tools/storage";
 import {performStorageConversion} from "../tools/compatibility";
 import AnimatedIcon from "../widgets/AnimatedIcon";

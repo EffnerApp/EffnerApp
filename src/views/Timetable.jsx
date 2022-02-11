@@ -11,6 +11,7 @@ import {getCellColor} from "../theme/TimetableThemes";
 import {load} from "../tools/storage";
 import {useIsFocused} from "@react-navigation/native";
 import {Icon} from "react-native-elements";
+import {api} from "../tools/api";
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -32,8 +33,8 @@ export default function TimetableScreen({navigation, route}) {
     const [timetableTheme, setTimetableTheme] = useState(0);
 
     const loadData = async () => {
-        await axios.get(`${BASE_URL}/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
-        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        await api.get(`/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
+        await api.get('/v3/documents', withAuthentication(credentials)).then(({data}) => setDocuments(data));
     }
 
     const refresh = () => {

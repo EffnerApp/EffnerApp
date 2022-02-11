@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from "react";
 
-import {Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {openUri, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
-import axios from "axios";
-import {BASE_URL} from "../tools/resources";
 import {Icon} from "react-native-elements";
+import {api} from "../tools/api";
 
-export default function InformationScreen({navigation, route}) {
+export default function InformationScreen({route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const {credentials} = route.params || {};
@@ -19,7 +18,7 @@ export default function InformationScreen({navigation, route}) {
     const [documents, setDocuments] = useState([]);
 
     const loadData = async () => {
-        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        await api.get('/v3/documents', withAuthentication(credentials)).then(({data}) => setDocuments(data));
     }
 
     const refresh = () => {

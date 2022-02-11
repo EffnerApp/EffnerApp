@@ -5,10 +5,8 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
-import axios from "axios";
 import {getCurrentSubstitutionDay, getUpcomingExams, normalize, openUri, showToast, validateClass, withAuthentication} from "../tools/helpers";
-import {BASE_URL} from "../tools/resources";
-import {loadDSBTimetable} from "../tools/api";
+import {api, loadDSBTimetable} from "../tools/api";
 import moment from "moment";
 import SkeletonContent from "../components/skeleton/SkeletonContent";
 
@@ -28,9 +26,9 @@ export default function HomeScreen({navigation, route}) {
     const [currentSubstitutions, setCurrentSubstitutions] = useState('');
 
     const loadData = async () => {
-        await axios.get(`${BASE_URL}/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data));
-        await axios.get(`${BASE_URL}/v3/documents`, withAuthentication(credentials)).then(({data}) => setDocuments(data));
-        await axios.get(`${BASE_URL}/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
+        await api.get(`/v3/config/${sClass}`, withAuthentication(credentials)).then(({data}) => setConfig(data));
+        await api.get('/v3/documents', withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        await api.get(`/v3/exams/${sClass}`, withAuthentication(credentials)).then(({data}) => setExams(data.exams));
 
         await loadDSBTimetable(credentials).then(({data}) => {
             const {dates, days} = data;

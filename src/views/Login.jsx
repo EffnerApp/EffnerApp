@@ -42,7 +42,7 @@ export default function LoginScreen({navigation, route}) {
 
     const LoginInfo = {
         component: (
-            <TouchableOpacity onPress={() => showToast('Die Anmeldedaten sind dieselben wie in der DSBmobile-App.', 'Du kannst sie auch im Sekretariat erfragen.', 'info')}>
+            <TouchableOpacity onPress={() => showToast('Anmeldedaten für die EffnerApp', 'Die Anmeldedaten sind dieselben wie in der DSBmobile-App.', 'info')}>
                 <Icon name="info" color={theme.colors.onSurface}/>
             </TouchableOpacity>
         ),
