@@ -2,12 +2,12 @@
   "expo": {
     "name": "EffnerApp",
     "slug": "EffnerApp",
-    "version": "3.0.12",
+    "version": "3.1.1",
     "orientation": "default",
     "entryPoint": "index.js",
-    "icon": "./src/assets/effnerapp_logo.png",
+    "icon": "./@resources/effnerapp_logo.png",
     "splash": {
-      "image": "./src/assets/splash.png",
+      "image": "./@resources/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#121212"
     },
@@ -18,28 +18,28 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "47",
+      "buildNumber": "48",
       "userInterfaceStyle": "automatic",
       "bundleIdentifier": "de.effnerapp.effner",
       "supportsTablet": true
     },
     "android": {
       "package": "de.effnerapp.effner",
-      "versionCode": 98,
+      "versionCode": 100,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/effnerapp_logo.png",
+        "foregroundImage": "./@resources/ic_launcher_foreground.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./src/assets/effnerapp_logo.png"
+      "favicon": "./@resources/effnerapp_logo.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./src/assets/effnerapp_push_icon.png",
+          "icon": "./@resources/effnerapp_push_icon.png",
           "color": "#ffffff"
         }
       ]
