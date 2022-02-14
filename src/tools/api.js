@@ -50,7 +50,7 @@ const login = async (credentials, sClass) => {
             return Promise.reject(response?.data?.status?.error)
         }
     } catch (e) {
-        return Promise.reject(e.response?.data?.status?.error || e)
+        return Promise.reject(e);
     }
 }
 
