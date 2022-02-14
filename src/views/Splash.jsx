@@ -1,10 +1,10 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
-import {StyleSheet, View} from "react-native";
+import {Alert, AppState, StyleSheet, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useIsFocused} from "@react-navigation/native";
-import {initDevice, navigateTo} from "../tools/helpers";
+import {initDevice, navigateTo, openUri} from "../tools/helpers";
 import {login} from "../tools/api";
 import {load} from "../tools/storage";
 import {performStorageConversion} from "../tools/compatibility";
@@ -16,9 +16,53 @@ export default function SplashScreen({navigation}) {
 
     const isFocused = useIsFocused();
 
+    const appState = useRef(AppState.currentState);
+    const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+    useEffect(() => {
+        AppState.addEventListener('change', _handleAppStateChange);
+
+        return () => {
+            AppState.removeEventListener('change', _handleAppStateChange);
+        };
+    }, []);
+
+    const _handleAppStateChange = nextAppState => {
+        if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+            console.log('App has come to the foreground!');
+        }
+
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log('AppState', appState.current);
+    };
+
+    const [error, setError] = useState(undefined);
+    const [retryState, setRetryState] = useState(0);
+
+    const retry = () => setRetryState(retryState + 1);
+
+    const showError = (e, showStack = false) => {
+        Alert.alert('Error: ' + e.message, showStack ? e.stack : 'Please check your internet connection or check the status of our services on the status page.', [
+            {
+                text: 'Status',
+                onPress: () => openUri('https://status.effner.app')
+            },
+            {
+                text: !showStack ? 'Show stack' : 'Hide stack',
+                onPress: () => showError(e, !showStack)
+            },
+            {
+                text: 'Retry',
+                onPress: () => retry()
+            }
+        ]);
+    }
+
     useEffect(() => {
         (async () => {
             await initDevice();
+            setError(undefined);
 
             const credentials = await load('APP_CREDENTIALS');
             if (credentials) {
@@ -33,7 +77,11 @@ export default function SplashScreen({navigation}) {
                     await login(credentials, sClass);
                     navigateTo(navigation, 'Main', {credentials, sClass});
                 } catch (e) {
-                    navigateTo(navigation, 'Login', {error: e});
+                    if(e.message === 'Network Error' || e.response?.status >= 500) {
+                        setError(e);
+                    } else {
+                        navigateTo(navigation, 'Login', {error: e});
+                    }
                 }
             } else {
                 try {
@@ -52,7 +100,13 @@ export default function SplashScreen({navigation}) {
                 }
             }
         })();
-    }, [isFocused]);
+    }, [isFocused, retryState]);
+
+    useEffect(() => {
+        if(!error || !appStateVisible) return;
+
+        showError(error);
+    }, [appStateVisible, error]);
 
     return (
         <View style={globalStyles.fullScreen}>
