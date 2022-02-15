@@ -2,7 +2,7 @@
   "expo": {
     "name": "EffnerApp",
     "slug": "EffnerApp",
-    "version": "3.1.2",
+    "version": "3.1.3",
     "orientation": "default",
     "entryPoint": "index.js",
     "icon": "./@resources/default_icon.png",
@@ -25,12 +25,13 @@
     },
     "android": {
       "package": "de.effnerapp.effner",
-      "versionCode": 101,
+      "versionCode": 102,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./@resources/android_icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": []
     },
     "web": {
       "favicon": "./@resources/default_icon.png"
