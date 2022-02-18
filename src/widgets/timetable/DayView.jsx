@@ -3,10 +3,10 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../../theme/ThemePreset";
 import {Themes} from "../../theme/ColorThemes";
-import {getCurrentSubstitutionDay, getSubstitutionInfo, getSubstitutionTitle, maxTimetableDepth, normalize, validateClass} from "../../tools/helpers";
+import {getSubstitutionInfo, maxTimetableDepth, normalize, validateClass, withAuthentication} from "../../tools/helpers";
 import {getWeekDay} from "../../tools/helpers";
 import {getCellColor} from "../../theme/TimetableThemes";
-import {loadDSBTimetable} from "../../tools/api";
+import {api, loadDSBTimetable} from "../../tools/api";
 import moment from "moment";
 import {Icon} from "react-native-elements";
 
@@ -16,13 +16,18 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
     const [currentDepth, setCurrentDepth] = useState(0);
     const [substitutions, setSubstitutions] = useState([]);
     const [title, setTitle] = useState('');
+    const [subjects, setSubjects] = useState([]);
+
+    useEffect(() => {
+        api.get('/v3/subjects').then(({data}) => setSubjects(data));
+    }, []);
 
     useEffect(() => {
         setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
 
         const currentWeekDay = new Date().getDay() - 1;
         const delta = Math.abs(currentWeekDay - weekDay);
-        const next = 7 - delta;
+        const next = delta === 0 ? 0 : 7 - delta;
 
         loadDSBTimetable(credentials).then(({data}) => {
             const {dates, days} = data;
@@ -44,6 +49,11 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
             }
         });
     }, [timetable, weekDay]);
+
+    function getSubjectName(subject) {
+        // why tf is it called className????
+        return subjects.find(({alias}) => alias.find((a) => a.toLowerCase() === subject.toLowerCase()))?.className || subject;
+    }
 
     return (
         <View>
@@ -72,7 +82,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
                                             <Text style={[globalStyles.text, localStyles.timetableEntryText, filteredSubstitutions.length > 0 ? {
                                                 textDecorationLine: 'line-through',
                                                 textDecorationStyle: 'solid'
-                                            } : {}]}>{subject || ' '}</Text>
+                                            } : {}]}>{getSubjectName(subject) || ' '}</Text>
                                             {filteredSubstitutions.length > 0 && <ScrollView horizontal={true}>
                                                 <View style={[globalStyles.row, globalStyles.box, {
                                                     justifyContent: 'flex-start',
