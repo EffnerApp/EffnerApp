@@ -130,10 +130,12 @@ const getWeekDay = (i) => {
 const excludeScreens = (route, screensToExclude) => screensToExclude.includes(route.name) ? () => null : undefined
 
 function getUpcomingExams(exams) {
-    const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) > moment()).slice().sort((a, b) => {
+    let _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) > moment()).slice().sort((a, b) => {
         return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
-    }).map((exam) => {
-        if (exams.filter(value => value.name === exam.name).length > 1) {
+    });
+
+    _exams = _exams.map((exam) => {
+        if (_exams.filter(value => value.name === exam.name).length > 1) {
             return {
                 ...exam,
                 name: exam.name + (exam.course ? ' (' + exam.course + ')' : '')
@@ -146,10 +148,12 @@ function getUpcomingExams(exams) {
 }
 
 function getExamsHistory(exams) {
-    const _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) <= moment()).slice().sort((a, b) => {
+    let _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) <= moment()).slice().sort((a, b) => {
         return moment(b.date, 'DD.MM.YYYY').unix() - moment(a.date, 'DD.MM.YYYY').unix();
-    }).map((exam) => {
-        if (exams.filter(value => value.name === exam.name).length > 1) {
+    });
+
+    _exams.map((exam) => {
+        if (_exams.filter(value => value.name === exam.name).length > 1) {
             return {
                 ...exam,
                 name: exam.name + (exam.course ? ' (' + exam.course + ')' : '')
