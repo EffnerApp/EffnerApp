@@ -227,6 +227,48 @@ const normalize = (size, sizeXL) => {
     }
 }
 
+const maxTimetableDepth = (timetable) => {
+    for (let j = 9; j >= 0; j--) {
+        let rowEmpty = true;
+        for (let i = 4; i >= 0; i--) {
+            rowEmpty = !timetable?.lessons?.[i]?.[j];
+            if (!rowEmpty) {
+                break;
+            }
+        }
+        if (!rowEmpty) {
+            return j + 1;
+        }
+    }
+    return 0;
+};
+
+const getSubstitutionInfo = ({period, subTeacher, room, info}) => {
+    if(info === 'Raumänderung') {
+        return + info + ' zu Raum ' + room;
+    } else if(!subTeacher || info === 'entfällt') {
+        return info;
+    } else if(subTeacher) {
+        return ' vertreten durch ' + subTeacher + (info ? ' (' + info + ')' : '');
+    }
+}
+
+const getSubstitutionTitle = ({period, subTeacher, room, info}) => {
+    let s = period + '. Stunde';
+
+    if(info === 'Raumänderung') {
+        s += ': ' + info + ' zu Raum ' + room;
+    } else if(!subTeacher || info === 'entfällt') {
+        s += ': ' + info;
+    } else if(subTeacher) {
+        s += ' vertreten durch ' + subTeacher;
+    }
+
+    return s;
+};
+
+const clamp = (value, min, max) => value > max ? max : value < min ? min : value;
+
 export {
     initDevice,
     showToast,
@@ -246,5 +288,9 @@ export {
     getCurrentSubstitutionDay,
     fromAngle,
     withAuthentication,
-    normalize
+    normalize,
+    maxTimetableDepth,
+    getSubstitutionTitle,
+    getSubstitutionInfo,
+    clamp
 }

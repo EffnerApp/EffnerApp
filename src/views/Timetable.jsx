@@ -3,15 +3,14 @@ import React, {useEffect, useState} from "react";
 import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {getLevel, getWeekDay, isALevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
-import axios from "axios";
+import {clamp, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import moment from "moment";
-import {BASE_URL} from "../tools/resources";
-import {getCellColor} from "../theme/TimetableThemes";
 import {load} from "../tools/storage";
 import {useIsFocused} from "@react-navigation/native";
 import {Icon} from "react-native-elements";
 import {api} from "../tools/api";
+import WeekView from "../widgets/timetable/WeekView";
+import DayView from "../widgets/timetable/DayView";
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -20,6 +19,9 @@ export default function TimetableScreen({navigation, route}) {
 
     const isFocused = useIsFocused();
 
+    let currentWeekDay = new Date().getDay() - 1;
+    currentWeekDay = (currentWeekDay < 0 || currentWeekDay > 5) ? 0 : currentWeekDay;
+
     const [refreshing, setRefreshing] = useState(false);
 
     const [timetables, setTimetables] = useState({data: [], schedule: []});
@@ -27,10 +29,10 @@ export default function TimetableScreen({navigation, route}) {
 
     const [timetable, setTimetable] = useState();
     const [selectedTimetable, setSelectedTimetable] = useState(0);
-    const [currentDepth, setCurrentDepth] = useState(0);
     const [documentUrl, setDocumentUrl] = useState();
-
     const [timetableTheme, setTimetableTheme] = useState(0);
+
+    const [currentView, setCurrentView] = useState(0);
 
     const loadData = async () => {
         await api.get(`/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
@@ -59,7 +61,6 @@ export default function TimetableScreen({navigation, route}) {
 
     useEffect(() => {
         setTimetable(timetables.data[selectedTimetable]);
-        setCurrentDepth(maxDepth(timetables.data[selectedTimetable]));
     }, [timetables, selectedTimetable]);
 
     useEffect(() => {
@@ -85,22 +86,6 @@ export default function TimetableScreen({navigation, route}) {
         })
     }, [isFocused, documentUrl]);
 
-    function maxDepth(timetable) {
-        for (let j = 9; j >= 0; j--) {
-            let rowEmpty = true;
-            for (let i = 4; i >= 0; i--) {
-                rowEmpty = !timetable?.lessons[i][j];
-                if (!rowEmpty) {
-                    break;
-                }
-            }
-            if (!rowEmpty) {
-                return j + 1;
-            }
-        }
-        return 0;
-    }
-
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
@@ -116,52 +101,41 @@ export default function TimetableScreen({navigation, route}) {
                                 {timetables.data.map(({class: tClass}, i) => (
                                     <TouchableOpacity
                                         key={i}
-                                        style={[globalStyles.bigIcon, globalStyles.row, localStyles.timetableSelectorBadge]}
+                                        style={[globalStyles.bigIcon, globalStyles.row, localStyles.timetableSelectorBadge, {borderColor: selectedTimetable === i ? theme.colors.primary : 'transparent'}]}
                                         onPress={() => setSelectedTimetable(i)}>
-                                        <Text style={localStyles.timetableSelectorBadgeText}>{tClass}</Text>
+                                        <Text style={[globalStyles.text, {color: theme.colors.onSecondary}]}>{tClass}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </View>
                         </View>
                     }
+                    <View style={localStyles.timetableSelector}>
+                        <View style={{alignSelf: 'center'}}>
+                            <Text style={globalStyles.text}>
+                                Ansicht auswählen:
+                            </Text>
+                        </View>
+                        <View style={{flexDirection: "row"}}>
+                            {['fullWeek', 'day'].map((e, i) => (
+                                <TouchableOpacity
+                                    key={i}
+                                    style={[globalStyles.bigIcon, globalStyles.row, localStyles.timetableSelectorBadge, {borderColor: currentView === i ? theme.colors.primary : 'transparent'}]}
+                                    onPress={() => setCurrentView(i)}>
+                                    <Text style={[globalStyles.text, {color: theme.colors.onSecondary}]}>{e}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </View>
 
 
                     <View style={[globalStyles.row, {justifyContent: 'center'}]}>
                         <View>
-                            <ScrollView horizontal={true}>
-                                <View style={localStyles.timetable}>
-                                    <View style={localStyles.timetableTimeColumnEntry}>
-                                        <View><Text style={[globalStyles.text,]}>{" "}</Text></View>
-                                        {[...Array(currentDepth).keys()].map((i) => (
-                                            <View key={i} style={[localStyles.timetableTimeEntry]}>
-                                                <Text style={[globalStyles.text, localStyles.timetableEntryText, localStyles.textBoldCenter]}>{i + 1}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
-
-                                    {timetable && [...Array(5).keys()].map(i => (
-                                        <View key={i} style={localStyles.timetableDayEntry}>
-                                            <View>
-                                                <Text style={[globalStyles.text, localStyles.textBoldCenter]}>
-                                                    {getWeekDay(i)}
-                                                </Text>
-                                            </View>
-                                            {timetable?.lessons[i].filter((lesson, j) => j < currentDepth).map((subject, j) => (
-                                                <View key={j}
-                                                      style={[localStyles.timetableEntry, {
-                                                          backgroundColor: getCellColor(timetableTheme, {
-                                                              meta: timetable.meta,
-                                                              subject: subject
-                                                          })
-                                                      }]}>
-                                                    {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
-                                                    <Text style={[globalStyles.text, localStyles.timetableEntryText]}>{subject || ' '}</Text>
-                                                </View>
-                                            ))}
-                                        </View>
-                                    ))}
-                                </View>
-                            </ScrollView>
+                            {currentView === 0 && (
+                                <ScrollView horizontal={true}>
+                                    <WeekView timetable={timetable} theme={timetableTheme} />
+                                </ScrollView>
+                            )}
+                            {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} />}
                         </View>
                     </View>
 
@@ -184,22 +158,6 @@ export default function TimetableScreen({navigation, route}) {
 
 const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
-        timetable: {
-            flexDirection: 'row',
-            justifyContent: 'center',
-        },
-        timetableDayEntry: {
-            flexDirection: 'column'
-        },
-        timetableEntry: {
-            borderWidth: 1.3,
-            borderColor: theme.colors.onSurface,
-            padding: 8,
-            margin: 1
-        },
-        timetableEntryText: {
-            fontSize: normalize(12, 24)
-        },
         timetableFooter: {
             marginTop: 5,
             marginEnd: 10
@@ -218,24 +176,12 @@ const createStyles = (theme = Themes.light) =>
         },
         timetableSelectorBadge: {
             borderRadius: 8,
-            backgroundColor: theme.colors.onSurface,
             padding: 4,
-            marginHorizontal: 6
-        },
-        timetableSelectorBadgeText: {
-            color: theme.colors.surface
+            marginHorizontal: 6,
+            backgroundColor: theme.colors.secondary,
+            borderWidth: 4
         },
         timetableTimeColumnEntry: {
             flexDirection: 'column'
-        },
-        timetableTimeEntry: {
-            borderWidth: 1.3,
-            borderColor: theme.colors.background,
-            padding: 8,
-            margin: 1
-        },
-        textBoldCenter: {
-            fontWeight: "bold",
-            textAlign: "center"
         }
     });
