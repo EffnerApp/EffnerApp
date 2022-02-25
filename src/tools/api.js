@@ -6,13 +6,15 @@ import {save} from "./storage";
 import {BASE_URL} from "./resources";
 import {getPushToken, subscribeToChannel} from "./push";
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 
-const appVersion = Constants.manifest.version
+const appVersion = Constants.manifest.version;
+const os = Platform.OS;
 
 const api = axios.create({
     baseURL: BASE_URL,
     headers: {
-        'User-Agent': `EffnerApp/${appVersion}`
+        'User-Agent': `EffnerApp/${appVersion}-${os}`
     }
 });
 
