@@ -71,7 +71,7 @@ export default function LoginScreen({navigation, route}) {
 
             const credentials = `${id}:${password}`;
 
-            login(credentials, sClass)
+            login(credentials, sClass, true)
                 .then(() => {
                     setRunning(false);
                     navigateTo(navigation, 'Splash');
