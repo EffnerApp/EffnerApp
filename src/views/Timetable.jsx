@@ -20,7 +20,7 @@ export default function TimetableScreen({navigation, route}) {
     const isFocused = useIsFocused();
 
     let currentWeekDay = new Date().getDay() - 1;
-    currentWeekDay = (currentWeekDay < 0 || currentWeekDay > 5) ? 0 : currentWeekDay;
+    currentWeekDay = (currentWeekDay < 0 || currentWeekDay > 4) ? 0 : currentWeekDay;
 
     const [refreshing, setRefreshing] = useState(false);
 

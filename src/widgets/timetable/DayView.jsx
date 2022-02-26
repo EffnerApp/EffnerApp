@@ -33,7 +33,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
             const {dates, days} = data;
 
             const selectedDate = moment().add({days: next}).format('DD.MM.YYYY');
-            setTitle('Stundenplan für ' + getWeekDay(currentWeekDay) + ', den ' + selectedDate);
+            setTitle('Stundenplan für ' + getWeekDay(weekDay) + ', den ' + selectedDate);
 
             const substitutions = days?.get(selectedDate)?.filter((entry) => validateClass(sClass, entry.name))?.map((e) => e.items);
 
