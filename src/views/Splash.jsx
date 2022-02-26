@@ -39,14 +39,19 @@ export default function SplashScreen({navigation}) {
 
     const [error, setError] = useState(undefined);
     const [retryState, setRetryState] = useState(0);
+    const [alertOpen, setAlertOpen] = useState(false);
 
     const retry = () => setRetryState(retryState + 1);
 
     const showError = (e, showStack = false) => {
+        setAlertOpen(true);
         Alert.alert('Error: ' + e.message, showStack ? e.stack : 'Please check your internet connection or check the status of our services on the status page.', [
             {
                 text: 'Status',
-                onPress: () => openUri('https://status.effner.app')
+                onPress: () => {
+                    setAlertOpen(false);
+                    openUri('https://status.effner.app');
+                }
             },
             {
                 text: !showStack ? 'Show stack' : 'Hide stack',
@@ -103,7 +108,7 @@ export default function SplashScreen({navigation}) {
     }, [isFocused, retryState]);
 
     useEffect(() => {
-        if(!error || !appStateVisible) return;
+        if(!error || !appStateVisible || alertOpen) return;
 
         showError(error);
     }, [appStateVisible, error]);

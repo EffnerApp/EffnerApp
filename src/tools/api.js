@@ -18,7 +18,7 @@ const api = axios.create({
     }
 });
 
-const login = async (credentials, sClass) => {
+const login = async (credentials, sClass, register = false) => {
     const time = Date.now();
 
     try {
@@ -30,21 +30,23 @@ const login = async (credentials, sClass) => {
         });
 
         if (response.data.status.login) {
-            await save('APP_CREDENTIALS', credentials);
-            await save('APP_CLASS', sClass);
-
-            const pushToken = await getPushToken();
-
-            // subscribe to push notifications
-            if(pushToken) {
-                await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken)
-                    .catch(({message, response}) => showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error'));
-                await subscribeToChannel(credentials, `PUSH_CLASS_${sClass}`, pushToken)
-                    .then(() => save('APP_NOTIFICATIONS', true))
-                    .catch(({message, response}) => {
-                        save('APP_NOTIFICATIONS', false);
-                        showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error');
-                    });
+            if(register) {
+                await save('APP_CREDENTIALS', credentials);
+                await save('APP_CLASS', sClass);
+    
+                const pushToken = await getPushToken();
+    
+                // subscribe to push notifications
+                if(pushToken) {
+                    await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken)
+                        .catch(({message, response}) => showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error'));
+                    await subscribeToChannel(credentials, `PUSH_CLASS_${sClass}`, pushToken)
+                        .then(() => save('APP_NOTIFICATIONS', true))
+                        .catch(({message, response}) => {
+                            save('APP_NOTIFICATIONS', false);
+                            showToast('Error while registering for push notifications.', response?.data?.status?.error || message, 'error');
+                        });
+                }
             }
 
             return Promise.resolve();
