@@ -2,7 +2,7 @@
   "expo": {
     "name": "EffnerApp",
     "slug": "EffnerApp",
-    "version": "3.1.7",
+    "version": "3.1.8",
     "orientation": "default",
     "entryPoint": "index.js",
     "icon": "./@resources/default_icon.png",
@@ -13,7 +13,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "52",
+      "buildNumber": "53",
       "userInterfaceStyle": "automatic",
       "bundleIdentifier": "de.effnerapp.effner",
       "supportsTablet": true,
@@ -25,7 +25,7 @@
     },
     "android": {
       "package": "de.effnerapp.effner",
-      "versionCode": 106,
+      "versionCode": 107,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./@resources/android_icon.png",
