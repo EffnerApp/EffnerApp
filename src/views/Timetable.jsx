@@ -116,7 +116,7 @@ export default function TimetableScreen({navigation, route}) {
                             </Text>
                         </View>
                         <View style={{flexDirection: "row"}}>
-                            {['fullWeek', 'day'].map((e, i) => (
+                            {['Woche', 'Tag'].map((e, i) => (
                                 <TouchableOpacity
                                     key={i}
                                     style={[globalStyles.bigIcon, globalStyles.row, localStyles.timetableSelectorBadge, {borderColor: currentView === i ? theme.colors.primary : 'transparent'}]}
