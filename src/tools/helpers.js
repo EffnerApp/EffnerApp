@@ -269,6 +269,12 @@ const getSubstitutionTitle = ({period, subTeacher, room, info}) => {
 
 const clamp = (value, min, max) => value > max ? max : value < min ? min : value;
 
+const pad = (num, size) => {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+};
+
 export {
     initDevice,
     showToast,
@@ -292,5 +298,6 @@ export {
     maxTimetableDepth,
     getSubstitutionTitle,
     getSubstitutionInfo,
-    clamp
+    clamp,
+    pad
 }

@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from "react";
 
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../../theme/ThemePreset";
 import {Themes} from "../../theme/ColorThemes";
-import {getSubstitutionInfo, maxTimetableDepth, normalize, validateClass, withAuthentication} from "../../tools/helpers";
+import {getSubstitutionInfo, maxTimetableDepth, normalize, validateClass} from "../../tools/helpers";
 import {getWeekDay} from "../../tools/helpers";
 import {getCellColor} from "../../theme/TimetableThemes";
 import {api, loadDSBTimetable} from "../../tools/api";
 import moment from "moment";
 import {Icon} from "react-native-elements";
+import {useNavigation} from "@react-navigation/native";
 
 export default function DayView({timetable, theme: timetableTheme, credentials, class: sClass, weekDay}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
+
+    const navigation = useNavigation();
 
     const [currentDepth, setCurrentDepth] = useState(0);
     const [substitutions, setSubstitutions] = useState([]);
@@ -84,12 +87,12 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
                                                 textDecorationStyle: 'solid'
                                             } : {}]}>{getSubjectName(subject) || ' '}</Text>
                                             {filteredSubstitutions.length > 0 && <ScrollView horizontal={true}>
-                                                <View style={[globalStyles.row, globalStyles.box, {
+                                                <TouchableOpacity style={[globalStyles.row, globalStyles.box, {
                                                     justifyContent: 'flex-start',
                                                     paddingVertical: 6,
                                                     paddingHorizontal: 10,
                                                     marginVertical: 0
-                                                }]}>
+                                                }]} onPress={() => navigation.navigate('Substitutions')}>
                                                     <View style={{alignSelf: 'center'}}>
                                                         <Icon name="shuffle" color={theme.colors.font} size={normalize(16)}/>
                                                     </View>
@@ -99,7 +102,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
                                                         paddingStart: 5,
                                                         paddingEnd: 3
                                                     }]}>{filteredSubstitutions.length === 1 ? getSubstitutionInfo(filteredSubstitutions[0]) : filteredSubstitutions.length + ' Vertretungen'}</Text>
-                                                </View>
+                                                </TouchableOpacity>
                                             </ScrollView>}
                                         </View>
                                     </View>
