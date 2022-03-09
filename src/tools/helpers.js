@@ -72,7 +72,7 @@ const openUri = async (uri, options = {}) => {
     if (uri.startsWith('mailto:')) {
         await Linking.openURL(uri);
     } else if ((uri.endsWith('.pdf') || options.type === 'pdf') && runsOn('android')) {
-        // open PDFs with the action view handler on android (fixes issue #163: https://github.com/EffnerApp/EffnerApp/issues/163)
+        // open PDFs with the action view handler on android (fixes issue #163: https://github.com/EffnerAppArchive/effnerapp-web-legacy/issues/163)
         await startActivityAsync('android.intent.action.VIEW', {
             data: uri,
             flags: 1,
@@ -131,7 +131,7 @@ const excludeScreens = (route, screensToExclude) => screensToExclude.includes(ro
 
 function getUpcomingExams(exams) {
     let _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) > moment()).slice().sort((a, b) => {
-        return moment(a.date, 'DD.MM.YYYY').unix() - moment(b.date, 'DD.MM.YYYY').unix();
+        return moment(a.date2 || a.date, 'DD.MM.YYYY').unix() - moment(b.date2 || b.date, 'DD.MM.YYYY').unix();
     });
 
     _exams = _exams.map((exam) => {
@@ -143,13 +143,13 @@ function getUpcomingExams(exams) {
         }
         return exam;
     });
-    const grouped = groupBy(_exams, item => item.date);
+    const grouped = groupBy(_exams, item => item.date + (item.date2 ? ' - ' + item.date2 : ''));
     return Array.from(grouped);
 }
 
 function getExamsHistory(exams) {
     let _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) <= moment()).slice().sort((a, b) => {
-        return moment(b.date, 'DD.MM.YYYY').unix() - moment(a.date, 'DD.MM.YYYY').unix();
+        return moment(b.date2 || b.date, 'DD.MM.YYYY').unix() - moment(a.date2 || a.date, 'DD.MM.YYYY').unix();
     });
 
     _exams.map((exam) => {
@@ -161,7 +161,7 @@ function getExamsHistory(exams) {
         }
         return exam;
     });
-    const grouped = groupBy(_exams, item => item.date);
+    const grouped = groupBy(_exams, item => item.date + (item.date2 ? ' - ' + item.date2 : ''));
     return Array.from(grouped);
 }
 
@@ -271,7 +271,7 @@ const clamp = (value, min, max) => value > max ? max : value < min ? min : value
 
 const pad = (num, size) => {
     num = num.toString();
-    while (num.length < size) num = "0" + num;
+    while (num.length < size) num = '0' + num;
     return num;
 };
 
