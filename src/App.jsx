@@ -3,7 +3,7 @@ import {Platform, StatusBar, StyleSheet} from "react-native";
 import {ThemeProvider, useTheme} from "./theme/ThemeProvider";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import * as NavigationBar from 'expo-navigation-bar';
 import HomeScreen from "./views/Home";
 import LoginScreen from "./views/Login";
@@ -23,7 +23,7 @@ import NewsScreen from "./views/News";
 import InformationScreen from "./views/Information";
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
 
@@ -85,6 +85,7 @@ function Main({route: stackRoute}) {
                 backgroundColor: theme.colors.surface,
                 borderTopColor: 'transparent'
             },
+            swipeEnabled: true,
             headerRight: () => <GlobalHeader/>
         };
     }, [theme]);
@@ -93,7 +94,7 @@ function Main({route: stackRoute}) {
         <Tab.Navigator screenOptions={({route}) => ({
             ...options,
             tabBarButton: excludeScreens(route, ['News', 'Information', 'Settings']),
-        })}>
+        })} tabBarPosition="bottom">
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
             }} initialParams={stackRoute.params}/>
