@@ -33,9 +33,9 @@ const login = async (credentials, sClass, register = false) => {
             if(register) {
                 await save('APP_CREDENTIALS', credentials);
                 await save('APP_CLASS', sClass);
-    
+
                 const pushToken = await getPushToken();
-    
+
                 // subscribe to push notifications
                 if(pushToken) {
                     await subscribeToChannel(credentials, 'PUSH_GLOBAL', pushToken)
@@ -74,13 +74,8 @@ const loadDSBTimetable = async (credentials) => {
     const [id, password] = credentials.split(':');
     const dsbmobile = new DSBMobile(id, password);
 
-    try {
-        await dsbmobile.login();
-        return await dsbmobile.getTimetable();
-    } catch (e) {
-        // await FirebaseCrashlytics.recordException({message: e.message, stacktrace: e.stack});
-        console.error(e);
-    }
+    await dsbmobile.login();
+    return await dsbmobile.getTimetable();
 }
 
 export {login, loadClasses, loadDSBTimetable, api};
