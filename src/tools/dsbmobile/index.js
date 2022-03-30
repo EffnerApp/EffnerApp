@@ -36,6 +36,12 @@ export default class DSBMobile {
             throw new Error('Could not fetch timetable meta data.');
         }
 
+        if(!meta?.[0]?.['Childs']?.length > 0) {
+            throw new Error('Could not decode timetable meta data.');
+        }
+
+        console.log(meta)
+
         const {Detail: url, Date: time} = meta[0]['Childs'][0];
 
         return {

@@ -37,7 +37,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                 setDates(data.dates);
                 setTimetableUrl(url);
                 setUpdatedAt(time);
-            });
+            }).catch((e) => showToast('Error while loading data.', e.message, 'error'));
     };
 
     const refresh = () => {

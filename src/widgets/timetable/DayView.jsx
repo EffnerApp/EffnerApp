@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../../theme/ThemePreset";
 import {Themes} from "../../theme/ColorThemes";
-import {getSubstitutionInfo, maxTimetableDepth, normalize, validateClass} from "../../tools/helpers";
+import {getSubstitutionInfo, maxTimetableDepth, normalize, showToast, validateClass} from "../../tools/helpers";
 import {getWeekDay} from "../../tools/helpers";
 import {getCellColor} from "../../theme/TimetableThemes";
 import {api, loadDSBTimetable} from "../../tools/api";
@@ -50,7 +50,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
 
                 setSubstitutions(tmp);
             }
-        });
+        }).catch((e) => showToast('Error while loading data.', e.message, 'error'));
     }, [timetable, weekDay]);
 
     function getSubjectName(subject) {
