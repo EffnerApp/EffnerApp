@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {clamp, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
@@ -11,6 +11,7 @@ import {Icon} from "react-native-elements";
 import {api} from "../tools/api";
 import WeekView from "../widgets/timetable/WeekView";
 import DayView from "../widgets/timetable/DayView";
+import TimetableEditModal from "../widgets/TimetableEditModal";
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -33,6 +34,9 @@ export default function TimetableScreen({navigation, route}) {
     const [timetableTheme, setTimetableTheme] = useState(0);
 
     const [currentView, setCurrentView] = useState(0);
+
+    const [editModeEnabled, setEditModeEnabled] = useState(false);
+    const [currentEditLesson, setCurrentEditLesson] = useState();
 
     const loadData = async () => {
         await api.get(`/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
@@ -64,18 +68,23 @@ export default function TimetableScreen({navigation, route}) {
     }, [timetables, selectedTimetable]);
 
     useEffect(() => {
-        if (!documentUrl)
-            return;
-
         navigation.setOptions({
             headerRight: () => (
                 <View style={[globalStyles.row, globalStyles.headerButtonContainer]}>
                     <TouchableOpacity
                         style={globalStyles.headerButton}
-                        onPress={() => openUri(documentUrl)}>
-                        <Icon name="picture-as-pdf" color={theme.colors.onSurface}/>
+                        onPress={() => setEditModeEnabled(!editModeEnabled)}>
+                        <Icon name="edit" color={editModeEnabled ? theme.colors.primary : theme.colors.onSurface}/>
                     </TouchableOpacity>
                     <View style={globalStyles.verticalLine}/>
+                    {!!documentUrl && (<>
+                        <TouchableOpacity
+                            style={globalStyles.headerButton}
+                            onPress={() => openUri(documentUrl)}>
+                            <Icon name="picture-as-pdf" color={theme.colors.onSurface}/>
+                        </TouchableOpacity>
+                        <View style={globalStyles.verticalLine}/>
+                    </>)}
                     <TouchableOpacity
                         style={globalStyles.headerButton}
                         onPress={() => navigation.navigate('Settings', {...route.params})}>
@@ -84,10 +93,11 @@ export default function TimetableScreen({navigation, route}) {
                 </View>
             )
         })
-    }, [isFocused, documentUrl]);
+    }, [isFocused, documentUrl, editModeEnabled]);
 
     return (
         <View style={globalStyles.screen}>
+            <TimetableEditModal lesson={currentEditLesson} />
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
                     {timetables?.data?.length > 1 &&
@@ -132,10 +142,13 @@ export default function TimetableScreen({navigation, route}) {
                         <View>
                             {currentView === 0 && (
                                 <ScrollView horizontal={true}>
-                                    <WeekView timetable={timetable} theme={timetableTheme} />
+                                    <WeekView timetable={timetable} theme={timetableTheme} onRequestEditItem={(item) => {
+                                        console.log(item)
+                                        setCurrentEditLesson(item)
+                                    }}/>
                                 </ScrollView>
                             )}
-                            {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} />}
+                            {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay}/>}
                         </View>
                     </View>
 
