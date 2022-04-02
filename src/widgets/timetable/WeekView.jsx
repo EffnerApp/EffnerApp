@@ -59,7 +59,7 @@ const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
         timetable: {
             flexDirection: "row",
-            justifyContent: "center",
+            justifyContent: "center"
         },
         timetableDayEntry: {
             flexDirection: "column",
@@ -70,24 +70,24 @@ const createStyles = (theme = Themes.light) =>
             borderColor: theme.colors.onSurface,
             padding: 8,
             margin: 1,
-            height: "13%"
+            minHeight: "13%"
         },
         timetableEntryText: {
             fontSize: normalize(12, 24),
-            textAlign: "center",
+            textAlign: "center"
         },
         timetableTimeColumnEntry: {
-            flexDirection: "column",
+            flexDirection: "column"
         },
         timetableTimeEntry: {
             borderWidth: 1.3,
             borderColor: theme.colors.background,
             padding: 8,
             margin: 1,
-            height: "13%"
+            minHeight: "13%"
         },
         textBoldCenter: {
             fontWeight: "bold",
-            textAlign: "center",
+            textAlign: "center"
         },
     });
