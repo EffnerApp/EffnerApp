@@ -1,7 +1,7 @@
 import {Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {Themes} from "../theme/ColorThemes";
-import {normalize} from "../tools/helpers";
+import {getFullWeekDay, getSubjectName, getWeekDay, normalize} from "../tools/helpers";
 import {ThemePreset} from "../theme/ThemePreset";
 import Checkbox from "expo-checkbox";
 import {getSubjectsForLesson} from "../tools/timetable";
@@ -83,6 +83,7 @@ export default forwardRef(({timetable, onResult = () => null}, ref) => {
         setCurrentEditItem(undefined);
         setModalVisible(false);
     }
+    if(!currentEditItem)return (<></>)
 
     return (
         <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => {
@@ -94,15 +95,15 @@ export default forwardRef(({timetable, onResult = () => null}, ref) => {
                         <ScrollView>
                             <View style={globalStyles.dropShadow}>
                                 <Text style={localStyles.modalHeaderText}>
-                                    Edit item {currentEditItem?.day + '.' + currentEditItem?.lesson + ' (' + timetable?.lessons?.[currentEditItem?.day]?.[currentEditItem?.lesson] + ')'}
+                                    {getFullWeekDay(currentEditItem?.day) + ', ' + (currentEditItem?.lesson+1) + ' Stunde (' + getSubjectName( timetable?.lessons?.[currentEditItem?.day]?.[currentEditItem?.lesson]) + ')'}
                                 </Text>
 
-                                <Widget title="General">
+                                <Widget title="Allgemein">
                                     <View style={localStyles.widgetInner}>
                                         <RadioButtonGroup containerStyle={{marginBottom: 10}} radioStyle={localStyles.radioButton} selected={generalItemSettings} onSelected={setGeneralItemSettings} radioBackground={theme.colors.primary}>
                                             <RadioButtonItem value={0} label={<Text style={localStyles.radioButtonText}>Vollständig anzeigen</Text>}/>
                                             <RadioButtonItem value={1} label={<Text style={localStyles.radioButtonText}>Ausgeblendet</Text>}/>
-                                            <RadioButtonItem value={2} label={<Text style={localStyles.radioButtonText}>Custom</Text>}/>
+                                            <RadioButtonItem value={2} label={<Text style={localStyles.radioButtonText}>Eigene Auswahl</Text>}/>
                                         </RadioButtonGroup>
                                         <View style={localStyles.checkboxContainer}>
                                             <Checkbox style={localStyles.checkbox} value={applyAll} onValueChange={setApplyAll}/>
@@ -111,7 +112,7 @@ export default forwardRef(({timetable, onResult = () => null}, ref) => {
                                     </View>
                                 </Widget>
                                 {generalItemSettings === 2 && (
-                                    <Widget title="Custom settings">
+                                    <Widget title="Spezifische Fachauswahl">
                                         <View style={localStyles.widgetInner}>
                                             {availableSubjects.map((subject, i) => (
                                                 <View key={i} style={localStyles.checkboxContainer}>
