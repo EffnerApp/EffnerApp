@@ -10,6 +10,7 @@ import {
 import {ThemePreset} from "../../theme/ThemePreset";
 import {Themes} from "../../theme/ColorThemes";
 import {
+    getSubjectName,
     getSubstitutionInfo,
     maxTimetableDepth,
     normalize,
@@ -32,11 +33,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
     const [currentDepth, setCurrentDepth] = useState(0);
     const [substitutions, setSubstitutions] = useState([]);
     const [title, setTitle] = useState("");
-    const [subjects, setSubjects] = useState([]);
 
-    useEffect(() => {
-        api.get("/v3/subjects").then(({data}) => setSubjects(data));
-    }, []);
 
     useEffect(() => {
         setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
@@ -69,14 +66,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
         );
     }, [timetable, weekDay]);
 
-    function getSubjectName(subject) {
-        // why tf is it called className????
-        return (
-            subjects.find(({alias}) =>
-                alias.find(a => a.toLowerCase() === subject.toLowerCase())
-            )?.className || subject
-        );
-    }
+    
 
     return (
         <View>
