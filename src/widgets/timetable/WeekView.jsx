@@ -73,7 +73,7 @@ const createStyles = (theme = Themes.light) =>
             height: "14%"
         },
         timetableEntryText: {
-            fontSize: normalize(12, 24),
+            fontSize: normalize(12, 22),
             textAlign: "center",
         },
         timetableTimeColumnEntry: {
