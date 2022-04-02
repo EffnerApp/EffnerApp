@@ -127,7 +127,7 @@ export default function TimetableScreen({navigation, route}) {
                 setTimetable(tmp);
                 save('APP_CUSTOMIZED_TIMETABLE', tmp);
             }}/>
-            <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
+            <View style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
                     {timetables?.data?.length > 1 &&
                         <View style={localStyles.timetableSelector}>
@@ -170,7 +170,7 @@ export default function TimetableScreen({navigation, route}) {
                     <View style={[globalStyles.row, {justifyContent: 'center'}]}>
                         <View>
                             {currentView === 0 && (
-                                <View >
+                                <View>
                                     <WeekView timetable={timetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                                 </View>
                             )}
@@ -189,7 +189,7 @@ export default function TimetableScreen({navigation, route}) {
                         )}
                     </View>
                 </View>
-            </ScrollView>
+            </View>
         </View>
 
     )
