@@ -166,9 +166,9 @@ export default function TimetableScreen({navigation, route}) {
                     <View style={[globalStyles.row, {justifyContent: 'center'}]}>
                         <View>
                             {currentView === 0 && (
-                                <ScrollView horizontal={true}>
+                                <View >
                                     <WeekView timetable={timetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
-                                </ScrollView>
+                                </View>
                             )}
                             {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>}
                         </View>
