@@ -24,7 +24,7 @@ import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
 import {save, load} from "../../tools/storage";
 
-export default function DayView({timetable, theme: timetableTheme, credentials, class: sClass, weekDay}) {
+export default function DayView({timetable, theme: timetableTheme, credentials, class: sClass, weekDay, editModeEnabled, onRequestEditItem = () => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const navigation = useNavigation();
@@ -33,16 +33,9 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
     const [substitutions, setSubstitutions] = useState([]);
     const [title, setTitle] = useState("");
     const [subjects, setSubjects] = useState([]);
-    const [ignoredSubjects, setIgnoredSubjects] = useState([]);
-    const [enableIgnoreSubjects, setEnableIgnoreSubjects] = useState(true);
 
     useEffect(() => {
         api.get("/v3/subjects").then(({data}) => setSubjects(data));
-        load("ignoredSubjects").then(sub => {
-            if (sub) {
-                setIgnoredSubjects(sub);
-            }
-        });
     }, []);
 
     useEffect(() => {
@@ -120,20 +113,10 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
                                                     {i + 1}
                                                 </Text>
                                             </View>
-                                            <TouchableOpacity disabled={!enableIgnoreSubjects} onPress={() => {
-                                                let temp = ignoredSubjects;
-                                                if (temp.includes(subject)) {
-                                                    temp = temp.filter(s => s !== subject);
-                                                } else {
-                                                    temp.push(subject);
-                                                }
-                                                setIgnoredSubjects(temp);
-                                                setIgnoredSubjects(i => [...i]);
-                                                save("ignoredSubjects", ignoredSubjects);
-                                            }} style={[localStyles.timetableEntry, {backgroundColor: getCellColor(timetableTheme, {meta: timetable.meta, subject})}]}>
+                                            <TouchableOpacity disabled={!editModeEnabled} onPress={() => onRequestEditItem({day: weekDay, lesson: i})} style={[localStyles.timetableEntry, {backgroundColor: getCellColor(timetableTheme, {meta: timetable.meta, subject})}]}>
                                                 {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
                                                 <Text style={[globalStyles.text, localStyles.timetableEntryText, filteredSubstitutions.length > 0 ? {textDecorationLine: "line-through", textDecorationStyle: "solid",} : {}]}>
-                                                    {!ignoredSubjects.includes(subject) ? getSubjectName(subject) || " " : " "}
+                                                    {getSubjectName(subject) || " "}
                                                 </Text>
                                                 {filteredSubstitutions.length > 0 && (
                                                         <ScrollView

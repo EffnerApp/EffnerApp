@@ -40,8 +40,6 @@ export default class DSBMobile {
             throw new Error('Could not decode timetable meta data.');
         }
 
-        console.log(meta)
-
         const {Detail: url, Date: time} = meta[0]['Childs'][0];
 
         return {

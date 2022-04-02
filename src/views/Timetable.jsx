@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import {Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {clamp, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
+import {clamp, clone, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import moment from "moment";
-import {load} from "../tools/storage";
+import {load, save} from "../tools/storage";
 import {useIsFocused} from "@react-navigation/native";
 import {Icon} from "react-native-elements";
 import {api} from "../tools/api";
@@ -29,6 +29,7 @@ export default function TimetableScreen({navigation, route}) {
     const [documents, setDocuments] = useState([]);
 
     const [timetable, setTimetable] = useState();
+    const [originalTimetable, setOriginalTimetable] = useState();
     const [selectedTimetable, setSelectedTimetable] = useState(0);
     const [documentUrl, setDocumentUrl] = useState();
     const [timetableTheme, setTimetableTheme] = useState(0);
@@ -36,7 +37,8 @@ export default function TimetableScreen({navigation, route}) {
     const [currentView, setCurrentView] = useState(0);
 
     const [editModeEnabled, setEditModeEnabled] = useState(false);
-    const [currentEditLesson, setCurrentEditLesson] = useState();
+
+    const timetableEditor = useRef();
 
     const loadData = async () => {
         await api.get(`/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
@@ -64,7 +66,25 @@ export default function TimetableScreen({navigation, route}) {
     }, [documents]);
 
     useEffect(() => {
-        setTimetable(timetables.data[selectedTimetable]);
+        const sTimetable = timetables.data[selectedTimetable];
+
+        if(!sTimetable) return;
+
+        // clone timetable
+        setOriginalTimetable(clone(sTimetable));
+
+        load('APP_CUSTOMIZED_TIMETABLE').then((customTimetable) => {
+            if (customTimetable) {
+                if (customTimetable.updatedAt === sTimetable.updatedAt) {
+                    setTimetable(customTimetable);
+                    return;
+                } else {
+                    console.log('incompatible timetable versions.');
+                }
+
+            }
+            setTimetable(sTimetable);
+        });
     }, [timetables, selectedTimetable]);
 
     useEffect(() => {
@@ -97,7 +117,12 @@ export default function TimetableScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <TimetableEditModal lesson={currentEditLesson} />
+            <TimetableEditModal ref={timetableEditor} timetable={originalTimetable} onResult={({items, selectedSubjects}) => {
+                const tmp = {...timetable};
+                items.forEach(([day, lesson]) => tmp.lessons[day][lesson] = selectedSubjects.join(' '));
+                setTimetable(tmp);
+                save('APP_CUSTOMIZED_TIMETABLE', tmp);
+            }}/>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
                     {timetables?.data?.length > 1 &&
@@ -142,13 +167,10 @@ export default function TimetableScreen({navigation, route}) {
                         <View>
                             {currentView === 0 && (
                                 <ScrollView horizontal={true}>
-                                    <WeekView timetable={timetable} theme={timetableTheme} onRequestEditItem={(item) => {
-                                        console.log(item)
-                                        setCurrentEditLesson(item)
-                                    }}/>
+                                    <WeekView timetable={timetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                                 </ScrollView>
                             )}
-                            {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay}/>}
+                            {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>}
                         </View>
                     </View>
 

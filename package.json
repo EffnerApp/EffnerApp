@@ -27,9 +27,11 @@
     "expo-linear-gradient": "~11.0.0",
     "expo-navigation-bar": "~1.1.1",
     "expo-notifications": "~0.14.0",
+    "expo-radio-button": "^1.0.8",
     "expo-status-bar": "~1.2.0",
     "expo-web-browser": "~10.1.0",
     "fast-html-parser": "^1.0.1",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-html-parser": "^1.4.9",
     "query-string": "^7.0.1",
@@ -51,7 +53,8 @@
     "react-native-toast-message": "^2.1.1",
     "react-native-user-defaults": "^0.1.5",
     "react-native-web": "0.17.1",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "expo-checkbox": "~2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
