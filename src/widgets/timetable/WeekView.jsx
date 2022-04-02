@@ -63,7 +63,7 @@ const createStyles = (theme = Themes.light) =>
         },
         timetableDayEntry: {
             flexDirection: "column",
-            width: "18%"
+            width: "18%",
         },
         timetableEntry: {
             borderWidth: 1.3,

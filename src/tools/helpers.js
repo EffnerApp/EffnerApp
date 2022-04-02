@@ -7,6 +7,7 @@ import moment from "moment";
 import {hash} from "./hash";
 import * as Device from 'expo-device';
 import {DeviceType} from "expo-device";
+import { api } from "./api";
 
 import _ from 'lodash';
 // _ is 'low-dash' for the cool kids, and I'm definitely a cool kid ^^
@@ -14,7 +15,9 @@ import _ from 'lodash';
 
 let deviceType = DeviceType.UNKNOWN;
 
+let subjects = [];
 const initDevice = async () => {
+    await loadSubjects();
     deviceType = await Device.getDeviceTypeAsync();
 }
 
@@ -129,6 +132,11 @@ const decodeEntities = (encodedString) => {
 const weekDays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 const getWeekDay = (i) => {
     return weekDays[i];
+}
+
+const fullWeekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+const getFullWeekDay = (i) => {
+    return fullWeekDays[i];
 }
 
 const excludeScreens = (route, screensToExclude) => screensToExclude.includes(route.name) ? () => null : undefined
@@ -281,6 +289,21 @@ const pad = (num, size) => {
 
 const clone = (object) => _.cloneDeep(object);
 
+async function loadSubjects(){
+    console.log("huhu")
+    subjects = await api.get("/v3/subjects").then(({data}) => data);
+}
+
+
+function getSubjectName(subject) {
+        // why tf is it called className????
+        return (
+            subjects.find(({alias}) =>
+                alias.find(a => a.toLowerCase() === subject.toLowerCase())
+            )?.className || subject
+        );
+    }
+
 export {
     initDevice,
     showToast,
@@ -306,5 +329,7 @@ export {
     getSubstitutionInfo,
     clamp,
     pad,
-    clone
+    clone,
+    getSubjectName,
+    getFullWeekDay
 }
