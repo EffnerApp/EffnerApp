@@ -70,11 +70,11 @@ const createStyles = (theme = Themes.light) =>
             borderColor: theme.colors.onSurface,
             padding: 8,
             margin: 1,
-            minHeight: "13%"
+            height: "14%"
         },
         timetableEntryText: {
             fontSize: normalize(12, 24),
-            textAlign: "center"
+            textAlign: "center",
         },
         timetableTimeColumnEntry: {
             flexDirection: "column"
@@ -84,7 +84,7 @@ const createStyles = (theme = Themes.light) =>
             borderColor: theme.colors.background,
             padding: 8,
             margin: 1,
-            minHeight: "13%"
+            height: "14%"
         },
         textBoldCenter: {
             fontWeight: "bold",
