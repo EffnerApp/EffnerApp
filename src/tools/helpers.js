@@ -8,6 +8,10 @@ import {hash} from "./hash";
 import * as Device from 'expo-device';
 import {DeviceType} from "expo-device";
 
+import _ from 'lodash';
+// _ is 'low-dash' for the cool kids, and I'm definitely a cool kid ^^
+// ~ sebi, 02.04.2022
+
 let deviceType = DeviceType.UNKNOWN;
 
 const initDevice = async () => {
@@ -245,7 +249,7 @@ const maxTimetableDepth = (timetable) => {
 
 const getSubstitutionInfo = ({period, subTeacher, room, info}) => {
     if(info === 'Raumänderung') {
-        return + info + ' zu Raum ' + room;
+        return info + ' zu Raum ' + room;
     } else if(!subTeacher || info === 'entfällt') {
         return info;
     } else if(subTeacher) {
@@ -275,6 +279,8 @@ const pad = (num, size) => {
     return num;
 };
 
+const clone = (object) => _.cloneDeep(object);
+
 export {
     initDevice,
     showToast,
@@ -299,5 +305,6 @@ export {
     getSubstitutionTitle,
     getSubstitutionInfo,
     clamp,
-    pad
+    pad,
+    clone
 }

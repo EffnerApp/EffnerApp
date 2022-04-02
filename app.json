@@ -6,6 +6,11 @@
     "orientation": "default",
     "entryPoint": "index.js",
     "icon": "./@resources/default_icon.png",
+    "splash": {
+      "image": "./@resources/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -16,12 +21,7 @@
       "buildNumber": "56",
       "userInterfaceStyle": "automatic",
       "bundleIdentifier": "de.effnerapp.effner",
-      "supportsTablet": true,
-      "splash": {
-        "image": "./@resources/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#121212"
-      }
+      "supportsTablet": true
     },
     "android": {
       "package": "de.effnerapp.effner",
