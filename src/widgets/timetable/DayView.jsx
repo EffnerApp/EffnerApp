@@ -48,7 +48,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
 
                 const selectedDate = moment().add({days: next}).format("DD.MM.YYYY");
                 setTitle("Stundenplan für " + getWeekDay(weekDay) + ", den " + selectedDate);
-
+            margin: 0
                 const substitutions = days?.get(selectedDate)?.filter(entry => validateClass(sClass, entry.name))?.map(e => e.items);
 
                 let tmp = [];
@@ -66,7 +66,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
         );
     }, [timetable, weekDay]);
 
-    
+
 
     return (
         <View>

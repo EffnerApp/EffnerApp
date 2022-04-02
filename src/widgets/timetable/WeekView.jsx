@@ -70,7 +70,7 @@ const createStyles = (theme = Themes.light) =>
             borderColor: theme.colors.onSurface,
             padding: 8,
             margin: 1,
-            height: "14%"
+            height: "13%"
         },
         timetableEntryText: {
             fontSize: normalize(12, 22),
@@ -84,7 +84,7 @@ const createStyles = (theme = Themes.light) =>
             borderColor: theme.colors.background,
             padding: 8,
             margin: 1,
-            height: "14%"
+            height: "13%"
         },
         textBoldCenter: {
             fontWeight: "bold",

@@ -68,7 +68,7 @@ export default function TimetableScreen({navigation, route}) {
     useEffect(() => {
         const sTimetable = timetables.data[selectedTimetable];
 
-        if(!sTimetable) return;
+        if (!sTimetable) return;
 
         // clone timetable
         setOriginalTimetable(clone(sTimetable));
@@ -95,7 +95,7 @@ export default function TimetableScreen({navigation, route}) {
                         style={globalStyles.headerButton}
                         onPress={() => {
                             setEditModeEnabled(!editModeEnabled);
-                            if(!editModeEnabled) showToast("Edit-Mode", "Edit-Mode aktiviert!")
+                            if (!editModeEnabled) showToast("Edit-Mode", "Edit-Mode aktiviert!")
                             else showToast("Edit-Mode", "Edit-Mode deaktiviert!")
                         }}>
                         <Icon name="edit" color={editModeEnabled ? theme.colors.primary : theme.colors.onSurface}/>
@@ -165,17 +165,16 @@ export default function TimetableScreen({navigation, route}) {
                             ))}
                         </View>
                     </View>
-
-
                     <View style={[globalStyles.row, {justifyContent: 'center'}]}>
-                        <View>
-                            {currentView === 0 && (
-                                <View>
-                                    <WeekView timetable={timetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
-                                </View>
-                            )}
-                            {currentView === 1 && <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>}
-                        </View>
+                        {currentView === 0 && (
+                            <View>
+                                <WeekView timetable={timetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
+                            </View>
+                        )}
+                        {currentView === 1 && (
+                            <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled}
+                                     onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
+                        )}
                     </View>
 
                     <View style={[globalStyles.row, localStyles.timetableFooter]}>
@@ -198,15 +197,13 @@ export default function TimetableScreen({navigation, route}) {
 const createStyles = (theme = Themes.light) =>
     StyleSheet.create({
         timetableFooter: {
-            marginTop: 5,
-            marginEnd: 10
         },
         timetableFooterTextBox: {
             padding: 10,
             alignSelf: 'center'
         },
         timetableFooterText: {
-            fontSize: normalize(12, 18)
+            fontSize: normalize(12, 14)
         },
         timetableSelector: {
             flexDirection: "row",
