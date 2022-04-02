@@ -194,6 +194,6 @@ const createStyles = (theme = Themes.light) =>
         },
         button: {
             color: theme.colors.onPrimary,
-            width: '30%'
+            width: '40%'
         },
     });
