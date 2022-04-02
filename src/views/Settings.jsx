@@ -110,7 +110,7 @@ export default function SettingsScreen({navigation, route}) {
     }, [selectedClass]);
 
     const showAbout = () => {
-        Alert.alert('Über die App', 'EffnerApp by Sebastian Müller, Luis Bros & Jonathan Berger\n\n© ' + new Date().getFullYear() + ' EffnerApp - Danke an alle Mitwirkenden ❤');
+        Alert.alert('Über die App', 'by Sebastian Müller, Luis Bros & Jonathan Berger\n\nMitwirkende: Julian Knoops\n\n© ' + new Date().getFullYear() + ' EffnerApp ❤');
     }
 
     const confirmClassChange = (to) => {
@@ -167,7 +167,7 @@ export default function SettingsScreen({navigation, route}) {
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
                 <View style={globalStyles.contentWrapper}>
-                    <Widget title="Benachrichtigungen" icon="notifications" headerMarginBottom={10} backgroundColor="transparent" marginVertical={0}>
+                    <Widget title="Benachrichtigungen" icon="notifications" headerMarginBottom={10}>
                         <View style={localStyles.widgetEntryContainer}>
                             <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                                 <View style={{alignSelf: "center"}}>
@@ -201,7 +201,7 @@ export default function SettingsScreen({navigation, route}) {
                             </View>
                         </View>
                     </Widget>
-                    <Widget title="Theming" icon="palette" headerMarginBottom={10} backgroundColor="transparent" marginVertical={0}>
+                    <Widget title="Theming" icon="palette" headerMarginBottom={10}>
                         <View style={localStyles.widgetEntryContainer}>
                             <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
                                 <View style={{alignSelf: "center"}}>
@@ -226,7 +226,7 @@ export default function SettingsScreen({navigation, route}) {
                             </View>
                         </View>
                     </Widget>
-                    <Widget title="Über EffnerApp" icon="info" backgroundColor="transparent" marginVertical={0}>
+                    <Widget title="Über EffnerApp" icon="info">
                         <View style={localStyles.widgetEntryContainer}>
                             <TouchableOpacity onPress={() => openUri('mailto:info@effner.app')}>
                                 <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
@@ -292,7 +292,7 @@ export default function SettingsScreen({navigation, route}) {
                             </TouchableOpacity>
                         </View>
                     </Widget>
-                    <Widget title="Account" icon="account-circle" backgroundColor="transparent" marginVertical={0}>
+                    <Widget title="Account" icon="account-circle">
                         <View style={localStyles.widgetEntryContainer}>
                             <View>
                                 <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
@@ -310,8 +310,9 @@ export default function SettingsScreen({navigation, route}) {
                         </View>
                     </Widget>
                     <View style={{flexDirection: 'column', justifyContent: "center", paddingVertical: 20}}>
-                        <Text style={[globalStyles.text, {textAlign: 'center'}]}>© {new Date().getFullYear()} EffnerApp by</Text>
+                        <Text style={[globalStyles.text, {textAlign: 'center'}]}>© {new Date().getFullYear()} EffnerApp</Text>
                         <Text style={[globalStyles.text, {textAlign: 'center', paddingTop: 5}]}>Sebastian Müller, Luis Bros & Jonathan Berger</Text>
+                        <Text style={[globalStyles.text, {textAlign: 'center', paddingTop: 5, color: '#8f8f8f'}]}>Mitwirkende: Julian Knoops</Text>
                     </View>
                 </View>
             </ScrollView>
