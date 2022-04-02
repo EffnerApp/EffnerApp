@@ -93,7 +93,11 @@ export default function TimetableScreen({navigation, route}) {
                 <View style={[globalStyles.row, globalStyles.headerButtonContainer]}>
                     <TouchableOpacity
                         style={globalStyles.headerButton}
-                        onPress={() => setEditModeEnabled(!editModeEnabled)}>
+                        onPress={() => {
+                            setEditModeEnabled(!editModeEnabled);
+                            if(!editModeEnabled) showToast("Edit-Mode", "Edit-Mode aktiviert!")
+                            else showToast("Edit-Mode", "Edit-Mode deaktiviert!")
+                        }}>
                         <Icon name="edit" color={editModeEnabled ? theme.colors.primary : theme.colors.onSurface}/>
                     </TouchableOpacity>
                     <View style={globalStyles.verticalLine}/>
