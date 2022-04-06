@@ -25,7 +25,7 @@ import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
 import {save, load} from "../../tools/storage";
 
-export default function DayView({timetable, theme: timetableTheme, credentials, class: sClass, weekDay, editModeEnabled, onRequestEditItem = () => null}) {
+export default function DayView({timetable, subjects, theme: timetableTheme, credentials, class: sClass, weekDay, editModeEnabled, onRequestEditItem = () => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const navigation = useNavigation();
@@ -106,7 +106,7 @@ export default function DayView({timetable, theme: timetableTheme, credentials, 
                                             <TouchableOpacity disabled={!editModeEnabled} onPress={() => onRequestEditItem({day: weekDay, lesson: i})} style={[localStyles.timetableEntry, {backgroundColor: getCellColor(timetableTheme, {meta: timetable.meta, subject})}]}>
                                                 {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
                                                 <Text style={[globalStyles.text, localStyles.timetableEntryText, filteredSubstitutions.length > 0 ? {textDecorationLine: "line-through", textDecorationStyle: "solid",} : {}]}>
-                                                    {getSubjectName(subject) || " "}
+                                                    {getSubjectName(subjects, subject) || " "}
                                                 </Text>
                                                 {filteredSubstitutions.length > 0 && (
                                                         <ScrollView

@@ -25,6 +25,8 @@ export default function TimetableScreen({navigation, route}) {
 
     const [refreshing, setRefreshing] = useState(false);
 
+    const [subjects, setSubjects] = useState([]);
+
     const [timetables, setTimetables] = useState({data: [], schedule: []});
     const [documents, setDocuments] = useState([]);
 
@@ -43,6 +45,7 @@ export default function TimetableScreen({navigation, route}) {
     const loadData = async () => {
         await api.get(`/v3/timetables/${sClass}`, withAuthentication(credentials)).then(({data}) => setTimetables(data));
         await api.get('/v3/documents', withAuthentication(credentials)).then(({data}) => setDocuments(data));
+        await api.get('/v3/subjects').then(({data}) => setSubjects(data));
     }
 
     const refresh = () => {
@@ -121,7 +124,7 @@ export default function TimetableScreen({navigation, route}) {
 
     return (
         <View style={globalStyles.screen}>
-            <TimetableEditModal ref={timetableEditor} timetable={originalTimetable} onResult={({items, selectedSubjects}) => {
+            <TimetableEditModal ref={timetableEditor} timetable={originalTimetable} subjects={subjects} onResult={({items, selectedSubjects}) => {
                 const tmp = {...timetable};
                 items.forEach(([day, lesson]) => tmp.lessons[day][lesson] = selectedSubjects.join(' '));
                 setTimetable(tmp);
@@ -172,7 +175,7 @@ export default function TimetableScreen({navigation, route}) {
                             </View>
                         )}
                         {currentView === 1 && (
-                            <DayView timetable={timetable} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled}
+                            <DayView timetable={timetable} subjects={subjects} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled}
                                      onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                         )}
                     </View>

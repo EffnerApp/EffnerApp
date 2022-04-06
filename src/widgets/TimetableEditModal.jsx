@@ -1,7 +1,7 @@
 import {Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {Themes} from "../theme/ColorThemes";
-import {getFullWeekDay, getSubjectName, getWeekDay, normalize} from "../tools/helpers";
+import {getFullWeekDay, getSubjectName} from "../tools/helpers";
 import {ThemePreset} from "../theme/ThemePreset";
 import Checkbox from "expo-checkbox";
 import {getSubjectsForLesson} from "../tools/timetable";
@@ -9,7 +9,7 @@ import RadioButtonGroup, {RadioButtonItem} from "expo-radio-button";
 import Widget from "../components/Widget";
 import Button from "../components/Button";
 
-export default forwardRef(({timetable, onResult = () => null}, ref) => {
+export default forwardRef(({timetable, subjects, onResult = () => null}, ref) => {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -95,7 +95,7 @@ export default forwardRef(({timetable, onResult = () => null}, ref) => {
                         <ScrollView>
                             <View style={globalStyles.dropShadow}>
                                 <Text style={localStyles.modalHeaderText}>
-                                    {getFullWeekDay(currentEditItem?.day) + ', ' + (currentEditItem?.lesson+1) + ' Stunde (' + getSubjectName( timetable?.lessons?.[currentEditItem?.day]?.[currentEditItem?.lesson]) + ')'}
+                                    {getFullWeekDay(currentEditItem?.day) + ', ' + (currentEditItem?.lesson+1) + ' Stunde (' + getSubjectName(subjects, timetable?.lessons?.[currentEditItem?.day]?.[currentEditItem?.lesson]) + ')'}
                                 </Text>
 
                                 <Widget title="Allgemein">
