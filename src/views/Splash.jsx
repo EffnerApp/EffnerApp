@@ -1,15 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
 
-import {Alert, AppState, StyleSheet, View} from "react-native";
+import {Alert, AppState, Linking, StyleSheet, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {useIsFocused} from "@react-navigation/native";
-import {initDevice, navigateTo, openUri} from "../tools/helpers";
+import {initDevice, navigateTo} from "../tools/helpers";
 import {login} from "../tools/api";
 import {load} from "../tools/storage";
 import {performStorageConversion} from "../tools/compatibility";
 import AnimatedIcon from "../widgets/AnimatedIcon";
-
 
 export default function SplashScreen({navigation}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -45,12 +44,24 @@ export default function SplashScreen({navigation}) {
 
     const showError = (e, showStack = false) => {
         setAlertOpen(true);
-        Alert.alert('Error: ' + e.message, showStack ? e.stack : 'Please check your internet connection or check the status of our services on the status page.', [
+
+        const remoteActions = e?.response?.data?.meta?.actions?.map?.((action) => ({
+            text: action.text,
+            onPress: async () => {
+                setAlertOpen(false);
+                await Linking.openURL(action.uri);
+            }
+        }));
+
+        const title = e?.response?.data?.status?.error || ('Error: ' + e.message);
+        const message = showStack ? e.stack : e?.response?.data?.status?.message || 'Please check your internet connection or check the status of our services on the status page.';
+
+        const actions = remoteActions || [
             {
                 text: 'Status',
-                onPress: () => {
+                onPress: async () => {
                     setAlertOpen(false);
-                    openUri('https://status.effner.app');
+                    await Linking.openURL('https://status.effner.app');
                 }
             },
             {
@@ -61,7 +72,9 @@ export default function SplashScreen({navigation}) {
                 text: 'Retry',
                 onPress: () => retry()
             }
-        ]);
+        ];
+
+        Alert.alert(title, message, actions);
     }
 
     useEffect(() => {
@@ -82,10 +95,10 @@ export default function SplashScreen({navigation}) {
                     await login(credentials, sClass);
                     navigateTo(navigation, 'Main', {credentials, sClass});
                 } catch (e) {
-                    if(e.message === 'Network Error' || e.response?.status >= 500) {
+                    if (e.message === 'Network Error' || e.response?.status >= 500) {
                         setError(e);
                     } else {
-                        navigateTo(navigation, 'Login', {error: e});
+                        navigateTo(navigation, 'Login', {error: e?.response?.data?.status?.error || e.message});
                     }
                 }
             } else {
@@ -98,7 +111,7 @@ export default function SplashScreen({navigation}) {
                         await login(credentials, sClass);
                         navigateTo(navigation, 'Main', {credentials, sClass});
                     } catch (e) {
-                        navigateTo(navigation, 'Login', {error: e});
+                        navigateTo(navigation, 'Login', {error: e?.response?.data?.status?.error || e.message});
                     }
                 } catch (e) {
                     navigateTo(navigation, 'Login');
@@ -108,15 +121,14 @@ export default function SplashScreen({navigation}) {
     }, [isFocused, retryState]);
 
     useEffect(() => {
-        if(!error || !appStateVisible || alertOpen) return;
+        if (!error || appStateVisible !== 'active' || alertOpen) return;
 
         showError(error);
     }, [appStateVisible, error]);
 
     return (
         <View style={globalStyles.fullScreen}>
-            {/*<Progress.Circle size={25} color={theme.colors.onSurface} borderWidth={3} indeterminate={true}/>*/}
-            <AnimatedIcon />
+            <AnimatedIcon/>
         </View>
     )
 }

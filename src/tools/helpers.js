@@ -7,7 +7,7 @@ import moment from "moment";
 import {hash} from "./hash";
 import * as Device from 'expo-device';
 import {DeviceType} from "expo-device";
-import { api } from "./api";
+import {api} from "./api";
 
 import _ from 'lodash';
 // _ is 'low-dash' for the cool kids, and I'm definitely a cool kid ^^
@@ -15,9 +15,7 @@ import _ from 'lodash';
 
 let deviceType = DeviceType.UNKNOWN;
 
-let subjects = [];
 const initDevice = async () => {
-    await loadSubjects();
     deviceType = await Device.getDeviceTypeAsync();
 }
 
@@ -256,11 +254,11 @@ const maxTimetableDepth = (timetable) => {
 };
 
 const getSubstitutionInfo = ({period, subTeacher, room, info}) => {
-    if(info === 'Raumänderung') {
+    if (info === 'Raumänderung') {
         return info + ' zu Raum ' + room;
-    } else if(!subTeacher || info === 'entfällt') {
+    } else if (!subTeacher || info === 'entfällt') {
         return info;
-    } else if(subTeacher) {
+    } else if (subTeacher) {
         return ' vertreten durch ' + subTeacher + (info ? ' (' + info + ')' : '');
     }
 }
@@ -268,11 +266,11 @@ const getSubstitutionInfo = ({period, subTeacher, room, info}) => {
 const getSubstitutionTitle = ({period, subTeacher, room, info}) => {
     let s = period + '. Stunde';
 
-    if(info === 'Raumänderung') {
+    if (info === 'Raumänderung') {
         s += ': ' + info + ' zu Raum ' + room;
-    } else if(!subTeacher || info === 'entfällt') {
+    } else if (!subTeacher || info === 'entfällt') {
         s += ': ' + info;
-    } else if(subTeacher) {
+    } else if (subTeacher) {
         s += ' vertreten durch ' + subTeacher;
     }
 
@@ -289,20 +287,14 @@ const pad = (num, size) => {
 
 const clone = (object) => _.cloneDeep(object);
 
-async function loadSubjects(){
-    console.log("huhu")
-    subjects = await api.get("/v3/subjects").then(({data}) => data);
-}
-
-
-function getSubjectName(subject) {
-        // why tf is it called className????
-        return (
-            subjects.find(({alias}) =>
-                alias.find(a => a.toLowerCase() === subject.toLowerCase())
-            )?.className || subject
-        );
-    }
+const getSubjectName = (subjects, subject) => {
+    // why tf is it called className????
+    return (
+        subjects.find(({alias}) =>
+            alias.find(a => a.toLowerCase() === subject.toLowerCase())
+        )?.className || subject
+    );
+};
 
 export {
     initDevice,
