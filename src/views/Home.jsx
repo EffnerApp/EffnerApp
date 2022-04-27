@@ -97,7 +97,7 @@ export default function HomeScreen({navigation, route}) {
             return;
         }
 
-        setNextExam(date + ': ' + nextExams[1].map((item) => item.course.match(/\d+([a-z]+)\d+/)[1].toUpperCase()).join(', '));
+        setNextExam(date + ': ' + nextExams[1].map((item) => item.course?.match(/\d+([a-z]+)\d+/)?.[1]?.toUpperCase() || item.course || item.name).join(', '));
     }, [exams]);
 
     useEffect(() => {
