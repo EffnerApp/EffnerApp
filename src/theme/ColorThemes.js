@@ -45,7 +45,7 @@ const dark = {
     surfaceSecondary: "#282828",
 
     font: "#FFFFFF",
-    error: "#FF4E2C",
+    error: "#ff6161",
   },
 };
 

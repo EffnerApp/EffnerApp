@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 
-import {Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {RefreshControl, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {clamp, clone, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
@@ -170,12 +170,10 @@ export default function TimetableScreen({navigation, route}) {
                     </View>
                     <View style={[globalStyles.row, {justifyContent: 'center'}]}>
                         {currentView === 0 && (
-                            <View>
-                                <WeekView timetable={timetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
-                            </View>
+                                <WeekView timetable={timetable} originalTimetable={originalTimetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                         )}
                         {currentView === 1 && (
-                            <DayView timetable={timetable} subjects={subjects} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled}
+                            <DayView timetable={timetable} originalTimetable={originalTimetable} subjects={subjects} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled}
                                      onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                         )}
                     </View>

@@ -19,13 +19,12 @@ import {
 } from "../../tools/helpers";
 import {getWeekDay} from "../../tools/helpers";
 import {getCellColor} from "../../theme/TimetableThemes";
-import {api, loadDSBTimetable} from "../../tools/api";
+import {loadDSBTimetable} from "../../tools/api";
 import moment from "moment";
 import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
-import {save, load} from "../../tools/storage";
 
-export default function DayView({timetable, subjects, theme: timetableTheme, credentials, class: sClass, weekDay, editModeEnabled, onRequestEditItem = () => null}) {
+export default function DayView({timetable, originalTimetable, subjects, theme: timetableTheme, credentials, class: sClass, weekDay, editModeEnabled, onRequestEditItem = () => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const navigation = useNavigation();
@@ -36,6 +35,7 @@ export default function DayView({timetable, subjects, theme: timetableTheme, cre
 
 
     useEffect(() => {
+        if(editModeEnabled) return;
         setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
 
         const currentWeekDay = new Date().getDay() - 1;
@@ -48,7 +48,7 @@ export default function DayView({timetable, subjects, theme: timetableTheme, cre
 
                 const selectedDate = moment().add({days: next}).format("DD.MM.YYYY");
                 setTitle("Stundenplan für " + getWeekDay(weekDay) + ", den " + selectedDate);
-            margin: 0
+
                 const substitutions = days?.get(selectedDate)?.filter(entry => validateClass(sClass, entry.name))?.map(e => e.items);
 
                 let tmp = [];
@@ -67,6 +67,13 @@ export default function DayView({timetable, subjects, theme: timetableTheme, cre
     }, [timetable, weekDay]);
 
 
+    useEffect(() => {
+        if(editModeEnabled) {
+            setCurrentDepth(maxTimetableDepth({lessons: [originalTimetable?.lessons?.[weekDay]]}));
+        } else {
+            setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
+        }
+    }, [editModeEnabled]);
 
     return (
         <View>
