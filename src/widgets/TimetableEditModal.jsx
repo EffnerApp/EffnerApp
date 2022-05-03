@@ -3,11 +3,11 @@ import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react
 import {Themes} from "../theme/ColorThemes";
 import {getFullWeekDay, getSubjectName} from "../tools/helpers";
 import {ThemePreset} from "../theme/ThemePreset";
-import Checkbox from "expo-checkbox";
 import {getSubjectsForLesson} from "../tools/timetable";
-import RadioButtonGroup, {RadioButtonItem} from "expo-radio-button";
 import Widget from "../components/Widget";
 import Button from "../components/Button";
+import InlinePicker from "../components/InlinePicker";
+import CheckBox from "../components/CheckBox";
 
 export default forwardRef(({timetable, subjects, onResult = () => null}, ref) => {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -100,13 +100,11 @@ export default forwardRef(({timetable, subjects, onResult = () => null}, ref) =>
 
                                 <Widget title="Allgemein">
                                     <View style={localStyles.widgetInner}>
-                                        <RadioButtonGroup containerStyle={{marginBottom: 10}} radioStyle={localStyles.radioButton} selected={generalItemSettings} onSelected={setGeneralItemSettings} radioBackground={theme.colors.primary}>
-                                            <RadioButtonItem value={0} label={<Text style={localStyles.radioButtonText}>Vollständig anzeigen</Text>}/>
-                                            <RadioButtonItem value={1} label={<Text style={localStyles.radioButtonText}>Ausgeblendet</Text>}/>
-                                            <RadioButtonItem value={2} label={<Text style={localStyles.radioButtonText}>Eigene Auswahl</Text>}/>
-                                        </RadioButtonGroup>
+                                        <View style={localStyles.generalItemSettingsWrapper}>
+                                            <InlinePicker items={['Vollständig anzeigen', 'Ausgeblendet', 'Fachauswahl']} selectedIndex={generalItemSettings} onSelect={(e, i) => setGeneralItemSettings(i)} />
+                                        </View>
                                         <View style={localStyles.checkboxContainer}>
-                                            <Checkbox style={localStyles.checkbox} value={applyAll} onValueChange={setApplyAll}/>
+                                            <CheckBox value={applyAll} onValueChange={() => setApplyAll(!applyAll)}/>
                                             <Text style={[globalStyles.text, localStyles.checkboxLabel]}>Für alle anwenden</Text>
                                         </View>
                                     </View>
@@ -116,7 +114,7 @@ export default forwardRef(({timetable, subjects, onResult = () => null}, ref) =>
                                         <View style={localStyles.widgetInner}>
                                             {availableSubjects.map((subject, i) => (
                                                 <View key={i} style={localStyles.checkboxContainer}>
-                                                    <Checkbox style={localStyles.checkbox} value={selectedSubjects.includes(subject)} onValueChange={() => {
+                                                    <CheckBox value={selectedSubjects.includes(subject)} onValueChange={() => {
                                                         if (selectedSubjects.includes(subject)) {
                                                             setSelectedSubjects(selectedSubjects.filter((e) => e !== subject));
                                                         } else {
@@ -174,17 +172,9 @@ const createStyles = (theme = Themes.light) =>
         widgetInner: {
             marginStart: 20
         },
-        radioButton: {
-            marginBottom: 10
-        },
-        radioButtonText: {
-            marginBottom: 10,
-            marginStart: 10,
-            color: theme.colors.font
-        },
         checkboxContainer: {
             flexDirection: 'row',
-            marginBottom: 20,
+            marginBottom: 20
         },
         checkbox: {
             alignSelf: 'center',
@@ -197,4 +187,7 @@ const createStyles = (theme = Themes.light) =>
             color: theme.colors.onPrimary,
             width: '40%'
         },
+        generalItemSettingsWrapper: {
+            marginBottom: 20
+        }
     });
