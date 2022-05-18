@@ -140,7 +140,7 @@ const getFullWeekDay = (i) => {
 const excludeScreens = (route, screensToExclude) => screensToExclude.includes(route.name) ? () => null : undefined
 
 function getUpcomingExams(exams) {
-    let _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) > moment()).slice().sort((a, b) => {
+    let _exams = exams.filter((exam) => moment(exam.date2 || exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) > moment()).slice().sort((a, b) => {
         return moment(a.date2 || a.date, 'DD.MM.YYYY').unix() - moment(b.date2 || b.date, 'DD.MM.YYYY').unix();
     });
 
@@ -158,7 +158,7 @@ function getUpcomingExams(exams) {
 }
 
 function getExamsHistory(exams) {
-    let _exams = exams.filter((exam) => moment(exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) <= moment()).slice().sort((a, b) => {
+    let _exams = exams.filter((exam) => moment(exam.date2 || exam.date, 'DD.MM.YYYY').set({hour: 14, minute: 0}) <= moment()).slice().sort((a, b) => {
         return moment(b.date2 || b.date, 'DD.MM.YYYY').unix() - moment(a.date2 || a.date, 'DD.MM.YYYY').unix();
     });
 

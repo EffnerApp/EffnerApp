@@ -93,7 +93,7 @@ export default function HomeScreen({navigation, route}) {
 
             const subject = name.split(' in ')[1];
 
-            setNextExam(((subject || name) + ' am ' + date) || name);
+            setNextExam(((subject || name) + (date.includes(' - ') ? ': ' : ' am ') + date) || name);
             return;
         }
 
