@@ -5,13 +5,14 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {
     getCurrentSubstitutionDay,
     getUpcomingExams,
     normalize,
     openUri, pad,
     showToast,
-    validateClass,
+    validateClass, withAlpha,
     withAuthentication
 } from "../tools/helpers";
 import {api, loadDSBTimetable} from "../tools/api";
@@ -27,11 +28,12 @@ export default function HomeScreen({navigation, route}) {
 
     const [config, setConfig] = useState();
     const [motd, setMotd] = useState('');
+    const [splashWidgets, setSplashWidgets] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [exams, setExams] = useState([]);
     const [timetables, setTimetables] = useState({data: [], schedule: []});
 
-    const [nextExam, setNextExam] = useState('');
+    const [nextExam, setNextExam] = useState(undefined);
     const [currentSubstitutions, setCurrentSubstitutions] = useState('');
     const [nextLesson, setNextLesson] = useState();
 
@@ -77,6 +79,7 @@ export default function HomeScreen({navigation, route}) {
     useEffect(() => {
         if (!config) return;
         setMotd(config.motd);
+        setSplashWidgets(config.splashWidgets);
     }, [config]);
 
     useEffect(() => {
@@ -84,7 +87,10 @@ export default function HomeScreen({navigation, route}) {
 
         const nextExams = upcomingExams[0];
 
-        if (!nextExams) return null;
+        if (!nextExams) {
+            setNextExam(null);
+            return;
+        }
 
         const date = nextExams[0];
 
@@ -142,36 +148,46 @@ export default function HomeScreen({navigation, route}) {
                         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
                     <View style={localStyles.motdBox}><Text style={localStyles.motdText}>{motd}</Text></View>
-                    {/*<Widget title="ÖPNV" icon="directions-bus" gradient={{angle: 135, colors: ['#f8b500', '#fceabb']}} titleColor="#FFFFFF" iconColor="#FFFFFF" headerRight={{*/}
-                    {/*    component: <Text style={localStyles.mvvBadgeText}>Live</Text>,*/}
-                    {/*    styles: {backgroundColor: "#7be87b"}*/}
-                    {/*}}>*/}
-                    {/*    <View style={[globalStyles.box, globalStyles.row]}>*/}
-                    {/*        <View style={[globalStyles.box, {backgroundColor: '#547fcd', padding: 8}]}>*/}
-                    {/*            <Text style={globalStyles.text}>721</Text>*/}
-                    {/*        </View>*/}
-                    {/*        <View style={{alignSelf: 'center'}}>*/}
-                    {/*            <Text style={globalStyles.textBigCenter}>Bergkirchen, Schule und so</Text>*/}
-                    {/*        </View>*/}
-                    {/*        <View style={{alignSelf: 'center'}}>*/}
-                    {/*            <Text style={[globalStyles.text, {color: '#4dc44d'}]}>13:37</Text>*/}
-                    {/*        </View>*/}
-                    {/*    </View>*/}
-                    {/*</Widget>*/}
+                    {splashWidgets?.map(({title, titleColor, icon, iconColor, gradient, image, headerMarginBottom, headerPadding, actions, actionsOpacity = 1.0, titleShadowColor, titleShadowRadius}, i) => (
+                        <Widget key={i} title={title} icon={icon} titleColor={titleColor} iconColor={iconColor} gradient={gradient} image={image} headerMarginBottom={headerMarginBottom} headerPadding={headerPadding}
+                                titleShadowColor={titleShadowColor} titleShadowRadius={titleShadowRadius}>
+                            {(!!actions && actions?.length > 0) && (
+                                <View style={[globalStyles.box, {backgroundColor: withAlpha(theme.colors.surface, actionsOpacity)}]}>
+                                    {actions?.map(({uri, disabled, icon, iconType, text, fontWeight, textColor, iconColor, hintText}, j) => (
+                                        <View key={j}>
+                                            {j > 0 && <View style={localStyles.line}/>}
+                                            <TouchableOpacity disabled={disabled} style={localStyles.newsItemContainer} onPress={() => openUri(uri)}>
+                                                {iconType === 'material_community' && <MaterialCommunityIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
+                                                {iconType !== 'material_community' && <Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
+                                                <View style={localStyles.newsItemContentInner}>
+                                                    <Text style={[localStyles.newsItemContentText, {fontWeight: fontWeight, color: textColor || theme.colors.font}]}>{text}</Text>
+                                                    {!!hintText && <Text style={[localStyles.newsItemContentText, {fontSize: normalize(10), fontWeight: fontWeight, color: textColor || theme.colors.font}]}>{hintText}</Text>}
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ))}
+                                </View>
+                            )}
+                        </Widget>
+                    ))}
                     <Widget title="News" icon="inbox" gradient={{angle: 135, colors: ['#24FE41', '#FDFC47']}}
                             titleColor="#FFFFFF" iconColor="#FFFFFF">
-                        <View style={[globalStyles.box]}>
-                            <TouchableOpacity style={localStyles.newsItemContainer}
-                                              onPress={() => navigation.navigate('Exams')}>
-                                <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
-                                <View style={localStyles.newsItemContentInner}>
-                                    <SkeletonContent isLoading={!nextExam} layout={[{width: 180, height: 20}]}
-                                                     boneColor="#292929" highlightColor="#333333" animationType="pulse">
-                                        <Text style={localStyles.newsItemContentText}>{nextExam}</Text>
-                                    </SkeletonContent>
-                                </View>
-                            </TouchableOpacity>
-                            <View style={localStyles.line}/>
+                        <View style={globalStyles.box}>
+                            {nextExam !== null && (
+                                <>
+                                    <TouchableOpacity style={localStyles.newsItemContainer}
+                                                      onPress={() => navigation.navigate('Exams')}>
+                                        <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
+                                        <View style={localStyles.newsItemContentInner}>
+                                            <SkeletonContent isLoading={!nextExam} layout={[{width: 180, height: 20}]}
+                                                             boneColor="#292929" highlightColor="#333333" animationType="pulse">
+                                                <Text style={localStyles.newsItemContentText}>{nextExam}</Text>
+                                            </SkeletonContent>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <View style={localStyles.line}/>
+                                </>
+                            )}
                             <TouchableOpacity style={localStyles.newsItemContainer}
                                               onPress={() => navigation.navigate('Substitutions')}>
                                 <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
