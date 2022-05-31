@@ -1,13 +1,13 @@
 import React from "react";
 
-import {StyleSheet, Text, View} from "react-native";
+import {ImageBackground, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 import {fromAngle, normalize} from "../tools/helpers";
 import {LinearGradient} from "expo-linear-gradient";
 
-export default function Widget({title, icon, style = {}, headerLeft, headerRight, children, titleColor, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, marginVertical = 12}) {
+export default function Widget({title, icon, style = {}, headerLeft, headerRight, children, titleColor, titleShadowColor, titleShadowRadius, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, marginVertical = 12, image}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     function WidgetHeader() {
@@ -16,7 +16,7 @@ export default function Widget({title, icon, style = {}, headerLeft, headerRight
                 <View style={localStyles.iconContainer}>
                     <View style={{alignSelf: 'center'}}><Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/></View>
                     <View style={{alignSelf: 'center'}}>
-                        <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font}]}>{title}</Text>
+                        <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font, textShadowColor: titleShadowColor, textShadowRadius: titleShadowRadius}]}>{title}</Text>
                     </View>
                     {headerLeft && <View style={[localStyles.headerComponentContainer, headerLeft.styles]}>
                         {headerLeft.component}
@@ -37,7 +37,7 @@ export default function Widget({title, icon, style = {}, headerLeft, headerRight
                 end={fromAngle(gradient.angle, 1.6)}
                 colors={gradient.colors}
             >
-                <WidgetHeader />
+                <WidgetHeader/>
                 {children}
             </LinearGradient>
         )
@@ -46,16 +46,30 @@ export default function Widget({title, icon, style = {}, headerLeft, headerRight
     function DefaultWidget() {
         return (
             <View style={[globalStyles.box, {backgroundColor: backgroundColor || theme.colors.surface, marginVertical: marginVertical}, style]}>
-                <WidgetHeader />
+                <WidgetHeader/>
                 {children}
             </View>
         )
     }
 
-    if(!!gradient) {
-        return <GradientWidget />
+    function WidgetWithBackgroundImage() {
+        return (
+            <View style={[{marginVertical: marginVertical}, style]}>
+                <ImageBackground source={image} style={[globalStyles.box, localStyles.imageBackground]}>
+                    <WidgetHeader/>
+                    {children}
+                </ImageBackground>
+            </View>
+
+        )
+    }
+
+    if (!!gradient) {
+        return <GradientWidget/>
+    } else if (!!image) {
+        return <WidgetWithBackgroundImage/>
     } else {
-        return <DefaultWidget />
+        return <DefaultWidget/>
     }
 }
 
@@ -83,5 +97,11 @@ const createStyles = (theme = Themes.light) =>
             fontWeight: "bold",
             fontSize: normalize(19),
             alignSelf: "center",
+        },
+        imageBackground: {
+            flex: 1,
+            resizeMode: 'contain',
+            justifyContent: 'center',
+            overflow: 'hidden'
         }
     });
