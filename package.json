@@ -20,7 +20,7 @@
     "crypto-js": "^4.1.1",
     "eas-cli": "^0.47.0",
     "expo": "~44.0.0",
-    "expo-cli": "^5.2.0",
+    "expo-cli": "^6.0.1",
     "expo-constants": "~13.0.1",
     "expo-device": "^4.1.0",
     "expo-intent-launcher": "~10.1.0",
