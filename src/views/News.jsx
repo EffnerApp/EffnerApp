@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
 
-import {Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, Platform, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {decodeEntities, normalize, openUri, showToast} from "../tools/helpers";
 import Widget from "../components/Widget";
-import axios from "axios";
 import {parse} from "node-html-parser";
 import NewsPreloadItem from "../widgets/NewsPreloadItem";
+import Constants from "expo-constants";
+import {api} from "../tools/api";
 
 export default function NewsScreen() {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -16,8 +17,11 @@ export default function NewsScreen() {
 
     const [news, setNews] = useState([]);
 
+    const appVersion = Constants.manifest.version;
+    const os = Platform.OS;
+
     const loadData = async () => {
-        await axios.get('https://effner.de/wp-json/wp/v2/posts').then(async ({data}) => {
+        await api.get('https://effner.de/wp-json/wp/v2/posts', { withCredentials: true }).then(async ({data}) => {
 
             const news = await Promise.all(data.map(async (e, i) => {
                 const mediaUri = await getFeaturedMediaUri(e);
@@ -34,7 +38,7 @@ export default function NewsScreen() {
             }));
 
             setNews(news);
-        });
+        }).catch((e) => console.log(e.response.data))
     }
 
     const refresh = () => {
@@ -55,20 +59,22 @@ export default function NewsScreen() {
         if (!featuredMedia)
             return null;
 
-        const {data: meta} = await axios.get(featuredMedia);
+        try {
+            const {data: meta} = await api.get(featuredMedia, { withCredentials: true });
 
-        if (meta?.media_type === 'image') {
-            return meta?.media_details?.sizes?.thumbnail?.source_url;
+            if (meta?.media_type === 'image') {
+                return meta?.media_details?.sizes?.thumbnail?.source_url;
+            }
+        } catch (e) {
+            return null;
         }
-
-        return null;
     }
 
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
-                    {news?.length === 0 && [...Array(5).keys()].map((i) => <NewsPreloadItem key={i} />)}
+                    {news?.length === 0 && [...Array(5).keys()].map((i) => <NewsPreloadItem key={i}/>)}
                     {news.map(({title, content, mediaUri, postUri}, i) => {
                         return (
                             <TouchableOpacity key={i} onPress={() => openUri(postUri)}>

@@ -130,6 +130,12 @@ export default function SubstitutionsScreen({navigation, route}) {
                     {information && <InformationEntry data={information}/>}
                     {absentClasses?.length > 0 && <AbsentClassesEntry data={absentClasses}/>}
                 </View>
+                {(substitutions.length === 0 && !information && absentClasses?.length === 0) && (
+                    <View style={[globalStyles.row, {justifyContent: 'center', marginVertical: 20}]}>
+                        <View style={{alignSelf: 'center'}}><Icon name="info" color={theme.colors.font} /></View>
+                        <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Keine Einträge.</Text></View>
+                    </View>
+                )}
                 <View style={[globalStyles.row, localStyles.footer]}>
                     {updatedAt && (
                         <View style={{alignSelf: 'center'}}>
