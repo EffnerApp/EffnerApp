@@ -13,12 +13,12 @@ const registerForPushNotifications = async () => {
 
         let finalStatus = existingStatus;
 
-        if (existingStatus !== "granted") {
+        if (existingStatus !== 'granted') {
             const {status} = await Notifications.requestPermissionsAsync();
             finalStatus = status;
         }
 
-        if (finalStatus == "granted") {
+        if (finalStatus !== 'granted') {
 
             // failed, check if we're on android 13
 
