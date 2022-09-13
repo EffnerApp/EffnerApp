@@ -34,10 +34,8 @@ const registerForPushNotifications = async () => {
                         {
                             text: 'Open settings',
                             onPress: async () => {
-                                const pkg = Constants.manifest.releaseChannel ? Constants.manifest.android.package : 'host.exp.exponent';
-
                                 await startActivityAsync('android.settings.APPLICATION_DETAILS_SETTINGS', {
-                                    data: 'package:' + pkg
+                                    data: 'package:de.effnerapp.effner'
                                 });
                             }
                         }
