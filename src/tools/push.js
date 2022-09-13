@@ -22,7 +22,7 @@ const registerForPushNotifications = async () => {
 
             // failed, check if we're on android 13
 
-            if (!runsOn('android') && OS_VERSION.startsWith('13')) {
+            if (runsOn('android') && OS_VERSION.startsWith('13')) {
                 Alert.alert(
                     'Failed to get push token for push notifications.',
                     'Your device is running Android ' + OS_VERSION + '. If you want to receive push notifications, you need to enable it in settings.',
