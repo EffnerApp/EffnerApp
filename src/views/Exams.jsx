@@ -115,6 +115,12 @@ export default function ExamsScreen({navigation, route}) {
                         ))}
                     </View>
                     {examsHistory.length > 0 && <Disclaimer />}
+                    {(upcomingExams.length === 0 && examsHistory.length === 0) && (
+                        <View style={[globalStyles.row, {justifyContent: 'center', marginVertical: 20}]}>
+                            <View style={{alignSelf: 'center'}}><Icon name="info" color={theme.colors.font} /></View>
+                            <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Keine Einträge.</Text></View>
+                        </View>
+                    )}
                     <View style={[globalStyles.row, localStyles.footer]}>
                         {updatedAt && (
                             <View style={{alignSelf: 'center'}}>
