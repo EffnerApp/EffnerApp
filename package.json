@@ -22,7 +22,7 @@
     "expo": "~44.0.0",
     "expo-cli": "^5.2.0",
     "expo-constants": "~13.0.1",
-    "expo-device": "^4.1.0",
+    "expo-device": "^5.0.0",
     "expo-intent-launcher": "~10.1.0",
     "expo-linear-gradient": "~11.0.3",
     "expo-navigation-bar": "~1.1.1",
