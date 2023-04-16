@@ -46,7 +46,7 @@ export default function WeekView({timetable, originalTimetable, theme: timetable
                         <View key={i} style={localStyles.timetableDayEntry}>
                             <View>
                                 <Text style={[globalStyles.text, localStyles.textBoldCenter]}>
-                                    {getWeekDay(i)}
+                                    {getWeekDay(i + 1) /* +1 turns the 0 - 5 to their days in a javascript week. */}
                                 </Text>
                             </View>
                             {timetable?.lessons[i].filter((lesson, j) => j < currentDepth)

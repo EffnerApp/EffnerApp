@@ -20,9 +20,6 @@ export default function TimetableScreen({navigation, route}) {
 
     const isFocused = useIsFocused();
 
-    let currentWeekDay = new Date().getDay() - 1;
-    currentWeekDay = (currentWeekDay < 0 || currentWeekDay > 4) ? 0 : currentWeekDay;
-
     const [refreshing, setRefreshing] = useState(false);
 
     const [subjects, setSubjects] = useState([]);
@@ -173,7 +170,7 @@ export default function TimetableScreen({navigation, route}) {
                                 <WeekView timetable={timetable} originalTimetable={originalTimetable} theme={timetableTheme} editModeEnabled={editModeEnabled} onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                         )}
                         {currentView === 1 && (
-                            <DayView timetable={timetable} originalTimetable={originalTimetable} subjects={subjects} theme={timetableTheme} credentials={credentials} class={sClass} weekDay={currentWeekDay} editModeEnabled={editModeEnabled}
+                            <DayView timetable={timetable} originalTimetable={originalTimetable} subjects={subjects} theme={timetableTheme} credentials={credentials} class={sClass} editModeEnabled={editModeEnabled}
                                      onRequestEditItem={(item) => timetableEditor.current.editItem(item)}/>
                         )}
                     </View>
