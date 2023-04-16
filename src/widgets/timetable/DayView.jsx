@@ -36,10 +36,11 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
 
     useEffect(() => {
         if(editModeEnabled) return;
-        setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
 
         const currentWeekDay = new Date().getDay(); // 0 ) sunday, 1 = monday, ...
         const delta = currentWeekDay > 5 ? 2 : currentWeekDay === 0 ? 1 : 0; // if it's greater than 5 that means saturday -> skip 2 days. 0 means sunday -> skip 1
+
+        setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[(currentWeekDay + delta) % 7]]}));
 
         const selectedDate = moment().add({days: delta});
         const dateFormatted = selectedDate.format("DD.MM.YYYY");
@@ -65,7 +66,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
             }).catch(e =>
             showToast("Error while loading data.", e.message, "error")
         );
-    }, [timetable, weekDay]);
+    }, [timetable]);
 
 
     useEffect(() => {
