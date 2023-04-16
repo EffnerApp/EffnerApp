@@ -127,7 +127,9 @@ const decodeEntities = (encodedString) => {
     });
 };
 
-const weekDays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+// turns a day in int format into a german day name abkürzung.
+// 0 equals Sunday, 1 - 6 equal Monday till Friday.
+const weekDays = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 const getWeekDay = (i) => {
     return weekDays[i];
 }

@@ -24,7 +24,7 @@ import moment from "moment";
 import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
 
-export default function DayView({timetable, originalTimetable, subjects, theme: timetableTheme, credentials, class: sClass, weekDay, editModeEnabled, onRequestEditItem = () => null}) {
+export default function DayView({timetable, originalTimetable, subjects, theme: timetableTheme, credentials, class: sClass, editModeEnabled, onRequestEditItem = () => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const navigation = useNavigation();
@@ -38,18 +38,19 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
         if(editModeEnabled) return;
         setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
 
-        const currentWeekDay = new Date().getDay() - 1;
-        const delta = Math.abs(currentWeekDay - weekDay);
-        const next = delta === 0 ? 0 : 7 - delta;
+        const currentWeekDay = new Date().getDay(); // 0 ) sunday, 1 = monday, ...
+        const delta = currentWeekDay > 5 ? 2 : currentWeekDay === 0 ? 1 : 0; // if it's greater than 5 that means saturday -> skip 2 days. 0 means sunday -> skip 1
+
+        const selectedDate = moment().add({days: delta});
+        const dateFormatted = selectedDate.format("DD.MM.YYYY");
 
         loadDSBTimetable(credentials)
             .then(({data}) => {
                 const {dates, days} = data;
 
-                const selectedDate = moment().add({days: next}).format("DD.MM.YYYY");
-                setTitle("Stundenplan für " + getWeekDay(weekDay) + ", den " + selectedDate);
+                setTitle("Stundenplan für " + getWeekDay(selectedDate.getDay()) + ", den " + dateFormatted);
 
-                const substitutions = days?.get(selectedDate)?.filter(entry => validateClass(sClass, entry.name))?.map(e => e.items);
+                const substitutions = days?.get(dateFormatted)?.filter(entry => validateClass(sClass, entry.name))?.map(e => e.items);
 
                 let tmp = [];
                 if (substitutions) {
