@@ -33,23 +33,24 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
     const [substitutions, setSubstitutions] = useState([]);
     const [title, setTitle] = useState("");
 
+    const currentWeekDay = new Date().getDay(); // 0 ) sunday, 1 = monday, ...
+    const delta = currentWeekDay > 5 ? 2 : currentWeekDay === 0 ? 1 : 0; // if it's greater than 5 that means saturday -> skip 2 days. 0 means sunday -> skip 1
+
+    const patchedWorkDay = (currentWeekDay + 1 + delta) % 7;
 
     useEffect(() => {
         if(editModeEnabled) return;
-
-        const currentWeekDay = new Date().getDay(); // 0 ) sunday, 1 = monday, ...
-        const delta = currentWeekDay > 5 ? 2 : currentWeekDay === 0 ? 1 : 0; // if it's greater than 5 that means saturday -> skip 2 days. 0 means sunday -> skip 1
-
-        setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[(currentWeekDay + delta) % 7]]}));
+        setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[patchedWorkDay]]}));
 
         const selectedDate = moment().add({days: delta});
+        selectedDate.weekday()
         const dateFormatted = selectedDate.format("DD.MM.YYYY");
 
         loadDSBTimetable(credentials)
             .then(({data}) => {
                 const {dates, days} = data;
 
-                setTitle("Stundenplan für " + getWeekDay(selectedDate.getDay()) + ", den " + dateFormatted);
+                setTitle("Stundenplan für " + getWeekDay(selectedDate.day()) + ", den " + dateFormatted);
 
                 const substitutions = days?.get(dateFormatted)?.filter(entry => validateClass(sClass, entry.name))?.map(e => e.items);
 
@@ -71,9 +72,9 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
 
     useEffect(() => {
         if(editModeEnabled) {
-            setCurrentDepth(maxTimetableDepth({lessons: [originalTimetable?.lessons?.[weekDay]]}));
+            setCurrentDepth(maxTimetableDepth({lessons: [originalTimetable?.lessons?.[patchedWorkDay]]}));
         } else {
-            setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[weekDay]]}));
+            setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[patchedWorkDay]]}));
         }
     }, [editModeEnabled]);
 
@@ -92,7 +93,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
                     </View>
                     <View style={localStyles.timetable}>
                         <View style={localStyles.timetableDayEntry}>
-                            {timetable?.lessons[weekDay]
+                            {timetable?.lessons[patchedWorkDay]
                                 .filter((lesson, i) => i < currentDepth)
                                 .map((subject, i) => {
                                     // why is period a string?
