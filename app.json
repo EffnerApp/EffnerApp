@@ -2,7 +2,7 @@
   "expo": {
     "name": "EffnerApp",
     "slug": "EffnerApp",
-    "version": "3.2.9",
+    "version": "3.3.0",
     "orientation": "default",
     "entryPoint": "index.js",
     "icon": "./@resources/default_icon.png",
@@ -18,14 +18,14 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "66",
+      "buildNumber": "67",
       "userInterfaceStyle": "automatic",
       "bundleIdentifier": "de.effnerapp.effner",
       "supportsTablet": true
     },
     "android": {
       "package": "de.effnerapp.effner",
-      "versionCode": 120,
+      "versionCode": 121,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./@resources/android_icon.png",
@@ -43,7 +43,25 @@
           "icon": "./@resources/push_icon.png",
           "color": "#ffffff"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.0"
+          }
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "906a3c44-1378-4fe9-8633-34076d1f1fe1"
+      }
+    }
   }
 }
