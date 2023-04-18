@@ -50,6 +50,9 @@
           "compileSdkVersion": 31,
           "targetSdkVersion": 31
         }
+      ],
+      [ 
+        "./plugins/androidManifestConfig.js"
       ]
     ],
     "extra": {
