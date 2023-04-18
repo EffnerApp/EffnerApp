@@ -36,14 +36,13 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
     const currentWeekDay = new Date().getDay(); // 0 ) sunday, 1 = monday, ...
     const delta = currentWeekDay > 5 ? 2 : currentWeekDay === 0 ? 1 : 0; // if it's greater than 5 that means saturday -> skip 2 days. 0 means sunday -> skip 1
 
-    const patchedWorkDay = (currentWeekDay - 1 + delta) % 7;
+    const lessonWeekDay = (currentWeekDay - 1 + delta) % 7;
 
     useEffect(() => {
         if(editModeEnabled) return;
-        setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[patchedWorkDay]]}));
+        setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[lessonWeekDay]]}));
 
         const selectedDate = moment().add({days: delta});
-        selectedDate.weekday()
         const dateFormatted = selectedDate.format("DD.MM.YYYY");
 
         loadDSBTimetable(credentials)
@@ -72,9 +71,9 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
 
     useEffect(() => {
         if(editModeEnabled) {
-            setCurrentDepth(maxTimetableDepth({lessons: [originalTimetable?.lessons?.[patchedWorkDay]]}));
+            setCurrentDepth(maxTimetableDepth({lessons: [originalTimetable?.lessons?.[lessonWeekDay]]}));
         } else {
-            setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[patchedWorkDay]]}));
+            setCurrentDepth(maxTimetableDepth({lessons: [timetable?.lessons?.[lessonWeekDay]]}));
         }
     }, [editModeEnabled]);
 
@@ -93,7 +92,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
                     </View>
                     <View style={localStyles.timetable}>
                         <View style={localStyles.timetableDayEntry}>
-                            {timetable?.lessons[patchedWorkDay]
+                            {timetable?.lessons[lessonWeekDay]
                                 .filter((lesson, i) => i < currentDepth)
                                 .map((subject, i) => {
                                     // why is period a string?
