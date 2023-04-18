@@ -36,7 +36,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
     const currentWeekDay = new Date().getDay(); // 0 ) sunday, 1 = monday, ...
     const delta = currentWeekDay > 5 ? 2 : currentWeekDay === 0 ? 1 : 0; // if it's greater than 5 that means saturday -> skip 2 days. 0 means sunday -> skip 1
 
-    const patchedWorkDay = (currentWeekDay + 1 + delta) % 7;
+    const patchedWorkDay = (currentWeekDay - 1 + delta) % 7;
 
     useEffect(() => {
         if(editModeEnabled) return;
