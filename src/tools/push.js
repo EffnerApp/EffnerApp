@@ -48,15 +48,15 @@ const registerForPushNotifications = async () => {
             return;
         }
 
+        if (Platform.OS === "android") {
+            await Notifications.setNotificationChannelAsync("default", {
+                name: "default",
+                importance: Notifications.AndroidImportance.MAX
+            });
+        }
+
         pushToken = await getPushToken();
         console.log('recv pushTokeyn ... ' + pushToken);
-    }
-
-    if (Platform.OS === "android") {
-        await Notifications.setNotificationChannelAsync("default", {
-            name: "default",
-            importance: Notifications.AndroidImportance.MAX
-        });
     }
 
     return pushToken;
