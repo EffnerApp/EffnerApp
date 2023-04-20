@@ -112,7 +112,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
                                                     {i + 1}
                                                 </Text>
                                             </View>
-                                            <TouchableOpacity disabled={!editModeEnabled} onPress={() => onRequestEditItem({day: weekDay, lesson: i})} style={[localStyles.timetableEntry, {backgroundColor: getCellColor(timetableTheme, {meta: timetable.meta, subject})}]}>
+                                            <TouchableOpacity disabled={!editModeEnabled} onPress={() => onRequestEditItem({day: lessonWeekDay, lesson: i})} style={[localStyles.timetableEntry, {backgroundColor: getCellColor(timetableTheme, {meta: timetable.meta, subject})}]}>
                                                 {/* for the correct cell-size, we need to put at least a single space if the cell should be empty */}
                                                 <Text style={[globalStyles.text, localStyles.timetableEntryText, filteredSubstitutions.length > 0 ? {textDecorationLine: "line-through", textDecorationStyle: "solid",} : {}]}>
                                                     {getSubjectName(subjects, subject) || " "}
