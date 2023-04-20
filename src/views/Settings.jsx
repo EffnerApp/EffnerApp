@@ -5,7 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import Picker from "../components/Picker";
-import {navigateTo, openUri, showToast} from "../tools/helpers";
+import {navigateTo, openUri, saveAndLoadClass, showToast} from "../tools/helpers";
 import {getPushToken, revokePushToken, subscribeToChannel} from "../tools/push";
 import {BASE_URL_GO} from "../tools/resources";
 import {isDevice} from "expo-device";
@@ -36,6 +36,8 @@ export default function SettingsScreen({navigation, route}) {
     const [classes, setClasses] = useState([sClass]);
     const [selectedClass, setClass] = useState(sClass);
 
+    const [historyEnabled, setHistoryEnabled] = useState(false);
+
     // const [parentScrollEnabled, setParentScrollEnabled] = useState(true);
 
     const appVersion = Constants.manifest.version
@@ -64,6 +66,8 @@ export default function SettingsScreen({navigation, route}) {
         } else {
             setNotificationsAvailable(false);
         }
+
+        load("CLASS_HISTORY_ENABLED").then(res => setNotificationsAvailable(res))
 
     }, []);
 
@@ -110,7 +114,7 @@ export default function SettingsScreen({navigation, route}) {
     }, [selectedClass]);
 
     const showAbout = () => {
-        Alert.alert('Über die App', 'by Sebastian Müller, Luis Bros & Jonathan Berger\n\nMitwirkende: Julian Knoops\n\n© ' + new Date().getFullYear() + ' EffnerApp ❤');
+        Alert.alert('Über die App', 'by Sebastian Müller, Luis Bros, Yannick Z. & Jonathan Berger\n\nMitwirkende: Julian Knoops\n\n© ' + new Date().getFullYear() + ' EffnerApp ❤');
     }
 
     const confirmClassChange = (to) => {
@@ -129,14 +133,20 @@ export default function SettingsScreen({navigation, route}) {
                 {
                     text: 'Ja',
                     onPress: () => {
-                        save('APP_CLASS', to)
-                            .then(() => navigateTo(navigation, 'Splash'))
-                            .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+                        saveAndLoadClass(navigation, to)
                     },
                 },
             ],
             {cancelable: false}
         );
+    }
+
+    const toggleClassHistory = () => {
+        setHistoryEnabled(state => {
+            // write in the storage
+            save("CLASS_HISTORY_ENABLED", !state).catch(console.error)
+            return !historyEnabled
+        })
     }
 
     const confirmLogout = () => {
@@ -297,6 +307,25 @@ export default function SettingsScreen({navigation, route}) {
                             <View>
                                 <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
                             </View>
+                            <TouchableOpacity>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Klassen-History
+                                        </Text>
+                                    </View>
+                                    <Switch
+                                        trackColor={{
+                                            false: "#767577",
+                                            true: theme.colors.primary,
+                                        }}
+                                        thumbColor="#fff"
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={toggleClassHistory}
+                                        value={historyEnabled}
+                                    />
+                                </View>
+                            </TouchableOpacity>
                             <View style={localStyles.line}/>
                             <TouchableOpacity onPress={confirmLogout}>
                                 <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
@@ -311,7 +340,7 @@ export default function SettingsScreen({navigation, route}) {
                     </Widget>
                     <View style={{flexDirection: 'column', justifyContent: "center", paddingVertical: 20}}>
                         <Text style={[globalStyles.text, {textAlign: 'center'}]}>© {new Date().getFullYear()} EffnerApp</Text>
-                        <Text style={[globalStyles.text, {textAlign: 'center', paddingTop: 5}]}>Sebastian Müller, Luis Bros & Jonathan Berger</Text>
+                        <Text style={[globalStyles.text, {textAlign: 'center', paddingTop: 5}]}>Sebastian Müller, Luis Bros, Yannick Z. & Jonathan Berger</Text>
                         <Text style={[globalStyles.text, {textAlign: 'center', paddingTop: 5, color: '#8f8f8f'}]}>Mitwirkende: Julian Knoops</Text>
                     </View>
                 </View>
