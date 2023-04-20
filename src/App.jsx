@@ -21,6 +21,7 @@ import {registerForPushNotifications} from "./tools/push";
 import {save} from "./tools/storage";
 import NewsScreen from "./views/News";
 import InformationScreen from "./views/Information";
+import TitleComponent from "./components/TitleComponent";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -71,7 +72,7 @@ function ThemedApp() {
     )
 }
 
-function Main({route: stackRoute}) {
+function Main({navigation, route: stackRoute}) {
     const theme = useTheme();
     const options = useMemo(() => {
         return {
@@ -85,7 +86,9 @@ function Main({route: stackRoute}) {
                 backgroundColor: theme.colors.surface,
                 borderTopColor: 'transparent'
             },
-            headerRight: () => <GlobalHeader/>
+            headerRight: () => <GlobalHeader/>,
+            headerTitleAlign: 'left',
+            headerTitle: (props) => <TitleComponent title={props.children} sClass={stackRoute.params.sClass} navigation={navigation} showBadge={props.children !== "Einstellungen"}/>
         };
     }, [theme]);
 

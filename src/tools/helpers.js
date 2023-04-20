@@ -10,6 +10,7 @@ import {DeviceType} from "expo-device";
 import {api} from "./api";
 
 import _ from 'lodash';
+import {load, save} from "./storage";
 // _ is 'low-dash' for the cool kids, and I'm definitely a cool kid ^^
 // ~ sebi, 02.04.2022
 
@@ -32,6 +33,34 @@ const navigateTo = (navigation, to, params = {}) => {
         index: 0,
         routes: [{name: to, params}]
     }));
+}
+
+const saveAndLoadClass = (navigation, c) => {
+    save('APP_CLASS', c)
+        .then(() => {
+            saveRecentClass(c)
+                .catch(err => console.log(err))
+                .finally(() => navigateTo(navigation, 'Splash'))
+        })
+        .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+}
+
+const saveRecentClass = (c) => {
+    return new Promise((resolve, reject) => {
+        load("RECENT_CLASSES").then(recent => {
+            if (! recent) recent = []
+
+            if (recent.includes(c))
+                recent = recent.filter(x => x !== c)
+
+            recent.push(c)
+
+            console.log("saving recent_classes -> " + recent)
+
+            // save the recent class
+            save("RECENT_CLASSES", recent).then(() => resolve()).catch(err => reject(err))
+        }).catch(err => reject(err))
+    })
 }
 
 const getPlatform = () => {
@@ -332,5 +361,6 @@ export {
     clone,
     getSubjectName,
     getFullWeekDay,
-    withAlpha
+    withAlpha,
+    saveAndLoadClass
 }
