@@ -12,7 +12,6 @@ import {
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Button from "../components/Button";
-import {SvgXml} from "react-native-svg";
 
 import logo from "../assets/effnerapp_logo.svg";
 
@@ -22,6 +21,7 @@ import {Picker} from "@react-native-picker/picker";
 import {BASE_URL_GO} from "../tools/resources";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
+import {SvgXml} from "react-native-svg";
 
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);

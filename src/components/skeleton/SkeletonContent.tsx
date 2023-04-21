@@ -304,7 +304,7 @@ const SkeletonContent: React.FunctionComponent<ISkeletonContentProps> = ({
                 inputRange: [0, 1],
                 outputRange: yOutputRange
             });
-            // swapping the translates if width is the main dim
+            // swapping the translate-x and y if width is the main dim
             if (mainDimension === boneWidth)
                 [translateX, translateY] = [translateY, translateX];
             const rotate = `${rotateAngle}rad`;

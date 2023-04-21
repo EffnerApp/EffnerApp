@@ -50,17 +50,13 @@ export default class DSBMobile {
     }
 
     async fetchMetaData() {
-        try {
-            const {data} = await axios.get(`${this.BASE_URL}/dsbtimetables?authid=${this.token}`);
+        const {data} = await axios.get(`${this.BASE_URL}/dsbtimetables?authid=${this.token}`);
 
-            if (data['Message']) {
-                throw new Error('dsbError: ' + data['Message']);
-            }
-
-            return data;
-        } catch (e) {
-            throw e;
+        if (data['Message']) {
+            throw new Error('dsbError: ' + data['Message']);
         }
+
+        return data;
     }
 
     async parseTimetable(url) {

@@ -55,7 +55,7 @@ function ThemedApp() {
             StatusBar.setTranslucent(false);
             StatusBar.setBackgroundColor(theme.colors.surface);
 
-            NavigationBar.setBackgroundColorAsync(theme.colors.surface);
+            NavigationBar.setBackgroundColorAsync(theme.colors.surface).catch(console.error);
         }
 
         StatusBar.setBarStyle(theme.statusbar);
@@ -88,15 +88,18 @@ function Main({navigation, route: stackRoute}) {
             },
             headerRight: () => <GlobalHeader/>,
             headerTitleAlign: 'left',
-            headerTitle: (props) => <TitleComponent title={props.children} sClass={stackRoute.params.sClass} navigation={navigation} showBadge={props.children !== "Einstellungen"}/>
+            headerTitle: (props) => <TitleComponent title={props.children} sClass={stackRoute.params.sClass} navigation={navigation}
+                                                    showBadge={props.children !== "Einstellungen"}/>
         };
     }, [theme]);
+
+    const {screen} = stackRoute.params || {screen: "Home"}
 
     return (
         <Tab.Navigator screenOptions={({route}) => ({
             ...options,
             tabBarButton: excludeScreens(route, ['News', 'Information', 'Settings']),
-        })}>
+        })} initialRouteName={screen}>
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
             }} initialParams={stackRoute.params}/>
