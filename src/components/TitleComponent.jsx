@@ -5,7 +5,7 @@ import {Themes} from "../theme/ColorThemes";
 import {Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import Badge from "./Badge";
 import {load} from "../tools/storage";
-import {navigateTo, saveAndLoadClass} from "../tools/helpers";
+import {navigateTo, runsOn, saveAndLoadClass} from "../tools/helpers";
 import {useRoute} from "@react-navigation/native";
 
 export default function TitleComponent({title, sClass, navigation, showBadge}) {
@@ -50,7 +50,15 @@ function ClassSelect({localStyle, show, close, navigation}) {
     const loadClass = c => {
         close()
 
-        saveAndLoadClass(navigation, c, route.name)
+        // iOS is stupid and crashes if you try to navigate while the modal is still opened, so we need to wait to
+        // make sure the state update triggered by close() has actually closed the modal.
+        if (runsOn("ios")) {
+            setTimeout(() => {
+                saveAndLoadClass(navigation, c, route.name)
+            }, 500)
+        } else {
+            saveAndLoadClass(navigation, c, route.name)
+        }
     }
 
     return <Modal visible={show} transparent={true} onRequestClose={() => close()}>
