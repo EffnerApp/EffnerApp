@@ -4,7 +4,6 @@
     "slug": "EffnerApp",
     "version": "3.3.3",
     "orientation": "default",
-    "entryPoint": "index.js",
     "icon": "./@resources/default_icon.png",
     "splash": {
       "image": "./@resources/splash.png",
@@ -43,16 +42,6 @@
           "icon": "./@resources/push_icon.png",
           "color": "#ffffff"
         }
-      ],
-      [
-        "./plugins/androidConfig.js",
-        {
-          "compileSdkVersion": 31,
-          "targetSdkVersion": 31
-        }
-      ],
-      [ 
-        "./plugins/androidManifestConfig.js"
       ]
     ],
     "extra": {

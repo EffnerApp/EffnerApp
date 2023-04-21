@@ -35,27 +35,28 @@ const navigateTo = (navigation, to, params = {}) => {
 }
 
 const saveAndLoadClass = (navigation, c, next = null) => {
-    save('APP_CLASS', c)
-        .then(() => {
-            saveRecentClass(c)
-                .catch(err => console.log(err))
-                .finally(() => navigateTo(navigation, 'Splash', {nextScreen: next}))
-        })
-        .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+    load("APP_CLASS").then(currentClass => {
+        save('APP_CLASS', c)
+            .then(() => {
+                saveRecentClass(c, currentClass)
+                    .catch(err => console.log(err))
+                    .finally(() => navigateTo(navigation, 'Splash', {nextScreen: next}))
+            })
+            .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+    }).catch(console.log)
 }
 
-const saveRecentClass = (c) => {
+const saveRecentClass = (newClass, oldClass) => {
     return new Promise((resolve, reject) => {
-        load("RECENT_CLASSES").then(async recent => {
+        load("RECENT_CLASSES").then(recent => {
             if (! recent) {
-                let oldClass = await load("APP_CLASS")
-                recent = [oldClass] // recent = current
+                recent = [oldClass]
             }
 
-            if (recent.includes(c))
-                recent = recent.filter(x => x !== c)
+            if (recent.includes(newClass))
+                recent = recent.filter(x => x !== newClass)
 
-            recent.push(c)
+            recent.push(newClass)
 
             console.log("saving recent_classes -> " + recent)
 
