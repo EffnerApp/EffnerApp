@@ -1,12 +1,12 @@
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import React from "react";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import Badge from "./Badge";
-import {loadClasses} from "../tools/api";
 import {load} from "../tools/storage";
 import {saveAndLoadClass} from "../tools/helpers";
+import {useRoute} from "@react-navigation/native";
 
 export default function TitleComponent({title, sClass, navigation, showBadge}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -21,7 +21,7 @@ export default function TitleComponent({title, sClass, navigation, showBadge}) {
                         setClassSelectOpened(!classSelectOpened)
                     }
                 }).catch(console.error)}>
-                    <Badge text={sClass} color={"#26bd90"}/>
+                    <Badge text={sClass} color={theme.colors.surfaceSecondary}/>
                 </TouchableOpacity>}
                 <Text style={[globalStyles.text, localStyles.title]}>{title}</Text>
             </View>
@@ -39,6 +39,8 @@ function ClassIcon({sClass, localStyles}) {
 function ClassSelect({localStyle, show, close, navigation}) {
     const [recentClasses, setRecentClasses] = useState([])
 
+    const route = useRoute()
+
     useEffect(() => {
         // load classes
         load("RECENT_CLASSES").then(recent => {
@@ -50,22 +52,29 @@ function ClassSelect({localStyle, show, close, navigation}) {
     }, [])
 
     const loadClass = c => {
-        saveAndLoadClass(navigation, c)
+        saveAndLoadClass(navigation, c, route.name)
     }
 
     return <Modal visible={show} transparent={true} onRequestClose={() => close()}>
         <TouchableWithoutFeedback onPress={close}>
             <View style={localStyle.modalWrapper}>
-                <View style={localStyle.classSelectWrapper}>
-                    <Text style={localStyle.classSelectHeadline}>Deine letzten Klassen</Text>
-                    <View style={localStyle.classSelectContainer}>
-                        {recentClasses.length > 0 ? recentClasses.reverse().map((c, index) => (
-                            <TouchableOpacity onPress={() => loadClass(c)} key={c}>
-                                <ClassIcon sClass={c} localStyles={localStyle}/>
-                            </TouchableOpacity>
-                        )) : <Text>No recent classes</Text>}
+                {recentClasses.length > 0 ? (
+                    <View style={localStyle.classSelectWrapper}>
+                        <Text style={localStyle.classSelectHeadline}>Deine letzten Klassen</Text>
+                        <View style={localStyle.classSelectContainer}>
+                            {recentClasses.reverse().map((c, index) => (
+                                <TouchableOpacity onPress={() => loadClass(c)} key={c}>
+                                    <ClassIcon sClass={c} localStyles={localStyle}/>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </View>
-                </View>
+                ) : (
+                    <View style={localStyle.classSelectWrapper}>
+                        <Text style={localStyle.classSelectHeadline}>Keine kürzlich geladenen Klassen</Text>
+                    </View>
+                )}
+
             </View>
         </TouchableWithoutFeedback>
     </Modal>
@@ -86,14 +95,14 @@ const createStyles = (theme = Themes.light) =>
         modalWrapper: {
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
             alignItems: "flex-start",
             height: "100%",
             width: "100%",
         },
         classSelectWrapper: {
             backgroundColor: theme.colors.surface,
-            width: "90%",
+            width: "auto",
+            minWidth: 200,
             borderRadius: 10,
             padding: 5,
             marginTop: 60,
@@ -110,10 +119,11 @@ const createStyles = (theme = Themes.light) =>
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 10,
-            margin: 1,
+            margin: 3,
+            marginTop: 6
         },
         classText: {
-            fontSize: 25,
+            fontSize: 22,
             color: theme.colors.font
         },
         newColor: {
@@ -121,5 +131,6 @@ const createStyles = (theme = Themes.light) =>
         },
         classSelectHeadline: {
             color: theme.colors.font,
+            fontSize: 18
         }
     });

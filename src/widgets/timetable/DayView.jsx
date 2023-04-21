@@ -96,7 +96,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
                                 .filter((lesson, i) => i < currentDepth)
                                 .map((subject, i) => {
                                     // why is period a string?
-                                    const filteredSubstitutions = substitutions.filter(e => e.period == i + 1);
+                                    const filteredSubstitutions = substitutions.filter(e => e.period === i + 1);
                                     return (
                                         <View key={i} style={globalStyles.row}>
                                             <View

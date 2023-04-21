@@ -10,13 +10,15 @@ import {load} from "../tools/storage";
 import {performStorageConversion} from "../tools/compatibility";
 import AnimatedIcon from "../widgets/AnimatedIcon";
 
-export default function SplashScreen({navigation}) {
+export default function SplashScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
 
     const isFocused = useIsFocused();
 
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+    const {nextScreen} = route.params || {};
 
     useEffect(() => {
         AppState.addEventListener('change', _handleAppStateChange);
@@ -94,7 +96,12 @@ export default function SplashScreen({navigation}) {
 
                 try {
                     await login(credentials, sClass);
-                    navigateTo(navigation, 'Main', {credentials, sClass});
+
+                    if (nextScreen) {
+                        navigateTo(navigation, 'Main', {credentials, sClass, screen: nextScreen});
+                    } else {
+                        navigateTo(navigation, 'Main', {credentials, sClass});
+                    }
                 } catch (e) {
                     if (e.message === 'Network Error' || e.response?.status >= 500) {
                         setError(e);
