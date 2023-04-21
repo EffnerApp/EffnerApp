@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {RefreshControl, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {clamp, clone, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
+import {clone, getLevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import moment from "moment";
 import {load, save} from "../tools/storage";
 import {useIsFocused} from "@react-navigation/native";
@@ -125,7 +125,7 @@ export default function TimetableScreen({navigation, route}) {
                 const tmp = {...timetable};
                 items.forEach(([day, lesson]) => tmp.lessons[day][lesson] = selectedSubjects.join(' '));
                 setTimetable(tmp);
-                save('APP_CUSTOMIZED_TIMETABLE', tmp);
+                save('APP_CUSTOMIZED_TIMETABLE', tmp).catch(console.error);
             }}/>
             <View style={globalStyles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}/>}>
                 <View style={globalStyles.contentWrapper}>
