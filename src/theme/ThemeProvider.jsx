@@ -21,7 +21,7 @@ export function ThemeProvider({children}) {
     }, []);
 
     const updateTheme = useCallback(theme => {
-        save("theme", theme);
+        save("theme", theme).catch(console.error);
         setTheme(theme);
     });
 
