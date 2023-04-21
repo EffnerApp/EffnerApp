@@ -13,7 +13,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Button from "../components/Button";
 
-// import logo from "../assets/effnerapp_logo.svg";
+import logo from "../assets/effnerapp_logo.svg";
 
 import {loadClasses, login} from "../tools/api";
 import {navigateTo, openUri, runsOn, showToast} from "../tools/helpers";
@@ -21,6 +21,7 @@ import {Picker} from "@react-native-picker/picker";
 import {BASE_URL_GO} from "../tools/resources";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
+import {SvgXml} from "react-native-svg";
 
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -129,7 +130,7 @@ export default function LoginScreen({navigation, route}) {
                     <KeyboardAvoidingView style={localStyles.keyboardAvoiding} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                         <View style={localStyles.logoOuterContainer}>
                             <View style={localStyles.logoContainer}>
-                                {/*<SvgXml style={{alignSelf: "center"}} xml={logo} width={100} height={100}/>*/}
+                                <SvgXml style={{alignSelf: "center"}} xml={logo} width={100} height={100}/>
                             </View>
                         </View>
 
