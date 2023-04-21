@@ -16,11 +16,7 @@ export default function TitleComponent({title, sClass, navigation, showBadge}) {
     return (
         <View>
             <View style={localStyles.titleContainer}>
-                {showBadge && <TouchableOpacity onPress={() => load("CLASS_HISTORY_ENABLED").then(res => {
-                    if (res) {
-                        setClassSelectOpened(!classSelectOpened)
-                    }
-                }).catch(console.error)}>
+                {showBadge && <TouchableOpacity onPress={() => setClassSelectOpened(!classSelectOpened)}>
                     <Badge text={sClass} color={theme.colors.surfaceSecondary}/>
                 </TouchableOpacity>}
                 <Text style={[globalStyles.text, localStyles.title]}>{title}</Text>

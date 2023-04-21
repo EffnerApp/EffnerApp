@@ -88,7 +88,8 @@ function Main({navigation, route: stackRoute}) {
             },
             headerRight: () => <GlobalHeader/>,
             headerTitleAlign: 'left',
-            headerTitle: (props) => <TitleComponent title={props.children} sClass={stackRoute.params.sClass} navigation={navigation} showBadge={props.children !== "Einstellungen"}/>
+            headerTitle: (props) => <TitleComponent title={props.children} sClass={stackRoute.params.sClass} navigation={navigation}
+                                                    showBadge={props.children !== "Einstellungen"}/>
         };
     }, [theme]);
 
