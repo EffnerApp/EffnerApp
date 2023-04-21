@@ -92,11 +92,13 @@ function Main({navigation, route: stackRoute}) {
         };
     }, [theme]);
 
+    const {screen} = stackRoute.params || {screen: "Home"}
+
     return (
         <Tab.Navigator screenOptions={({route}) => ({
             ...options,
             tabBarButton: excludeScreens(route, ['News', 'Information', 'Settings']),
-        })}>
+        })} initialRouteName={screen}>
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
             }} initialParams={stackRoute.params}/>
