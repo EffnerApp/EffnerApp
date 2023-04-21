@@ -77,8 +77,9 @@ export default function SplashScreen({navigation}) {
         Alert.alert(title, message, actions);
     }
 
-    useEffect(() => {
-        (async () => {
+    // TODO: fix warning
+    useEffect(async () => {
+        async function initialize() {
             await initDevice();
             setError(undefined);
 
@@ -117,7 +118,9 @@ export default function SplashScreen({navigation}) {
                     navigateTo(navigation, 'Login');
                 }
             }
-        })();
+        }
+
+        await initialize();
     }, [isFocused, retryState]);
 
     useEffect(() => {
