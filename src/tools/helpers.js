@@ -35,20 +35,23 @@ const navigateTo = (navigation, to, params = {}) => {
     }));
 }
 
-const saveAndLoadClass = (navigation, c) => {
+const saveAndLoadClass = (navigation, c, next = null) => {
     save('APP_CLASS', c)
         .then(() => {
             saveRecentClass(c)
                 .catch(err => console.log(err))
-                .finally(() => navigateTo(navigation, 'Splash'))
+                .finally(() => navigateTo(navigation, 'Splash', {nextScreen: next}))
         })
         .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
 }
 
 const saveRecentClass = (c) => {
     return new Promise((resolve, reject) => {
-        load("RECENT_CLASSES").then(recent => {
-            if (! recent) recent = []
+        load("RECENT_CLASSES").then(async recent => {
+            if (! recent) {
+                let oldClass = await load("APP_CLASS")
+                recent = [oldClass] // recent = current
+            }
 
             if (recent.includes(c))
                 recent = recent.filter(x => x !== c)
