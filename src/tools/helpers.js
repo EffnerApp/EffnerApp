@@ -7,7 +7,6 @@ import moment from "moment";
 import {hash} from "./hash";
 import * as Device from 'expo-device';
 import {DeviceType} from "expo-device";
-import {api} from "./api";
 
 import _ from 'lodash';
 import {load, save} from "./storage";

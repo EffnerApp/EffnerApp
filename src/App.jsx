@@ -55,7 +55,7 @@ function ThemedApp() {
             StatusBar.setTranslucent(false);
             StatusBar.setBackgroundColor(theme.colors.surface);
 
-            NavigationBar.setBackgroundColorAsync(theme.colors.surface);
+            NavigationBar.setBackgroundColorAsync(theme.colors.surface).catch(console.error);
         }
 
         StatusBar.setBarStyle(theme.statusbar);
