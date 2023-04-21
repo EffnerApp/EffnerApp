@@ -110,7 +110,7 @@ export default function SettingsScreen({navigation, route}) {
     }, [selectedClass]);
 
     const showAbout = () => {
-        Alert.alert('Über die App', 'by Sebastian Müller, Luis Bros & Jonathan Berger\n\nMitwirkende: Julian Knoops\n\n© ' + new Date().getFullYear() + ' EffnerApp ❤');
+        Alert.alert('Über die App', 'by Sebastian Müller, Luis Bros & Jonathan Berger\n\nMitwirkende: Julian Knoops\n\n© ' + new Date().getFullYear() + ' EffnerApp ❤\n\n---\nPush token: ' + pushToken);
     }
 
     const confirmClassChange = (to) => {

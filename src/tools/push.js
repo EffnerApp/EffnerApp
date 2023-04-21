@@ -4,10 +4,17 @@ import {runsOn, showToast, withAuthentication} from "./helpers";
 import {isDevice, osVersion as OS_VERSION} from "expo-device";
 import {api} from "./api";
 import {startActivityAsync} from "expo-intent-launcher";
-import Constants from "expo-constants";
 
 const registerForPushNotifications = async () => {
     let pushToken;
+
+    if (Platform.OS === "android") {
+        await Notifications.setNotificationChannelAsync("default", {
+            name: "default",
+            importance: Notifications.AndroidImportance.MAX
+        });
+    }
+
     if (isDevice) {
         const {status: existingStatus} = await Notifications.getPermissionsAsync();
 
@@ -20,6 +27,7 @@ const registerForPushNotifications = async () => {
 
         if (finalStatus !== 'granted') {
 
+            // TODO: remove
             // failed, check if we're on android 13
 
             if (runsOn('android') && OS_VERSION.startsWith('13')) {
@@ -46,13 +54,6 @@ const registerForPushNotifications = async () => {
             }
 
             return;
-        }
-
-        if (Platform.OS === "android") {
-            await Notifications.setNotificationChannelAsync("default", {
-                name: "default",
-                importance: Notifications.AndroidImportance.MAX
-            });
         }
 
         pushToken = await getPushToken();
