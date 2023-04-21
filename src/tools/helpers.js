@@ -43,12 +43,12 @@ const saveAndLoadClass = (navigation, c, next = null) => {
                     .finally(() => navigateTo(navigation, 'Splash', {nextScreen: next}))
             })
             .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
-    })
+    }).catch(console.log)
 }
 
 const saveRecentClass = (newClass, oldClass) => {
     return new Promise((resolve, reject) => {
-        load("RECENT_CLASSES").then(async recent => {
+        load("RECENT_CLASSES").then(recent => {
             if (! recent) {
                 recent = [oldClass]
             }
