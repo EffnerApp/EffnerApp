@@ -7,7 +7,6 @@ import moment from "moment";
 import {hash} from "./hash";
 import * as Device from 'expo-device';
 import {DeviceType} from "expo-device";
-import {api} from "./api";
 
 import _ from 'lodash';
 import {load, save} from "./storage";
@@ -35,25 +34,29 @@ const navigateTo = (navigation, to, params = {}) => {
     }));
 }
 
-const saveAndLoadClass = (navigation, c) => {
-    save('APP_CLASS', c)
-        .then(() => {
-            saveRecentClass(c)
-                .catch(err => console.log(err))
-                .finally(() => navigateTo(navigation, 'Splash'))
-        })
-        .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+const saveAndLoadClass = (navigation, c, next = null) => {
+    load("APP_CLASS").then(currentClass => {
+        save('APP_CLASS', c)
+            .then(() => {
+                saveRecentClass(c, currentClass)
+                    .catch(err => console.log(err))
+                    .finally(() => navigateTo(navigation, 'Splash', {nextScreen: next}))
+            })
+            .catch(({message, response}) => showToast('Error while performing class change.', response?.data?.status?.error || message, 'error'));
+    }).catch(console.log)
 }
 
-const saveRecentClass = (c) => {
+const saveRecentClass = (newClass, oldClass) => {
     return new Promise((resolve, reject) => {
         load("RECENT_CLASSES").then(recent => {
-            if (! recent) recent = []
+            if (! recent) {
+                recent = [oldClass]
+            }
 
-            if (recent.includes(c))
-                recent = recent.filter(x => x !== c)
+            if (recent.includes(newClass))
+                recent = recent.filter(x => x !== newClass)
 
-            recent.push(c)
+            recent.push(newClass)
 
             console.log("saving recent_classes -> " + recent)
 

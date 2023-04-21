@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {openUri, showToast, withAuthentication} from "../tools/helpers";

@@ -10,7 +10,7 @@ export default function Disclaimer() {
     return (
         <View style={[globalStyles.row, {justifyContent: 'center', marginVertical: 20}]}>
             <View style={{alignSelf: 'center'}}><Icon name="info" color={theme.colors.font} /></View>
-            <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Alle Angaben sind ohne Gewähr.{'\n'}Es gilt das Wort des Lehrers.</Text></View>
+            <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Alle Angaben sind ohne Gewähr.{'\n'}Es gilt das Wort der Lehrkraft.</Text></View>
         </View>
     )
 }

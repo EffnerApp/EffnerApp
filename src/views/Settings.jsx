@@ -36,8 +36,6 @@ export default function SettingsScreen({navigation, route}) {
     const [classes, setClasses] = useState([sClass]);
     const [selectedClass, setClass] = useState(sClass);
 
-    const [historyEnabled, setHistoryEnabled] = useState(false);
-
     // const [parentScrollEnabled, setParentScrollEnabled] = useState(true);
 
     const appVersion = Constants.manifest.version
@@ -106,7 +104,7 @@ export default function SettingsScreen({navigation, route}) {
         if (timetableTheme === undefined)
             return;
 
-        save('APP_TIMETABLE_COLOR_THEME', timetableTheme);
+        save('APP_TIMETABLE_COLOR_THEME', timetableTheme).catch(console.error);
     }, [timetableTheme]);
 
     useEffect(() => {
@@ -139,14 +137,6 @@ export default function SettingsScreen({navigation, route}) {
             ],
             {cancelable: false}
         );
-    }
-
-    const toggleClassHistory = () => {
-        setHistoryEnabled(state => {
-            // write in the storage
-            save("CLASS_HISTORY_ENABLED", !state).catch(console.error)
-            return !historyEnabled
-        })
     }
 
     const confirmLogout = () => {
@@ -307,25 +297,6 @@ export default function SettingsScreen({navigation, route}) {
                             <View>
                                 <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
                             </View>
-                            <TouchableOpacity>
-                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
-                                    <View style={{alignSelf: "center"}}>
-                                        <Text style={globalStyles.text}>
-                                            Klassen-History
-                                        </Text>
-                                    </View>
-                                    <Switch
-                                        trackColor={{
-                                            false: "#767577",
-                                            true: theme.colors.primary,
-                                        }}
-                                        thumbColor="#fff"
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={toggleClassHistory}
-                                        value={historyEnabled}
-                                    />
-                                </View>
-                            </TouchableOpacity>
                             <View style={localStyles.line}/>
                             <TouchableOpacity onPress={confirmLogout}>
                                 <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
