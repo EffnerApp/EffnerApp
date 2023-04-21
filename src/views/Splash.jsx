@@ -80,7 +80,7 @@ export default function SplashScreen({navigation, route}) {
     }
 
     // TODO: fix warning
-    useEffect(async () => {
+    useEffect(() => {
         async function initialize() {
             await initDevice();
             setError(undefined);
@@ -127,7 +127,7 @@ export default function SplashScreen({navigation, route}) {
             }
         }
 
-        await initialize();
+        initialize();
     }, [isFocused, retryState]);
 
     useEffect(() => {
