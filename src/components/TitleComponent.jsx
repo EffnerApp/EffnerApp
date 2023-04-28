@@ -2,10 +2,10 @@ import {useEffect, useState} from "react";
 import React from "react";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Alert, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import Badge from "./Badge";
 import {load} from "../tools/storage";
-import {navigateTo, runsOn, saveAndLoadClass} from "../tools/helpers";
+import {navigateTo, normalize, runsOn, saveAndLoadClass} from "../tools/helpers";
 import {useRoute} from "@react-navigation/native";
 
 export default function TitleComponent({title, sClass, navigation, showBadge}) {
@@ -47,6 +47,17 @@ function ClassSelect({localStyle, show, close, navigation}) {
         })
     }, [])
 
+    if (show && recentClasses.length === 0) {
+        close()
+
+        Alert.alert(
+            'Schneller Klassenwechsel',
+            "Wenn du die Klasse wechselst, werden dir hier die zuletzt geöffneten Klassen angezeigt. Dadurch kannst du schnell zwischen den verschiedenen Klassen wechseln, ohne lange danach suchen zu müssen. Dies ist besonders hilfreich, wenn du regelmäßig zwischen Klassen hin- und herwechselst.\n" +
+            "\n" +
+            "Klassen können wie gewohnt in den Einstellungen gewechselt werden."
+        )
+    }
+
     const loadClass = c => {
         close()
 
@@ -61,11 +72,11 @@ function ClassSelect({localStyle, show, close, navigation}) {
         }
     }
 
-    return <Modal visible={show} transparent={true} onRequestClose={() => close()}>
+    return <Modal visible={show && recentClasses.length > 0} transparent={true} onRequestClose={() => close()}>
         <TouchableWithoutFeedback onPress={close}>
             <View style={localStyle.modalWrapper}>
                 {recentClasses.length > 0 ? (
-                    <View style={localStyle.classSelectWrapper}>
+                    <View style={[localStyle.classSelectWrapper, {}]}>
                         <Text style={localStyle.classSelectHeadline}>Deine letzten Klassen</Text>
                         <View style={localStyle.classSelectContainer}>
                             {recentClasses.reverse().map((c, index) => (
@@ -77,10 +88,9 @@ function ClassSelect({localStyle, show, close, navigation}) {
                     </View>
                 ) : (
                     <View style={localStyle.classSelectWrapper}>
-                        <Text style={localStyle.classSelectHeadline}>Keine kürzlich geladenen Klassen</Text>
+                        <Text style={localStyle.classSelectHeadline}></Text>
                     </View>
                 )}
-
             </View>
         </TouchableWithoutFeedback>
     </Modal>
@@ -112,11 +122,13 @@ const createStyles = (theme = Themes.light) =>
             borderRadius: 10,
             padding: 5,
             marginTop: 60,
+            marginLeft: 4,
         },
         classSelectContainer: {
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
+            gap: 5,
         },
         classIcon: {
             padding: 8,
@@ -125,7 +137,6 @@ const createStyles = (theme = Themes.light) =>
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 10,
-            margin: 3,
             marginTop: 6
         },
         classText: {
