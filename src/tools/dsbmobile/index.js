@@ -23,6 +23,11 @@ export default class DSBMobile {
 
         try {
             const {data} = await axios.get(url);
+
+            if(!data) {
+                throw new Error('invalid token');
+            }
+
             this.token = data;
         } catch (e) {
             throw new Error('Error while authenticating with dsbmobile');
