@@ -60,6 +60,8 @@ export default function HomeScreen({navigation, route}) {
                 }
 
                 setCurrentSubstitutions((tmp.length > 0 ? tmp.length : 'Keine') + (tmp.length === 1 ? ' Vertretung ' : ' Vertretungen ') + (date === today ? 'heute' : 'am ' + date));
+            } else {
+                setCurrentSubstitutions('Keine Vertretungen ' + (date === today ? 'heute' : 'am ' + date))
             }
         }).catch((e) => showToast('Error while loading data.', e.message, 'error'));
     }
