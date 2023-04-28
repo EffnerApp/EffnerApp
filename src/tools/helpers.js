@@ -66,6 +66,10 @@ const saveRecentClass = (newClass, oldClass) => {
     })
 }
 
+const clearRecentClasses = async () => {
+    return await save("RECENT_CLASSES", null);
+}
+
 const getPlatform = () => {
     return Platform.OS;
 }
@@ -365,5 +369,6 @@ export {
     getSubjectName,
     getFullWeekDay,
     withAlpha,
-    saveAndLoadClass
+    saveAndLoadClass,
+    clearRecentClasses
 }
