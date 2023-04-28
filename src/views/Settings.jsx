@@ -5,7 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
 import Picker from "../components/Picker";
-import {navigateTo, openUri, saveAndLoadClass, showToast} from "../tools/helpers";
+import {clearRecentClasses, navigateTo, openUri, saveAndLoadClass, showToast} from "../tools/helpers";
 import {getPushToken, revokePushToken, subscribeToChannel} from "../tools/push";
 import {BASE_URL_GO} from "../tools/resources";
 import {isDevice} from "expo-device";
@@ -163,6 +163,12 @@ export default function SettingsScreen({navigation, route}) {
         );
     }
 
+    const resetClassHistory = () => {
+        clearRecentClasses()
+            .then(() => showToast('Klassen-Verlauf gelöscht.', ''))
+            .then(() => navigateTo(navigation, 'Splash', {nextScreen: 'Settings'}));
+    }
+
     return (
         <View style={globalStyles.screen}>
             <ScrollView style={globalStyles.content}>
@@ -297,6 +303,16 @@ export default function SettingsScreen({navigation, route}) {
                             <View>
                                 <Picker title="Deine Klasse" items={classes} selectedValue={selectedClass} onSelect={(e) => setClass(e)}/>
                             </View>
+                            <View style={localStyles.line}/>
+                            <TouchableOpacity onPress={resetClassHistory}>
+                                <View style={[globalStyles.row, {justifyContent: "space-between"}]}>
+                                    <View style={{alignSelf: "center"}}>
+                                        <Text style={globalStyles.text}>
+                                            Klassen-Verlauf löschen
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                             <View style={localStyles.line}/>
                             <TouchableOpacity onPress={confirmLogout}>
                                 <View style={[globalStyles.row, {justifyContent: "space-between"}]}>

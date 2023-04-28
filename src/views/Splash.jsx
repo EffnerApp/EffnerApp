@@ -9,6 +9,7 @@ import {login} from "../tools/api";
 import {load} from "../tools/storage";
 import {performStorageConversion} from "../tools/compatibility";
 import AnimatedIcon from "../widgets/AnimatedIcon";
+import {initializeApp} from "../tools/init";
 
 export default function SplashScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -79,55 +80,15 @@ export default function SplashScreen({navigation, route}) {
         Alert.alert(title, message, actions);
     }
 
-    // TODO: fix warning
     useEffect(() => {
-        async function initialize() {
-            await initDevice();
-            setError(undefined);
+        initializeApp(navigation, nextScreen)
+            .then((action) => {
+                setError(undefined);
 
-            const credentials = await load('APP_CREDENTIALS');
-            if (credentials) {
-                const sClass = await load('APP_CLASS');
-
-                if (!sClass) {
-                    navigateTo(navigation, 'Login', {error: 'No class provided.'});
-                    return;
+                if(typeof action === 'function') {
+                    action();
                 }
-
-                try {
-                    await login(credentials, sClass);
-
-                    if (nextScreen) {
-                        navigateTo(navigation, 'Main', {credentials, sClass, screen: nextScreen});
-                    } else {
-                        navigateTo(navigation, 'Main', {credentials, sClass});
-                    }
-                } catch (e) {
-                    if (e.message === 'Network Error' || e.response?.status >= 500) {
-                        setError(e);
-                    } else {
-                        navigateTo(navigation, 'Login', {error: e?.response?.data?.status?.error || e.message});
-                    }
-                }
-            } else {
-                try {
-                    await performStorageConversion();
-                    const credentials = await load('APP_CREDENTIALS');
-                    const sClass = await load('APP_CLASS');
-
-                    try {
-                        await login(credentials, sClass);
-                        navigateTo(navigation, 'Main', {credentials, sClass});
-                    } catch (e) {
-                        navigateTo(navigation, 'Login', {error: e?.response?.data?.status?.error || e.message});
-                    }
-                } catch (e) {
-                    navigateTo(navigation, 'Login');
-                }
-            }
-        }
-
-        initialize();
+            }).catch((e) => setError(e));
     }, [isFocused, retryState]);
 
     useEffect(() => {
