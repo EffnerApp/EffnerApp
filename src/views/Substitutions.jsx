@@ -61,7 +61,7 @@ export default function SubstitutionsScreen({navigation, route}) {
 
     useEffect(() => {
         if (!data || !currentDate) return;
-        const subs = data.days.get(currentDate).filter((entry) => validateClass(sClass, entry.name)).map((entry) => entry.items);
+        const subs = data.days?.get(currentDate)?.filter((entry) => validateClass(sClass, entry.name)).map((entry) => entry.items);
         let tmp = [];
         if (subs) {
             for (let i = 0; i < subs.length; i++) {
