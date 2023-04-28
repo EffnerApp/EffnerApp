@@ -80,7 +80,7 @@ function ClassSelect({localStyle, show, close, navigation}) {
                         <Text style={localStyle.classSelectHeadline}>Deine letzten Klassen</Text>
                         <View style={localStyle.classSelectContainer}>
                             {recentClasses.reverse().map((c, index) => (
-                                <TouchableOpacity onPress={() => loadClass(c)} key={c}>
+                                <TouchableOpacity onPress={() => loadClass(c)} key={index}>
                                     <ClassIcon sClass={c} localStyles={localStyle}/>
                                 </TouchableOpacity>
                             ))}
@@ -113,16 +113,27 @@ const createStyles = (theme = Themes.light) =>
             flexDirection: "row",
             alignItems: "flex-start",
             height: "100%",
-            width: "100%",
+            width: "100%"
         },
         classSelectWrapper: {
             backgroundColor: theme.colors.surface,
             width: "auto",
             minWidth: 200,
             borderRadius: 10,
-            padding: 5,
-            marginTop: 60,
-            marginLeft: 4,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            marginTop: normalize(60),
+            marginLeft: normalize(10),
+            borderWidth: 3,
+            borderColor: theme.colors.surfaceSecondary,
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 4,
+                height: 4,
+            },
+            shadowOpacity: 0.7,
+            shadowRadius: 2,
+            elevation: 4
         },
         classSelectContainer: {
             display: "flex",
@@ -141,7 +152,7 @@ const createStyles = (theme = Themes.light) =>
         },
         classText: {
             fontSize: 22,
-            color: theme.colors.font
+            color: theme.colors.secondary
         },
         newColor: {
             backgroundColor: "gray"
