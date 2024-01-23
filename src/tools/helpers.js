@@ -86,27 +86,41 @@ const isALevel = (sClass) => {
     return ['11', '12'].includes(getLevel(sClass));
 }
 
-const validateClass = (fullClass, test) => {
-    if (fullClass === test)
+const validateClass = (selectedClass, comparingAgainst) => {
+    if (selectedClass === comparingAgainst)
         return true;
 
-    // if the test string is not equal to the full class name we test it using regex for these cases:
-    // fullClass="12Q3"; test="12Q" -> match
-    // fullClass="10E"; test="12EF" -> match
+    // TODO Completely rewrite this when we switch sub plan provider
 
+    // Selected class follows this pattern:
+    // 10[A-I]
+    // 12Q[1-6]
 
-    const checkA = fullClass.match(/\d{1,2}[A-Z]/);
-    const checkB = test.match(/\d{1,2}[A-Z]/);
+    // comparingAgainst follows this pattern:
+    // 10[A-F]
+    // 10[A-F][F|S|L]
+    // 12Q
 
-    let result = false;
+    // all cases to handle:
+    // sC = ""; cA = ""
+    // sC = ""; cA = ""
+    // sC = ""; cA = ""
+    // sC = ""; cA = ""
+    // sC = ""; cA = ""
 
-    if (checkA) {
-        result = checkA[0] === test;
-    } else if (checkB) {
-        result = checkB[0] === fullClass;
+    // boring fix for 12Q-"broadcasts"
+    if (comparingAgainst.endsWith("Q")) {
+        return selectedClass.includes(comparingAgainst);
     }
 
-    return result;
+    // regex check for classes with FSL (French, Spanish, Latin)
+    const filterMatches = comparingAgainst.match(/(\d{1,2}[A-Z])[FSL]/);
+    if (filterMatches) {
+        const classGroup = filterMatches[1];
+        return classGroup === selectedClass;
+    }
+
+    return false;
 };
 
 const openUri = async (uri, options = {}) => {
