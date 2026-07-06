@@ -4,6 +4,6 @@ This is the source code for the React-Native version of the EffnerApp.
 
 **Please notice:** This is a discontinued version, currently only available on android. However, the android version will also be replaced soon.
 
-Looking for the iOS version? Click [here](https://github.com/EffnerApp/EffnerApp-iOs).
+Looking for the iOS version? Click [here](https://github.com/EffnerApp/EffnerApp-iOS).
 
 You can download the app from [Google Play](https://go.effner.app/android).
