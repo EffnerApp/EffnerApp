@@ -4,6 +4,7 @@ import {runsOn, showToast, withAuthentication} from "./helpers";
 import {isDevice, osVersion as OS_VERSION} from "expo-device";
 import {api} from "./api";
 import {startActivityAsync} from "expo-intent-launcher";
+import Constants from "expo-constants";
 
 const registerForPushNotifications = async () => {
     let pushToken;
@@ -65,7 +66,8 @@ const registerForPushNotifications = async () => {
 
 const getPushToken = async () => {
     return (await Notifications.getExpoPushTokenAsync({
-        experienceId: '@effnerapp/EffnerApp'
+        experienceId: '@effnerapp/EffnerApp',
+        projectId: Constants.expoConfig?.extra?.eas?.projectId,
     })).data;
 };
 
