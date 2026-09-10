@@ -6,6 +6,7 @@ import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 import {fromAngle, normalize} from "../tools/helpers";
 import {LinearGradient} from "expo-linear-gradient";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function Widget({title, icon, style = {}, headerLeft, headerRight, children, titleColor, titleShadowColor, titleShadowRadius, iconColor, headerMarginBottom = 15, gradient, headerPadding = 0, backgroundColor, marginVertical = 12, image}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -14,7 +15,7 @@ export default function Widget({title, icon, style = {}, headerLeft, headerRight
         return (
             <View style={[localStyles.boxHeader, {marginBottom: headerMarginBottom, paddingVertical: headerPadding}]}>
                 <View style={localStyles.iconContainer}>
-                    <View style={{alignSelf: 'center'}}><Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/></View>
+                    <View style={{alignSelf: 'center'}}><MaterialIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/></View>
                     <View style={{alignSelf: 'center'}}>
                         <Text style={[localStyles.headerText, {marginStart: 5, color: titleColor || theme.colors.font, textShadowColor: titleShadowColor, textShadowRadius: titleShadowRadius}]}>{title}</Text>
                     </View>

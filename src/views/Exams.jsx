@@ -10,6 +10,7 @@ import {Icon} from "react-native-elements";
 import moment from "moment";
 import Disclaimer from "../widgets/Disclaimer";
 import {api} from "../tools/api";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function ExamsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -69,13 +70,13 @@ export default function ExamsScreen({navigation, route}) {
                     <TouchableOpacity
                         style={globalStyles.headerButton}
                         onPress={() => openUri(document.uri)}>
-                        <Icon name="picture-as-pdf" color={theme.colors.onSurface}/>
+                        <MaterialIcons name="picture-as-pdf" color={theme.colors.onSurface}/>
                     </TouchableOpacity>
                     <View style={globalStyles.verticalLine}/>
                     <TouchableOpacity
                         style={globalStyles.headerButton}
                         onPress={() => navigation.navigate('Settings', {...route.params})}>
-                        <Icon name="settings" color={theme.colors.onSurface}/>
+                        <MaterialIcons name="settings" color={theme.colors.onSurface}/>
                     </TouchableOpacity>
                 </View>
             )
@@ -117,7 +118,7 @@ export default function ExamsScreen({navigation, route}) {
                     {examsHistory.length > 0 && <Disclaimer />}
                     {(upcomingExams.length === 0 && examsHistory.length === 0) && (
                         <View style={[globalStyles.row, {justifyContent: 'center', marginVertical: 20}]}>
-                            <View style={{alignSelf: 'center'}}><Icon name="info" color={theme.colors.font} /></View>
+                            <View style={{alignSelf: 'center'}}><MaterialIcons name="info" color={theme.colors.font} /></View>
                             <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Keine Einträge.</Text></View>
                         </View>
                     )}

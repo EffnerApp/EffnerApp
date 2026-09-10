@@ -18,6 +18,7 @@ import {
 import {api, loadDSBTimetable} from "../tools/api";
 import moment from "moment";
 import SkeletonContent from "../components/skeleton/SkeletonContent";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function HomeScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -160,7 +161,7 @@ export default function HomeScreen({navigation, route}) {
                                             {j > 0 && <View style={localStyles.line}/>}
                                             <TouchableOpacity disabled={disabled} style={localStyles.newsItemContainer} onPress={() => openUri(uri)}>
                                                 {iconType === 'material_community' && <MaterialCommunityIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
-                                                {iconType !== 'material_community' && <Icon name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
+                                                {iconType !== 'material_community' && <MaterialIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
                                                 <View style={localStyles.newsItemContentInner}>
                                                     <Text style={[localStyles.newsItemContentText, {fontWeight: fontWeight, color: textColor || theme.colors.font}]}>{text}</Text>
                                                     {!!hintText && <Text style={[localStyles.newsItemContentText, {fontSize: normalize(10), fontWeight: fontWeight, color: textColor || theme.colors.font}]}>{hintText}</Text>}
@@ -179,7 +180,7 @@ export default function HomeScreen({navigation, route}) {
                                 <>
                                     <TouchableOpacity style={localStyles.newsItemContainer}
                                                       onPress={() => navigation.navigate('Exams')}>
-                                        <Icon name="school" color={theme.colors.onSurface} size={normalize(20)}/>
+                                        <MaterialIcons name="school" color={theme.colors.onSurface} size={normalize(20)}/>
                                         <View style={localStyles.newsItemContentInner}>
                                             <SkeletonContent isLoading={!nextExam} layout={[{width: 180, height: 20}]}
                                                              boneColor="#292929" highlightColor="#333333" animationType="pulse">
@@ -192,7 +193,7 @@ export default function HomeScreen({navigation, route}) {
                             )}
                             <TouchableOpacity style={localStyles.newsItemContainer}
                                               onPress={() => navigation.navigate('Substitutions')}>
-                                <Icon name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
+                                <MaterialIcons name="shuffle" color={theme.colors.onSurface} size={normalize(20)}/>
                                 <View style={localStyles.newsItemContentInner}>
                                     <SkeletonContent isLoading={!currentSubstitutions}
                                                      layout={[{width: 220, height: 20}]} boneColor="#292929"
@@ -212,7 +213,7 @@ export default function HomeScreen({navigation, route}) {
                             {!!nextLesson && (
                                 <View style={[globalStyles.box]}>
                                     <View style={localStyles.newsItemContainer}>
-                                        <Icon name="calendar-view-day" color={theme.colors.onSurface}
+                                        <MaterialIcons name="calendar-view-day" color={theme.colors.onSurface}
                                               size={normalize(20)}/>
                                         <View style={localStyles.newsItemContentInner}>
                                             <Text style={localStyles.newsItemContentText}>{nextLesson}</Text>

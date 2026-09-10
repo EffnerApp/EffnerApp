@@ -22,6 +22,7 @@ import {BASE_URL_GO} from "../tools/resources";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import {SvgXml} from "react-native-svg";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function LoginScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -43,7 +44,7 @@ export default function LoginScreen({navigation, route}) {
     const LoginInfo = {
         component: (
             <TouchableOpacity onPress={() => showToast('Anmeldedaten für die EffnerApp', 'Die Anmeldedaten sind dieselben wie in der DSBmobile-App.', 'info')}>
-                <Icon name="info" color={theme.colors.onSurface}/>
+                <MaterialIcons name="info" color={theme.colors.onSurface}/>
             </TouchableOpacity>
         ),
         styles: {

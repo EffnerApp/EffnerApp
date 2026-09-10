@@ -23,6 +23,7 @@ import {loadDSBTimetable} from "../../tools/api";
 import moment from "moment";
 import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function DayView({timetable, originalTimetable, subjects, theme: timetableTheme, credentials, class: sClass, editModeEnabled, onRequestEditItem = () => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -123,7 +124,7 @@ export default function DayView({timetable, originalTimetable, subjects, theme: 
                                                             <TouchableOpacity style={[globalStyles.row, globalStyles.box, {justifyContent: "flex-start", paddingVertical: 6, paddingHorizontal: 10, marginVertical: 0}]}
                                                                               onPress={() => navigation.navigate("Substitutions")}>
                                                                 <View style={{alignSelf: "center"}}>
-                                                                    <Icon name="shuffle" color={theme.colors.font} size={normalize(16)}/>
+                                                                    <MaterialIcons name="shuffle" color={theme.colors.font} size={normalize(16)}/>
                                                                 </View>
                                                                 <Text style={[globalStyles.text, {fontWeight: "bold", alignSelf: "center", paddingStart: 5, paddingEnd: 3}]}>
                                                                     {filteredSubstitutions.length === 1 ? getSubstitutionInfo(filteredSubstitutions[0]) : filteredSubstitutions.length + " Vertretungen"}

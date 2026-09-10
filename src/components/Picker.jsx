@@ -4,6 +4,7 @@ import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function Picker({title, items = [], selectedIndex = -1, selectedValue, itemNameGetter = (e) => e, onSelect = (e, i) => null, onTouchStart = (e) => null, onTouchEnd = (e) => null}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -49,13 +50,13 @@ export default function Picker({title, items = [], selectedIndex = -1, selectedV
                 </View>
                 <View style={localStyles.itemContainer}>
                     {!showItems && (
-                        <Icon
+                        <MaterialIcons
                             name="add"
                             color={theme.colors.onSurface}
                         />
                     )}
                     {showItems && (
-                        <Icon
+                        <MaterialIcons
                             name="remove"
                             color={theme.colors.onSurface}
                         />
@@ -84,7 +85,7 @@ export default function Picker({title, items = [], selectedIndex = -1, selectedV
                                     </View>
                                     {key === selectedItem && (
                                         <View style={localStyles.itemContainer}>
-                                            <Icon
+                                            <MaterialIcons
                                                 name="check"
                                                 color={
                                                     theme.colors.onSurface

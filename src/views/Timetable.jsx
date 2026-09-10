@@ -12,6 +12,7 @@ import {api} from "../tools/api";
 import WeekView from "../widgets/timetable/WeekView";
 import DayView from "../widgets/timetable/DayView";
 import TimetableEditModal from "../widgets/TimetableEditModal";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function TimetableScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -98,21 +99,21 @@ export default function TimetableScreen({navigation, route}) {
                             if (!editModeEnabled) showToast("Edit-Mode", "Edit-Mode aktiviert!")
                             else showToast("Edit-Mode", "Edit-Mode deaktiviert!")
                         }}>
-                        <Icon name="edit" color={editModeEnabled ? theme.colors.primary : theme.colors.onSurface}/>
+                        <MaterialIcons name="edit" color={editModeEnabled ? theme.colors.primary : theme.colors.onSurface} size={20}/>
                     </TouchableOpacity>
                     <View style={globalStyles.verticalLine}/>
                     {!!documentUrl && (<>
                         <TouchableOpacity
                             style={globalStyles.headerButton}
                             onPress={() => openUri(documentUrl)}>
-                            <Icon name="picture-as-pdf" color={theme.colors.onSurface}/>
+                            <MaterialIcons name="picture-as-pdf" color={theme.colors.onSurface} size={20}/>
                         </TouchableOpacity>
                         <View style={globalStyles.verticalLine}/>
                     </>)}
                     <TouchableOpacity
                         style={globalStyles.headerButton}
                         onPress={() => navigation.navigate('Settings', {...route.params})}>
-                        <Icon name="settings" color={theme.colors.onSurface}/>
+                        <MaterialIcons name="settings" color={theme.colors.onSurface} size={20}/>
                     </TouchableOpacity>
                 </View>
             )

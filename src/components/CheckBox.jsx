@@ -3,13 +3,14 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Icon} from "react-native-elements";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function CheckBox({value = false, onValueChange = () => {}, title = ""}) {
     const {theme, localStyles, globalStyles} = ThemePreset(createStyles);
 
     return (
         <TouchableOpacity onPress={onValueChange} style={[globalStyles.box, localStyles.container]} activeOpacity={0.5}>
-            <Icon color={theme.colors.onSurface} name={value ? "check-box" : "check-box-outline-blank"}/>
+            <MaterialIcons color={theme.colors.onSurface} name={value ? "check-box" : "check-box-outline-blank"}/>
             <View style={{justifyContent: "center"}}>
                 <Text style={globalStyles.text}>{title}</Text>
             </View>

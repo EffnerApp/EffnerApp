@@ -7,6 +7,7 @@ import {openUri, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
 import {Icon} from "react-native-elements";
 import {api} from "../tools/api";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function InformationScreen({route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -41,7 +42,7 @@ export default function InformationScreen({route}) {
                         return (
                             <TouchableOpacity key={i} onPress={() => openUri(uri)}>
                                 <Widget title={name || key} icon="description" headerMarginBottom={0}
-                                        headerRight={{component: <Icon name="launch" color={theme.colors.onSurface}/>, styles: {backgroundColor: theme.colors.surface}}}/>
+                                        headerRight={{component: <MaterialIcons name="launch" color={theme.colors.onSurface}/>, styles: {backgroundColor: theme.colors.surface}}}/>
                             </TouchableOpacity>
                         )
                     })}

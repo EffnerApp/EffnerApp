@@ -5,6 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 import * as Progress from 'react-native-progress';
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function Button({title, icon, overrideStyles = {}, onPress = () => null, running = true}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -25,7 +26,7 @@ export default function Button({title, icon, overrideStyles = {}, onPress = () =
             <Text style={[globalStyles.textDefault, localStyles.center, {color: theme.colors.onPrimary}]}>
                 {title}
             </Text>
-            {(icon && !isProcessing) && <Icon
+            {(icon && !isProcessing) && <MaterialIcons
                 name={icon}
                 color={theme.colors.onPrimary}
             />}

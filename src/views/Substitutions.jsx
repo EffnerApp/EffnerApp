@@ -10,6 +10,7 @@ import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
 import {Icon} from "react-native-elements";
 import {useIsFocused} from "@react-navigation/native";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function SubstitutionsScreen({navigation, route}) {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -86,13 +87,13 @@ export default function SubstitutionsScreen({navigation, route}) {
                     <TouchableOpacity
                         style={globalStyles.headerButton}
                         onPress={() => openUri(timetableUrl)}>
-                        <Icon name="launch" color={theme.colors.onSurface}/>
+                        <MaterialIcons name="launch" color={theme.colors.onSurface}/>
                     </TouchableOpacity>
                     <View style={globalStyles.verticalLine}/>
                     <TouchableOpacity
                         style={globalStyles.headerButton}
                         onPress={() => navigation.navigate('Settings', {...route.params})}>
-                        <Icon name="settings" color={theme.colors.onSurface} />
+                        <MaterialIcons name="settings" color={theme.colors.onSurface} />
                     </TouchableOpacity>
                 </View>
             )
@@ -132,7 +133,7 @@ export default function SubstitutionsScreen({navigation, route}) {
                 </View>
                 {(substitutions.length === 0 && !information && absentClasses?.length === 0) && (
                     <View style={[globalStyles.row, {justifyContent: 'center', marginVertical: 20}]}>
-                        <View style={{alignSelf: 'center'}}><Icon name="info" color={theme.colors.font} /></View>
+                        <View style={{alignSelf: 'center'}}><MaterialIcons name="info" color={theme.colors.font} /></View>
                         <View style={{alignSelf: 'center', paddingLeft: 24}}><Text style={globalStyles.text}>Keine Einträge.</Text></View>
                     </View>
                 )}

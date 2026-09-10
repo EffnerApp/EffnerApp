@@ -5,6 +5,7 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {Icon} from "react-native-elements";
 import {useNavigation, useRoute} from "@react-navigation/native";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function GlobalHeader() {
     const {theme, globalStyles, localStyles} = ThemePreset(createStyles);
@@ -17,7 +18,7 @@ export default function GlobalHeader() {
             <TouchableOpacity
                 style={globalStyles.headerButton}
                 onPress={() => navigation.navigate('Settings', {...route.params})}>
-                <Icon name="settings" color={theme.colors.onSurface} />
+                <MaterialIcons name="settings" color={theme.colors.onSurface} size={20} />
             </TouchableOpacity>
         </View>
     )
