@@ -46,7 +46,8 @@
       "expo-build-properties",
       "expo-asset",
       "expo-font",
-      "@react-native-vector-icons/material-icons"
+      "@react-native-vector-icons/material-icons",
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {
