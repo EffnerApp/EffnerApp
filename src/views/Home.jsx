@@ -4,7 +4,7 @@ import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} fr
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import {
     getCurrentSubstitutionDay,
     getUpcomingExams,
@@ -159,7 +159,7 @@ export default function HomeScreen({navigation, route}) {
                                         <View key={j}>
                                             {j > 0 && <View style={localStyles.line}/>}
                                             <TouchableOpacity disabled={disabled} style={localStyles.newsItemContainer} onPress={() => openUri(uri)}>
-                                                {iconType === 'material_community' && <MaterialCommunityIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
+                                                {iconType === 'material_community' && <MaterialDesignIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
                                                 {iconType !== 'material_community' && <MaterialIcons name={icon} color={iconColor || theme.colors.onSurface} size={normalize(20)}/>}
                                                 <View style={localStyles.newsItemContentInner}>
                                                     <Text style={[localStyles.newsItemContentText, {fontWeight: fontWeight, color: textColor || theme.colors.font}]}>{text}</Text>
