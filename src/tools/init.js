@@ -1,7 +1,6 @@
 import {initDevice, navigateTo} from "./helpers";
 import {load} from "./storage";
 import {login} from "./api";
-import {performStorageConversion} from "./compatibility";
 
 export function initializeApp(navigation, nextScreen) {
     return new Promise(async (resolve, reject) => {
@@ -31,7 +30,6 @@ export function initializeApp(navigation, nextScreen) {
             });
         } else {
             try {
-                await performStorageConversion();
                 const credentials = await load('APP_CREDENTIALS');
                 const sClass = await load('APP_CLASS');
 
