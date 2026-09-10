@@ -43,7 +43,8 @@
           "color": "#ffffff"
         }
       ],
-      "expo-build-properties"
+      "expo-build-properties",
+      "expo-asset"
     ],
     "extra": {
       "eas": {
