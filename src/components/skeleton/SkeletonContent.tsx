@@ -1,9 +1,11 @@
 import {View} from "react-native";
 import React from "react";
 
-const SkeletonContent: React.FunctionComponent = () => {
+const SkeletonContent: React.FunctionComponent = ({ children }) => {
     return (
-        <View></View>
+        <View>
+            {children}
+        </View>
     );
 };
 
