@@ -30,8 +30,7 @@
         "foregroundImage": "./@resources/android_icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "permissions": [],
-      "edgeToEdgeEnabled": true
+      "permissions": []
     },
     "web": {
       "favicon": "./@resources/default_icon.png"
