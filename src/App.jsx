@@ -10,7 +10,7 @@ import LoginScreen from "./views/Login";
 
 import Toast from 'react-native-toast-message';
 import SplashScreen from "./views/Splash";
-import {Icon} from "react-native-elements";
+import { MaterialIcons } from '@expo/vector-icons';
 import TimetableScreen from "./views/Timetable";
 import ExamsScreen from "./views/Exams";
 import SubstitutionsScreen from "./views/Substitutions";
@@ -101,18 +101,18 @@ function Main({navigation, route: stackRoute}) {
             tabBarButton: excludeScreens(route, ['News', 'Information', 'Settings']),
         })} initialRouteName={screen}>
             <Tab.Screen navigationKey="home" name="Home" component={HomeScreen} options={{
-                tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size}/>)
+                tabBarIcon: ({color, size}) => (<MaterialIcons name="home" color={color} size={size}/>)
             }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="substitutions" name="Substitutions" component={SubstitutionsScreen} options={{
-                tabBarIcon: ({color, size}) => (<Icon name="shuffle" color={color} size={size}/>),
+                tabBarIcon: ({color, size}) => (<MaterialIcons name="shuffle" color={color} size={size}/>),
                 title: 'Vertretungen'
             }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="exams" name="Exams" component={ExamsScreen} options={{
-                tabBarIcon: ({color, size}) => (<Icon name="school" color={color} size={size}/>),
+                tabBarIcon: ({color, size}) => (<MaterialIcons name="school" color={color} size={size}/>),
                 title: 'Schulaufgaben'
             }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="timetable" name="Timetable" component={TimetableScreen} options={{
-                tabBarIcon: ({color, size}) => (<Icon name="event-note" color={color} size={size}/>),
+                tabBarIcon: ({color, size}) => (<MaterialIcons name="event-note" color={color} size={size}/>),
                 title: 'Stundenplan'
             }} initialParams={stackRoute.params}/>
             <Tab.Screen navigationKey="news" name="News" component={NewsScreen} options={{title: 'Aktuelles'}} initialParams={stackRoute.params}/>

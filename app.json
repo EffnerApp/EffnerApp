@@ -44,7 +44,8 @@
         }
       ],
       "expo-build-properties",
-      "expo-asset"
+      "expo-asset",
+      "expo-font"
     ],
     "extra": {
       "eas": {
