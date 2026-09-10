@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {Icon} from "react-native-elements";
 import * as Progress from 'react-native-progress';
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 

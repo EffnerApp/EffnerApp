@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {Icon} from "react-native-elements";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function InlinePicker({items = [], selectedIndex = -1, selectedValue, itemNameGetter = (e) => e, onSelect = (e, i) => null, onTouchStart = (e) => null, onTouchEnd = (e) => null}) {

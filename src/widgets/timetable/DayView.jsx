@@ -21,7 +21,6 @@ import {getWeekDay} from "../../tools/helpers";
 import {getCellColor} from "../../theme/TimetableThemes";
 import {loadDSBTimetable} from "../../tools/api";
 import moment from "moment";
-import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 

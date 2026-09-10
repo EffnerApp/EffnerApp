@@ -4,7 +4,6 @@ import {RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} fr
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import Widget from "../components/Widget";
-import {Icon} from "react-native-elements";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {
     getCurrentSubstitutionDay,

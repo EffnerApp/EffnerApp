@@ -3,7 +3,6 @@ import React from "react";
 import {ImageBackground, StyleSheet, Text, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {Icon} from "react-native-elements";
 import {fromAngle, normalize} from "../tools/helpers";
 import {LinearGradient} from "expo-linear-gradient";
 import MaterialIcons from "@react-native-vector-icons/material-icons";

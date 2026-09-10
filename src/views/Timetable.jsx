@@ -7,7 +7,6 @@ import {clone, getLevel, normalize, openUri, showToast, withAuthentication} from
 import moment from "moment";
 import {load, save} from "../tools/storage";
 import {useIsFocused} from "@react-navigation/native";
-import {Icon} from "react-native-elements";
 import {api} from "../tools/api";
 import WeekView from "../widgets/timetable/WeekView";
 import DayView from "../widgets/timetable/DayView";

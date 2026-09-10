@@ -5,7 +5,6 @@ import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
 import {openUri, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
-import {Icon} from "react-native-elements";
 import {api} from "../tools/api";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 

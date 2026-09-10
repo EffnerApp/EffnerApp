@@ -20,7 +20,6 @@ import {navigateTo, openUri, runsOn, showToast} from "../tools/helpers";
 import {Picker} from "@react-native-picker/picker";
 import {BASE_URL_GO} from "../tools/resources";
 import Widget from "../components/Widget";
-import {Icon} from "react-native-elements";
 import {SvgXml} from "react-native-svg";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 

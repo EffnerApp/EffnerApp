@@ -3,7 +3,6 @@ import React from "react";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemePreset} from "../theme/ThemePreset";
 import {Themes} from "../theme/ColorThemes";
-import {Icon} from "react-native-elements";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 

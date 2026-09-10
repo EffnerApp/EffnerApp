@@ -2,7 +2,6 @@ import {StyleSheet, Text, View} from "react-native";
 import React from "react";
 import {Themes} from "../theme/ColorThemes";
 import {ThemePreset} from "../theme/ThemePreset";
-import {Icon} from "react-native-elements";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 export default function Disclaimer() {

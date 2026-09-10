@@ -6,7 +6,6 @@ import {Themes} from "../theme/ColorThemes";
 import {getExamsHistory, getLevel, getUpcomingExams, isALevel, normalize, openUri, showToast, withAuthentication} from "../tools/helpers";
 import Widget from "../components/Widget";
 import {useIsFocused} from "@react-navigation/native";
-import {Icon} from "react-native-elements";
 import moment from "moment";
 import Disclaimer from "../widgets/Disclaimer";
 import {api} from "../tools/api";

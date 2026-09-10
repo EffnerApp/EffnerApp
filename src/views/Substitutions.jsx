@@ -8,7 +8,6 @@ import {loadDSBTimetable} from "../tools/api";
 import SubstitutionEntry from "../widgets/SubstitutionEntry";
 import InformationEntry from "../widgets/InformationEntry";
 import AbsentClassesEntry from "../widgets/AbsentClassesEntry";
-import {Icon} from "react-native-elements";
 import {useIsFocused} from "@react-navigation/native";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 
