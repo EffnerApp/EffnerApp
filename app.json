@@ -5,11 +5,6 @@
     "version": "3.4.0",
     "orientation": "default",
     "icon": "./@resources/default_icon.png",
-    "splash": {
-      "image": "./@resources/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#121212"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
