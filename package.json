@@ -39,7 +39,7 @@
     "moment": "^2.29.1",
     "node-html-parser": "^1.4.9",
     "query-string": "^7.1.1",
-    "react": "19.2.3",
+    "react": "19.2.8",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-circular-progress-indicator": "^4.4.2",
