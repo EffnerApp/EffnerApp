@@ -10,7 +10,7 @@ import LoginScreen from "./views/Login";
 
 import Toast from 'react-native-toast-message';
 import SplashScreen from "./views/Splash";
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from "@react-native-vector-icons/material-icons/static";
 import TimetableScreen from "./views/Timetable";
 import ExamsScreen from "./views/Exams";
 import SubstitutionsScreen from "./views/Substitutions";
