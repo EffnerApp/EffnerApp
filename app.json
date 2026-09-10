@@ -2,7 +2,7 @@
   "expo": {
     "name": "EffnerApp",
     "slug": "EffnerApp",
-    "version": "3.4.0",
+    "version": "3.4.1",
     "orientation": "default",
     "icon": "./@resources/default_icon.png",
     "updates": {
@@ -19,7 +19,7 @@
     },
     "android": {
       "package": "de.effnerapp.effner",
-      "versionCode": 129,
+      "versionCode": 130,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./@resources/android_icon.png",
